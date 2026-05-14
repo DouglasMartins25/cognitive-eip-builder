@@ -85,7 +85,13 @@ function Index() {
     if (!text) return;
     setMessages((m) => [...m, { id: Date.now(), text, from: "user" }]);
     setInput("");
-    if (text.toLowerCase().includes("vencendo hoje") || text.toLowerCase().includes("vencimento hoje")) {
+    const lower = text.toLowerCase();
+    if (
+      lower.includes("vencendo hoje") ||
+      lower.includes("vencimento hoje") ||
+      lower.includes("vencer hoje") ||
+      lower.includes("a vencer")
+    ) {
       setView("vencendo");
     }
   };
