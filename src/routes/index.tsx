@@ -363,6 +363,32 @@ function Index() {
                     })()}
                   </div>
                 </div>
+              </>
+            ) : (
+              <>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <TrendingUp className="h-3.5 w-3.5 text-primary" />
+                      A receber
+                    </div>
+                    <p className="mt-1 text-lg font-semibold text-foreground">{totalReceber}</p>
+                  </div>
+                  <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <TrendingDown className="h-3.5 w-3.5 text-[oklch(0.6_0.18_25)]" />
+                      A pagar
+                    </div>
+                    <p className="mt-1 text-lg font-semibold text-foreground">{totalPagar}</p>
+                  </div>
+                  <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <AlertCircle className="h-3.5 w-3.5 text-primary" />
+                      Total de títulos
+                    </div>
+                    <p className="mt-1 text-lg font-semibold text-primary">{titulosVencendoHoje.length}</p>
+                  </div>
+                </div>
 
                 <div className="mt-5 overflow-hidden rounded-2xl border border-border">
                   <table className="w-full text-sm">
