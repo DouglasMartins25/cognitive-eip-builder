@@ -200,13 +200,15 @@ function Index() {
           ? "processing"
           : start === "credito"
             ? "processing"
-            : "empty";
-  const initialTarget: "comprovantes" | "credito" =
-    start === "credito" ? "credito" : "comprovantes";
+            : start === "comparacao"
+              ? "processing"
+              : "empty";
+  const initialTarget: ProcessingTarget =
+    start === "credito" ? "credito" : start === "comparacao" ? "comparacao" : "comprovantes";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [view, setView] = useState<View>(initialView);
-  const [processingTarget, setProcessingTarget] = useState<"comprovantes" | "credito">(initialTarget);
+  const [processingTarget, setProcessingTarget] = useState<ProcessingTarget>(initialTarget);
   const [selectedComprovante, setSelectedComprovante] = useState<
     null | { id: string; cliente: string; documento: string; valor: string; autenticacao: string }
   >(null);
