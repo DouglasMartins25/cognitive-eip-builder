@@ -84,7 +84,63 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao";
+
+const comparacaoData = {
+  periodoA: "Março 2026",
+  periodoB: "Março 2025",
+  metricas: [
+    { label: "Receita", a: 92000, b: 72000, format: "currency", positiveIsGood: true },
+    { label: "Custo", a: 64000, b: 58000, format: "currency", positiveIsGood: false },
+    { label: "Caixa", a: 28000, b: 14000, format: "currency", positiveIsGood: true },
+    { label: "Necessidade de crédito", a: 0, b: 35000, format: "currency", positiveIsGood: false },
+    { label: "Custo de juros", a: 1200, b: 4800, format: "currency", positiveIsGood: false },
+  ],
+  serie: [
+    { label: "Receita", a: 92, b: 72 },
+    { label: "Custo", a: 64, b: 58 },
+    { label: "Margem", a: 28, b: 14 },
+  ],
+  insights: [
+    {
+      title: "Receita cresceu 27,8% YoY",
+      desc: "Mar/2026 fechou em R$ 92k vs R$ 72k em Mar/2025. Crescimento puxado pelos 5 maiores clientes (+R$ 14k).",
+      impact: "+R$ 20k receita",
+      tone: "positive" as const,
+    },
+    {
+      title: "Custos subiram menos que a receita",
+      desc: "Custo cresceu 10,3% (R$ 58k → R$ 64k), abaixo da receita. Margem operacional ganhou 11pp.",
+      impact: "+11pp margem",
+      tone: "positive" as const,
+    },
+    {
+      title: "Caixa dobrou no comparativo anual",
+      desc: "Posição de caixa saiu de R$ 14k para R$ 28k, reduzindo dependência de capital de terceiros.",
+      impact: "+100% caixa",
+      tone: "positive" as const,
+    },
+    {
+      title: "Necessidade de crédito zerada",
+      desc: "Em Mar/2025 foi necessário captar R$ 35k. Em Mar/2026 a operação se autofinanciou.",
+      impact: "-R$ 35k captação",
+      tone: "positive" as const,
+    },
+    {
+      title: "Despesa financeira caiu 75%",
+      desc: "Juros pagos passaram de R$ 4,8k para R$ 1,2k, reflexo do menor uso de crédito.",
+      impact: "-R$ 3,6k juros",
+      tone: "positive" as const,
+    },
+    {
+      title: "Atenção ao mix de custos",
+      desc: "Apesar do crescimento saudável, custos fixos representam 62% (vs 55% em 2025). Avaliar renegociação.",
+      impact: "+7pp custo fixo",
+      tone: "warning" as const,
+    },
+  ],
+};
 
 function SideIcon({
   icon: Icon,
