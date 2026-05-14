@@ -509,6 +509,7 @@ function Index() {
             </button>
           </footer>
         </div>
+        )}
       </main>
 
       {/* Right sidebar */}
