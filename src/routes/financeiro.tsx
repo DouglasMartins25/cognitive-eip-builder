@@ -154,7 +154,22 @@ function Index() {
         </header>
 
         <div className="flex-1 space-y-4 overflow-y-auto px-6 pb-4">
-          {messages.map((m, idx) => (
+          {view === "chart" && (
+            <div className="space-y-3 text-sm text-foreground">
+              <p>Qual período você quer analisar?</p>
+              <div className="flex flex-col items-start gap-2 pt-1">
+                <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
+                  <BarChart3 className="h-4 w-4" />
+                  Últimos 12 meses
+                </button>
+                <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
+                  <Plus className="h-4 w-4" />
+                  Outro período
+                </button>
+              </div>
+            </div>
+          )}
+          {messages.map((m) => (
             <div key={m.id}>
               {m.from === "user" ? (
                 <div className="flex justify-center">
@@ -164,27 +179,6 @@ function Index() {
                 </div>
               ) : (
                 <p className="text-sm text-foreground">{m.text}</p>
-              )}
-              {idx === 0 && (
-                <div className="space-y-3 pt-4 text-sm text-foreground">
-                  <p>Olá! Posso te ajudar com isso.</p>
-                  <p>Qual período você quer analisar?</p>
-                  <div className="flex flex-col items-start gap-2 pt-1">
-                    <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
-                      <BarChart3 className="h-4 w-4" />
-                      Últimos 7 meses
-                    </button>
-                    <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
-                      <Plus className="h-4 w-4" />
-                      Outro período
-                    </button>
-                  </div>
-                </div>
-              )}
-              {idx === 1 && (
-                <p className="pt-4 text-sm text-foreground">
-                  Perfeito. Aqui está o comparativo entre receitas e despesas no período.
-                </p>
               )}
             </div>
           ))}
