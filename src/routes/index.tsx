@@ -82,6 +82,63 @@ function QuickAction({
 }
 
 function Home() {
+  const navigate = useNavigate();
+  const [input, setInput] = useState("");
+
+  const handleSubmit = () => {
+    const text = input.trim();
+    if (!text) return;
+    const lower = text.toLowerCase();
+    const pagamentoTerms = [
+      "realizar pagamento",
+      "realizar o pagamento",
+      "realizar pagamentos",
+      "realizar os pagamentos",
+      "efetuar pagamento",
+      "efetuar os pagamentos",
+      "pagar título",
+      "pagar titulo",
+      "pagar títulos",
+      "pagar titulos",
+      "fazer pagamento",
+      "fazer os pagamentos",
+    ];
+    const tituloTerms = [
+      "título",
+      "titulo",
+      "títulos",
+      "titulos",
+      "vencendo hoje",
+      "vencimento hoje",
+      "vencer hoje",
+      "vencido",
+      "vencidos",
+      "pagamento de hoje",
+      "pagamentos de hoje",
+      "recebimento de hoje",
+      "recebimentos de hoje",
+      "pagar e receber",
+      "receber e pagar",
+    ];
+    const analiseTerms = [
+      "análise financeira",
+      "analise financeira",
+      "análise receita",
+      "analise receita",
+      "receita",
+      "despesa",
+      "financeir",
+    ];
+    let start: "analise" | "vencendo" | "pagamento" | undefined;
+    if (pagamentoTerms.some((t) => lower.includes(t))) start = "pagamento";
+    else if (tituloTerms.some((t) => lower.includes(t))) start = "vencendo";
+    else if (analiseTerms.some((t) => lower.includes(t))) start = "analise";
+    if (start) {
+      navigate({ to: "/financeiro", search: { start } });
+    }
+    setInput("");
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Left sidebar */}
