@@ -444,8 +444,11 @@ function Index() {
               </h2>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
                 {processingTarget === "credito"
+                 {processingTarget === "credito"
                   ? "Pensando a melhor forma de você visualizar as ofertas de crédito..."
-                  : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                  : processingTarget === "comparacao"
+                    ? "Analisando os períodos e gerando insights da comparação financeira..."
+                    : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
