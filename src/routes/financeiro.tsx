@@ -73,12 +73,9 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 
 function Index() {
   const max = 120;
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: "Analisar pagamentos e recebimentos", from: "user" },
-    { id: 2, text: "Últimos 7 meses", from: "user" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [view, setView] = useState<"chart" | "vencendo">("chart");
+  const [view, setView] = useState<"empty" | "chart" | "vencendo">("empty");
 
   const handleSend = () => {
     const text = input.trim();
@@ -93,6 +90,16 @@ function Index() {
       lower.includes("a vencer")
     ) {
       setView("vencendo");
+    } else if (
+      lower.includes("análise financeira") ||
+      lower.includes("analise financeira") ||
+      lower.includes("receita") ||
+      lower.includes("despesa") ||
+      lower.includes("pagamento") ||
+      lower.includes("recebimento") ||
+      lower.includes("financeir")
+    ) {
+      setView("chart");
     }
   };
 
