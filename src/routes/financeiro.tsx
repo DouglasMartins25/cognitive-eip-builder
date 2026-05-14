@@ -91,6 +91,16 @@ function Index() {
   const [view, setView] = useState<
     "empty" | "chart" | "vencendo" | "processing" | "comprovantes"
   >(startsWithChart ? "chart" : "empty");
+  const [selectedComprovante, setSelectedComprovante] = useState<
+    null | { id: string; cliente: string; documento: string; valor: string; autenticacao: string }
+  >(null);
+  const [autenticacoes] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      titulosVencendoHoje
+        .filter((t) => t.tipo === "despesa")
+        .map((t) => [t.id, Math.random().toString(36).slice(2, 10).toUpperCase()]),
+    ),
+  );
 
   useEffect(() => {
     if (view === "processing") {
