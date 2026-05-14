@@ -150,7 +150,7 @@ function Home() {
             </div>
 
             <div className="mt-4 flex flex-nowrap items-center justify-between gap-3">
-              <QuickAction icon={LineChart} label="Análise financeira" to="/financeiro" />
+              <QuickAction icon={LineChart} label="Análise financeira" to="/financeiro" search={{ start: "analise" }} />
               <QuickAction icon={FileSpreadsheet} label="Criar pedido de venda" />
               <QuickAction icon={DollarSign} label="Consultar preços" />
               <QuickAction icon={UserPlus} label="Cadastrar cliente" />
