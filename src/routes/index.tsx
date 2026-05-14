@@ -214,7 +214,8 @@ function Home() {
                 className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
               />
               <button
-                type="button"
+                type="submit"
+                aria-label="Enviar"
                 className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-background hover:text-foreground"
               >
                 <Mic className="h-4 w-4" />
