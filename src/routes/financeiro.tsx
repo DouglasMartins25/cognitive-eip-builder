@@ -264,6 +264,87 @@ function Index() {
               Comece pedindo, por exemplo, "Gostaria de fazer a análise financeira" ou "Quais títulos vencem hoje".
             </p>
           </div>
+        ) : view === "processing" ? (
+          <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden rounded-2xl border border-border bg-card/40 text-center">
+            <div
+              className="absolute h-[420px] w-[420px] rounded-full blur-3xl"
+              style={{
+                background:
+                  "radial-gradient(circle, oklch(0.72 0.14 160 / 0.55) 0%, oklch(0.72 0.14 160 / 0) 70%)",
+              }}
+            />
+            <div className="relative z-10 flex flex-col items-center">
+              <Loader2 className="mb-6 h-8 w-8 animate-spin text-primary" />
+              <h2 className="text-xl font-semibold text-foreground">
+                Carregando informações
+              </h2>
+              <p className="mt-2 max-w-md text-sm text-muted-foreground">
+                Pensando a melhor forma de você visualizar seu pedido...
+              </p>
+            </div>
+          </div>
+        ) : view === "comprovantes" ? (
+          <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+            <header className="flex items-start gap-4 border-b border-border px-8 py-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                <CheckCircle2 className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-base font-medium text-foreground">
+                  Pagamentos realizados com sucesso
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Confira abaixo os comprovantes dos títulos pagos hoje
+                </p>
+              </div>
+              <span className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
+                {titulosVencendoHoje.filter((t) => t.tipo === "despesa").length} pagamentos
+              </span>
+            </header>
+            <div className="flex-1 space-y-3 overflow-auto px-8 py-6">
+              {titulosVencendoHoje
+                .filter((t) => t.tipo === "despesa")
+                .map((t) => (
+                  <div
+                    key={t.id}
+                    className="flex items-center gap-4 rounded-2xl border border-border bg-background px-5 py-4"
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                      <CheckCircle2 className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="truncate text-sm font-medium text-foreground">
+                          {t.cliente}
+                        </p>
+                        <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-medium text-accent-foreground">
+                          Pago
+                        </span>
+                      </div>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {t.documento} • {t.id} • Autenticação {Math.random().toString(36).slice(2, 10).toUpperCase()}
+                      </p>
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">{t.valor}</p>
+                    <button className="flex h-9 w-9 items-center justify-center rounded-full text-primary hover:bg-accent" aria-label="Baixar comprovante">
+                      <Download className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+            </div>
+            <footer className="flex items-center justify-between border-t border-border px-8 py-4">
+              <p className="text-sm text-muted-foreground">
+                Total pago: <span className="font-semibold text-foreground">{totalPagar}</span>
+              </p>
+              <button
+                onClick={() => setView("vencendo")}
+                className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-5 py-2 text-sm text-primary transition-colors hover:bg-accent"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Voltar
+              </button>
+            </footer>
+          </div>
         ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
