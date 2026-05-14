@@ -260,34 +260,8 @@ function Index() {
                 </div>
 
                 <div className="mt-5">
-                  <div className="mb-3 flex items-center gap-4 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1.5">
-                      <span className="h-2.5 w-2.5 rounded-full bg-primary" />
-                      Receita
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="h-2.5 w-2.5 rounded-full bg-[oklch(0.7_0.15_25)]" />
-                      Despesa
-                    </div>
-                  </div>
-                  <div className="flex h-[180px] items-end gap-3 border-b border-border">
-                    {chartData.map((d) => (
-                      <div key={d.month} className="flex flex-1 flex-col items-center gap-1">
-                        <div className="flex h-full w-full items-end justify-center gap-1">
-                          <div
-                            className="w-1/2 rounded-t-md bg-primary"
-                            style={{ height: `${(d.receita / max) * 100}%` }}
-                          />
-                          <div
-                            className="w-1/2 rounded-t-md bg-[oklch(0.7_0.15_25)]"
-                            style={{ height: `${(d.despesa / max) * 100}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                   {/* Evolução mês a mês (área + linha) */}
-                  <div className="mt-6 rounded-2xl border border-border bg-background p-4">
+                  <div className="rounded-2xl border border-border bg-background p-4">
                     <div className="mb-2 flex items-center justify-between">
                       <h3 className="text-sm font-medium text-foreground">Evolução de Receitas e Despesas</h3>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -387,14 +361,6 @@ function Index() {
                         </svg>
                       );
                     })()}
-                  </div>
-
-                  <div className="mt-2 flex gap-3">
-                    {chartData.map((d) => (
-                      <div key={d.month} className="flex-1 text-center text-[11px] text-muted-foreground">
-                        {d.month}
-                      </div>
-                    ))}
                   </div>
                 </div>
               </>
