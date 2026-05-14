@@ -95,20 +95,29 @@ function Index() {
     setMessages((m) => [...m, { id: Date.now(), text, from: "user" }]);
     setInput("");
     const lower = text.toLowerCase();
-    if (
-      lower.includes("vencendo hoje") ||
-      lower.includes("vencimento hoje") ||
-      lower.includes("vencer hoje") ||
-      lower.includes("a vencer")
-    ) {
+    const vencendoTerms = [
+      "vencendo hoje",
+      "vencimento hoje",
+      "vencer hoje",
+      "a vencer",
+      "vencido",
+      "vencidos",
+      "pagamento de hoje",
+      "pagamentos de hoje",
+      "recebimento de hoje",
+      "recebimentos de hoje",
+      "pagar e receber",
+      "receber e pagar",
+      "título",
+      "titulo",
+    ];
+    if (vencendoTerms.some((t) => lower.includes(t))) {
       setView("vencendo");
     } else if (
       lower.includes("análise financeira") ||
       lower.includes("analise financeira") ||
       lower.includes("receita") ||
       lower.includes("despesa") ||
-      lower.includes("pagamento") ||
-      lower.includes("recebimento") ||
       lower.includes("financeir")
     ) {
       setView("chart");
