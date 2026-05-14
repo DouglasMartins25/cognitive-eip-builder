@@ -276,7 +276,7 @@ function Index() {
             <div className="relative z-10 flex flex-col items-center">
               <Loader2 className="mb-6 h-8 w-8 animate-spin text-primary" />
               <h2 className="text-xl font-semibold text-foreground">
-                Pensando a melhor forma de você visualizar seu comprovante...
+                Carregando informações
               </h2>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
                 Pensando a melhor forma de você visualizar seu pedido...
