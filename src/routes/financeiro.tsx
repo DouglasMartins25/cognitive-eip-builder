@@ -54,6 +54,11 @@ function SideIcon({
 }
 
 const chartData = [
+  { month: "Ago", receita: 70, despesa: 50 },
+  { month: "Set", receita: 74, despesa: 54 },
+  { month: "Out", receita: 80, despesa: 56 },
+  { month: "Nov", receita: 76, despesa: 58 },
+  { month: "Dez", receita: 90, despesa: 62 },
   { month: "Jan", receita: 78, despesa: 52 },
   { month: "Fev", receita: 85, despesa: 60 },
   { month: "Mar", receita: 72, despesa: 58 },
