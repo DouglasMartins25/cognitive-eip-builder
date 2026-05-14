@@ -147,11 +147,11 @@ function Home() {
               </button>
             </div>
 
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-4 flex flex-nowrap items-center justify-center gap-3">
+              <QuickAction icon={LineChart} label="Análise financeira" to="/financeiro" />
               <QuickAction icon={FileSpreadsheet} label="Criar pedido de venda" />
               <QuickAction icon={DollarSign} label="Consultar preços" />
               <QuickAction icon={UserPlus} label="Cadastrar cliente" />
-              <QuickAction icon={LineChart} label="Análise financeira" to="/financeiro" />
             </div>
           </div>
         </div>

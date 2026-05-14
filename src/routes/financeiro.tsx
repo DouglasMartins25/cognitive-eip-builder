@@ -73,12 +73,9 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 
 function Index() {
   const max = 120;
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: "Analisar pagamentos e recebimentos", from: "user" },
-    { id: 2, text: "Últimos 7 meses", from: "user" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [view, setView] = useState<"chart" | "vencendo">("chart");
+  const [view, setView] = useState<"empty" | "chart" | "vencendo">("empty");
 
   const handleSend = () => {
     const text = input.trim();
@@ -93,6 +90,16 @@ function Index() {
       lower.includes("a vencer")
     ) {
       setView("vencendo");
+    } else if (
+      lower.includes("análise financeira") ||
+      lower.includes("analise financeira") ||
+      lower.includes("receita") ||
+      lower.includes("despesa") ||
+      lower.includes("pagamento") ||
+      lower.includes("recebimento") ||
+      lower.includes("financeir")
+    ) {
+      setView("chart");
     }
   };
 
@@ -204,6 +211,19 @@ function Index() {
 
       {/* Main panel */}
       <main className="flex min-h-0 flex-1 flex-col p-6">
+        {view === "empty" ? (
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/40 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-primary">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <h2 className="mt-4 text-lg font-medium text-foreground">
+              Como posso ajudar com sua análise financeira?
+            </h2>
+            <p className="mt-1 max-w-md text-sm text-muted-foreground">
+              Comece pedindo, por exemplo, "Gostaria de fazer a análise financeira" ou "Quais títulos vencem hoje".
+            </p>
+          </div>
+        ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-accent-foreground">
@@ -489,6 +509,7 @@ function Index() {
             </button>
           </footer>
         </div>
+        )}
       </main>
 
       {/* Right sidebar */}
