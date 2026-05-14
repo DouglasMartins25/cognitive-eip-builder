@@ -211,6 +211,19 @@ function Index() {
 
       {/* Main panel */}
       <main className="flex min-h-0 flex-1 flex-col p-6">
+        {view === "empty" ? (
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/40 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-primary">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <h2 className="mt-4 text-lg font-medium text-foreground">
+              Como posso ajudar com sua análise financeira?
+            </h2>
+            <p className="mt-1 max-w-md text-sm text-muted-foreground">
+              Comece pedindo, por exemplo, "Gostaria de fazer a análise financeira" ou "Quais títulos vencem hoje".
+            </p>
+          </div>
+        ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-accent-foreground">
