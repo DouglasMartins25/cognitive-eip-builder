@@ -104,12 +104,12 @@ function Index() {
       {/* Left sidebar */}
       <aside className="flex w-16 flex-col items-center justify-between border-r border-border bg-sidebar py-5">
         <div className="flex flex-col items-center gap-5">
-          <div className="text-primary">
+          <Link to="/" className="text-primary">
             <svg viewBox="0 0 32 32" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 22c4-8 12-8 16 0" />
               <path d="M6 10c4 8 12 8 16 0" />
             </svg>
-          </div>
+          </Link>
           <nav className="mt-4 flex flex-col items-center gap-2">
             <SideIcon icon={Inbox} />
             <SideIcon icon={Crop} />
