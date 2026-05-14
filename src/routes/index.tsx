@@ -55,10 +55,12 @@ function QuickAction({
   icon: Icon,
   label,
   to,
+  search,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   to?: string;
+  search?: Record<string, string>;
 }) {
   const cls =
     "inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent";
@@ -70,7 +72,7 @@ function QuickAction({
   );
   if (to) {
     return (
-      <Link to={to} className={cls}>
+      <Link to={to} search={search} className={cls}>
         {inner}
       </Link>
     );
