@@ -85,12 +85,19 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 function Index() {
   const max = 120;
   const { start } = Route.useSearch();
-  const startsWithChart = start === "analise";
+  const initialView: "empty" | "chart" | "vencendo" | "processing" | "comprovantes" =
+    start === "analise"
+      ? "chart"
+      : start === "vencendo"
+        ? "vencendo"
+        : start === "pagamento"
+          ? "processing"
+          : "empty";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [view, setView] = useState<
     "empty" | "chart" | "vencendo" | "processing" | "comprovantes"
-  >(startsWithChart ? "chart" : "empty");
+  >(initialView);
   const [selectedComprovante, setSelectedComprovante] = useState<
     null | { id: string; cliente: string; documento: string; valor: string; autenticacao: string }
   >(null);
