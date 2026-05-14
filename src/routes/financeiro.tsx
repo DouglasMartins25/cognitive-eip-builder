@@ -32,7 +32,6 @@ import {
   Filter,
   ArrowUpDown,
   CheckCircle,
-  Zap,
   TrendingUp as TrendingUpIcon,
 } from "lucide-react";
 
