@@ -27,6 +27,9 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/financeiro")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    start: typeof search.start === "string" ? search.start : undefined,
+  }),
   component: Index,
 });
 
@@ -73,9 +76,17 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 
 function Index() {
   const max = 120;
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { start } = Route.useSearch();
+  const startsWithChart = start === "analise";
+  const [messages, setMessages] = useState<Message[]>(
+    startsWithChart
+      ? [{ id: 1, text: "fazer análise financeira", from: "user" }]
+      : []
+  );
   const [input, setInput] = useState("");
-  const [view, setView] = useState<"empty" | "chart" | "vencendo">("empty");
+  const [view, setView] = useState<"empty" | "chart" | "vencendo">(
+    startsWithChart ? "chart" : "empty"
+  );
 
   const handleSend = () => {
     const text = input.trim();
