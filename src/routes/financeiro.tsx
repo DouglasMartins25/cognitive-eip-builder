@@ -278,7 +278,24 @@ function Index() {
       "antecipacao",
       "capital de giro",
     ];
-    if (creditoTerms.some((t) => lower.includes(t))) {
+    const comparacaoTerms = [
+      "comparar",
+      "comparação",
+      "comparacao",
+      "compare ",
+      "vs ",
+      " versus ",
+      "comparativo",
+      "ano contra ano",
+      "yoy",
+      "year over year",
+      "período financeiro",
+      "periodo financeiro",
+    ];
+    if (comparacaoTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("comparacao");
+      setView("processing");
+    } else if (creditoTerms.some((t) => lower.includes(t))) {
       setProcessingTarget("credito");
       setView("processing");
     } else if (pagamentoTerms.some((t) => lower.includes(t))) {
