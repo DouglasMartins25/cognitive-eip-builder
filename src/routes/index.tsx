@@ -100,7 +100,7 @@ function Index() {
   const totalPagar = "R$ 10.640,00";
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen overflow-hidden bg-background">
       {/* Left sidebar */}
       <aside className="flex w-16 flex-col items-center justify-between border-r border-border bg-sidebar py-5">
         <div className="flex flex-col items-center gap-5">
@@ -203,8 +203,8 @@ function Index() {
       </section>
 
       {/* Main panel */}
-      <main className="flex-1 p-6">
-        <div className="flex h-[640px] flex-col rounded-2xl border border-border bg-card shadow-sm">
+      <main className="flex min-h-0 flex-1 flex-col p-6">
+        <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-accent-foreground">
               {view === "chart" ? <Wallet className="h-5 w-5" /> : <CalendarClock className="h-5 w-5" />}
