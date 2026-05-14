@@ -88,9 +88,16 @@ function Index() {
   const startsWithChart = start === "analise";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [view, setView] = useState<"empty" | "chart" | "vencendo">(
-    startsWithChart ? "chart" : "empty"
-  );
+  const [view, setView] = useState<
+    "empty" | "chart" | "vencendo" | "processing" | "comprovantes"
+  >(startsWithChart ? "chart" : "empty");
+
+  useEffect(() => {
+    if (view === "processing") {
+      const t = setTimeout(() => setView("comprovantes"), 5000);
+      return () => clearTimeout(t);
+    }
+  }, [view]);
 
   const handleSend = () => {
     const text = input.trim();
@@ -98,6 +105,20 @@ function Index() {
     setMessages((m) => [...m, { id: Date.now(), text, from: "user" }]);
     setInput("");
     const lower = text.toLowerCase();
+    const pagamentoTerms = [
+      "realizar pagamento",
+      "realizar o pagamento",
+      "realizar pagamentos",
+      "realizar os pagamentos",
+      "efetuar pagamento",
+      "efetuar os pagamentos",
+      "pagar títulos",
+      "pagar titulos",
+      "pagar os títulos",
+      "pagar os titulos",
+      "fazer pagamento",
+      "fazer os pagamentos",
+    ];
     const vencendoTerms = [
       "vencendo hoje",
       "vencimento hoje",
@@ -114,7 +135,9 @@ function Index() {
       "título",
       "titulo",
     ];
-    if (vencendoTerms.some((t) => lower.includes(t))) {
+    if (pagamentoTerms.some((t) => lower.includes(t))) {
+      setView("processing");
+    } else if (vencendoTerms.some((t) => lower.includes(t))) {
       setView("vencendo");
     } else if (
       lower.includes("análise financeira") ||
