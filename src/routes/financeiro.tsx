@@ -681,6 +681,211 @@ function Index() {
               </div>
             </div>
           </div>
+        ) : view === "comparacao" ? (
+          <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+            <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                  <BarChart3 className="h-5 w-5" />
+                </div>
+                <div>
+                  <h2 className="text-base font-medium text-foreground">
+                    Comparativo financeiro
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {comparacaoData.periodoA} vs {comparacaoData.periodoB}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setView("empty")}
+                className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Voltar
+              </button>
+            </header>
+
+            <div className="flex-1 overflow-auto px-8 py-6">
+              {/* Cards de métricas */}
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
+                {comparacaoData.metricas.map((m) => {
+                  const diff = m.a - m.b;
+                  const pct = m.b === 0 ? (m.a === 0 ? 0 : 100) : (diff / m.b) * 100;
+                  const up = diff > 0;
+                  const good = m.positiveIsGood ? up : !up;
+                  const fmt = (v: number) =>
+                    v >= 1000 ? `R$ ${(v / 1000).toFixed(1)}k` : `R$ ${v}`;
+                  return (
+                    <div
+                      key={m.label}
+                      className="rounded-2xl border border-border bg-background px-4 py-3"
+                    >
+                      <p className="text-xs text-muted-foreground">{m.label}</p>
+                      <p className="mt-1 text-lg font-semibold text-foreground">{fmt(m.a)}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        vs {fmt(m.b)} em {comparacaoData.periodoB}
+                      </p>
+                      <div
+                        className={`mt-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                          good
+                            ? "bg-accent text-accent-foreground"
+                            : "bg-[oklch(0.95_0.04_25)] text-[oklch(0.45_0.15_25)]"
+                        }`}
+                      >
+                        {up ? (
+                          <TrendingUp className="h-3 w-3" />
+                        ) : (
+                          <TrendingDown className="h-3 w-3" />
+                        )}
+                        {pct > 0 ? "+" : ""}
+                        {pct.toFixed(1)}%
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Gráfico de barras comparativas */}
+              <div className="mt-5 rounded-2xl border border-border bg-background p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-foreground">
+                    Receita, Custo e Margem (R$ mil)
+                  </h3>
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full bg-primary" />
+                      {comparacaoData.periodoA}
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full bg-muted-foreground/60" />
+                      {comparacaoData.periodoB}
+                    </div>
+                  </div>
+                </div>
+                {(() => {
+                  const w = 700;
+                  const h = 200;
+                  const pad = { l: 40, r: 12, t: 10, b: 28 };
+                  const iw = w - pad.l - pad.r;
+                  const ih = h - pad.t - pad.b;
+                  const yMax = 100;
+                  const groups = comparacaoData.serie.length;
+                  const groupW = iw / groups;
+                  const barW = groupW / 3;
+                  const y = (v: number) => pad.t + ih - (v / yMax) * ih;
+                  const yTicks = [0, 25, 50, 75, 100];
+                  return (
+                    <svg viewBox={`0 0 ${w} ${h}`} className="h-[200px] w-full">
+                      {yTicks.map((t) => (
+                        <g key={t}>
+                          <line
+                            x1={pad.l}
+                            x2={w - pad.r}
+                            y1={y(t)}
+                            y2={y(t)}
+                            stroke="oklch(0.92 0.005 180)"
+                            strokeDasharray="3 3"
+                          />
+                          <text
+                            x={pad.l - 6}
+                            y={y(t) + 3}
+                            textAnchor="end"
+                            fontSize="9"
+                            fill="oklch(0.55 0.015 180)"
+                          >
+                            {t}
+                          </text>
+                        </g>
+                      ))}
+                      {comparacaoData.serie.map((g, i) => {
+                        const cx = pad.l + groupW * i + groupW / 2;
+                        const xa = cx - barW - 2;
+                        const xb = cx + 2;
+                        return (
+                          <g key={g.label}>
+                            <rect
+                              x={xa}
+                              y={y(g.a)}
+                              width={barW}
+                              height={y(0) - y(g.a)}
+                              rx={4}
+                              fill="oklch(0.52 0.13 160)"
+                            />
+                            <rect
+                              x={xb}
+                              y={y(g.b)}
+                              width={barW}
+                              height={y(0) - y(g.b)}
+                              rx={4}
+                              fill="oklch(0.75 0.02 180)"
+                            />
+                            <text
+                              x={cx}
+                              y={h - 8}
+                              textAnchor="middle"
+                              fontSize="11"
+                              fill="oklch(0.45 0.015 180)"
+                            >
+                              {g.label}
+                            </text>
+                          </g>
+                        );
+                      })}
+                    </svg>
+                  );
+                })()}
+              </div>
+
+              {/* Insights */}
+              <div className="mt-5 rounded-2xl border border-border bg-accent/30 p-5">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground">
+                    Insights da comparação
+                  </h3>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Análise automática dos principais indicadores entre os períodos
+                </p>
+                <div className="mt-4 grid gap-2 lg:grid-cols-2">
+                  {comparacaoData.insights.map((ins, i) => (
+                    <div
+                      key={i}
+                      className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3"
+                    >
+                      <div
+                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+                          ins.tone === "positive"
+                            ? "bg-accent text-primary"
+                            : "bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]"
+                        }`}
+                      >
+                        {ins.tone === "positive" ? (
+                          <TrendingUp className="h-3.5 w-3.5" />
+                        ) : (
+                          <AlertCircle className="h-3.5 w-3.5" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-foreground">{ins.title}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">{ins.desc}</p>
+                      </div>
+                      <span
+                        className={`shrink-0 text-xs font-semibold ${
+                          ins.tone === "positive"
+                            ? "text-primary"
+                            : "text-[oklch(0.55_0.15_70)]"
+                        }`}
+                      >
+                        {ins.impact}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
