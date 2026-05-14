@@ -663,6 +663,65 @@ function Index() {
         <button className="hover:text-foreground"><User className="h-5 w-5" /></button>
         <button className="hover:text-foreground"><FileText className="h-5 w-5" /></button>
       </aside>
+
+      {selectedComprovante && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-6 backdrop-blur-sm"
+          onClick={() => setSelectedComprovante(null)}
+        >
+          <div
+            className="w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center gap-3 border-b border-border bg-accent/40 px-8 py-6 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-primary">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-medium text-foreground">Comprovante de pagamento</h3>
+                <p className="text-xs text-muted-foreground">Pagamento realizado com sucesso</p>
+              </div>
+              <p className="text-2xl font-semibold text-foreground">{selectedComprovante.valor}</p>
+            </div>
+            <dl className="space-y-3 px-8 py-6 text-sm">
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Beneficiário</dt>
+                <dd className="text-right font-medium text-foreground">{selectedComprovante.cliente}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Documento</dt>
+                <dd className="text-right text-foreground">{selectedComprovante.documento}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Título</dt>
+                <dd className="text-right text-foreground">{selectedComprovante.id}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Autenticação</dt>
+                <dd className="text-right font-mono text-foreground">{selectedComprovante.autenticacao}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Data</dt>
+                <dd className="text-right text-foreground">
+                  {new Date().toLocaleDateString("pt-BR")}
+                </dd>
+              </div>
+            </dl>
+            <div className="flex items-center justify-between gap-3 border-t border-border px-8 py-4">
+              <button
+                onClick={() => setSelectedComprovante(null)}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground hover:bg-accent"
+              >
+                Fechar
+              </button>
+              <button className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90">
+                <Download className="h-4 w-4" />
+                Baixar comprovante
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
