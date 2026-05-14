@@ -136,19 +136,22 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 function Index() {
   const max = 120;
   const { start } = Route.useSearch();
-  const initialView: "empty" | "chart" | "vencendo" | "processing" | "comprovantes" =
+  const initialView: View =
     start === "analise"
       ? "chart"
       : start === "vencendo"
         ? "vencendo"
         : start === "pagamento"
           ? "processing"
-          : "empty";
+          : start === "credito"
+            ? "processing"
+            : "empty";
+  const initialTarget: "comprovantes" | "credito" =
+    start === "credito" ? "credito" : "comprovantes";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [view, setView] = useState<
-    "empty" | "chart" | "vencendo" | "processing" | "comprovantes"
-  >(initialView);
+  const [view, setView] = useState<View>(initialView);
+  const [processingTarget, setProcessingTarget] = useState<"comprovantes" | "credito">(initialTarget);
   const [selectedComprovante, setSelectedComprovante] = useState<
     null | { id: string; cliente: string; documento: string; valor: string; autenticacao: string }
   >(null);
@@ -162,10 +165,10 @@ function Index() {
 
   useEffect(() => {
     if (view === "processing") {
-      const t = setTimeout(() => setView("comprovantes"), 5000);
+      const t = setTimeout(() => setView(processingTarget), 5000);
       return () => clearTimeout(t);
     }
-  }, [view]);
+  }, [view, processingTarget]);
 
   const handleSend = () => {
     const text = input.trim();
