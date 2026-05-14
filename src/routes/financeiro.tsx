@@ -24,6 +24,9 @@ import {
   Send,
   CalendarClock,
   AlertCircle,
+  CheckCircle2,
+  Download,
+  Loader2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/financeiro")({
