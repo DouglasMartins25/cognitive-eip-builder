@@ -363,6 +363,57 @@ function Index() {
                     })()}
                   </div>
                 </div>
+
+                {/* Recomendações Inteligentes */}
+                <div className="mt-5 rounded-2xl border border-border bg-accent/30 p-5">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <h3 className="text-sm font-semibold text-foreground">Recomendações Inteligentes</h3>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Ações priorizadas com base na análise de dados financeiros
+                  </p>
+                  <div className="mt-4 space-y-2">
+                    {[
+                      {
+                        title: "Antecipar cobrança de recebíveis",
+                        desc: "Oferecer 2% de desconto para pagamento antecipado aos 5 maiores clientes com saldo > 60 dias.",
+                        impact: "+R$ 800K melhoria de caixa",
+                      },
+                      {
+                        title: "Renegociar prazos com fornecedores",
+                        desc: "Três fornecedores-chave indicaram disposição para estender de 30 para 45 dias.",
+                        impact: "+18 dias de extensão PMP",
+                      },
+                      {
+                        title: "Compensar créditos tributários a vencer",
+                        desc: "Créditos de PIS/COFINS vencem em 30 dias. Agendar compensação contra obrigações atuais.",
+                        impact: "R$ 145K em economia tributária",
+                      },
+                      {
+                        title: "Consolidar operações bancárias",
+                        desc: "Migrar contas secundárias para o banco principal e negociar redução de tarifas por volume.",
+                        impact: "-R$ 42K/ano em tarifas",
+                      },
+                    ].map((rec, i) => (
+                      <div
+                        key={i}
+                        className="flex items-start gap-4 rounded-xl border border-border bg-card px-4 py-3"
+                      >
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">
+                          {i + 1}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-foreground">{rec.title}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">{rec.desc}</p>
+                        </div>
+                        <span className="shrink-0 text-xs font-semibold text-primary">
+                          {rec.impact}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </>
             ) : (
               <>
