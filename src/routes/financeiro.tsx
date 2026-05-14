@@ -27,6 +27,9 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/financeiro")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    start: typeof search.start === "string" ? search.start : undefined,
+  }),
   component: Index,
 });
 
