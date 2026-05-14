@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Inbox,
   Crop,
@@ -81,6 +82,63 @@ function QuickAction({
 }
 
 function Home() {
+  const navigate = useNavigate();
+  const [input, setInput] = useState("");
+
+  const handleSubmit = () => {
+    const text = input.trim();
+    if (!text) return;
+    const lower = text.toLowerCase();
+    const pagamentoTerms = [
+      "realizar pagamento",
+      "realizar o pagamento",
+      "realizar pagamentos",
+      "realizar os pagamentos",
+      "efetuar pagamento",
+      "efetuar os pagamentos",
+      "pagar título",
+      "pagar titulo",
+      "pagar títulos",
+      "pagar titulos",
+      "fazer pagamento",
+      "fazer os pagamentos",
+    ];
+    const tituloTerms = [
+      "título",
+      "titulo",
+      "títulos",
+      "titulos",
+      "vencendo hoje",
+      "vencimento hoje",
+      "vencer hoje",
+      "vencido",
+      "vencidos",
+      "pagamento de hoje",
+      "pagamentos de hoje",
+      "recebimento de hoje",
+      "recebimentos de hoje",
+      "pagar e receber",
+      "receber e pagar",
+    ];
+    const analiseTerms = [
+      "análise financeira",
+      "analise financeira",
+      "análise receita",
+      "analise receita",
+      "receita",
+      "despesa",
+      "financeir",
+    ];
+    let start: "analise" | "vencendo" | "pagamento" | undefined;
+    if (pagamentoTerms.some((t) => lower.includes(t))) start = "pagamento";
+    else if (tituloTerms.some((t) => lower.includes(t))) start = "vencendo";
+    else if (analiseTerms.some((t) => lower.includes(t))) start = "analise";
+    if (start) {
+      navigate({ to: "/financeiro", search: { start } });
+    }
+    setInput("");
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Left sidebar */}
@@ -135,19 +193,33 @@ function Home() {
           </p>
 
           <div className="mt-8 inline-flex flex-col">
-            <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/40 px-4 py-3.5">
-              <button className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-background hover:text-foreground">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+              className="flex items-center gap-3 rounded-2xl border border-border bg-muted/40 px-4 py-3.5"
+            >
+              <button
+                type="button"
+                className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-background hover:text-foreground"
+              >
                 <Plus className="h-4 w-4" />
               </button>
               <input
                 type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Descreva o que precisa"
                 className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
               />
-              <button className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-background hover:text-foreground">
+              <button
+                type="button"
+                className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-background hover:text-foreground"
+              >
                 <Mic className="h-4 w-4" />
               </button>
-            </div>
+            </form>
 
             <div className="mt-4 flex flex-nowrap items-center justify-between gap-3">
               <QuickAction icon={LineChart} label="Análise financeira" to="/financeiro" search={{ start: "analise" }} />
