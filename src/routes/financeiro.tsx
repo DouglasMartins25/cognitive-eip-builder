@@ -54,6 +54,11 @@ function SideIcon({
 }
 
 const chartData = [
+  { month: "Ago", receita: 70, despesa: 50 },
+  { month: "Set", receita: 74, despesa: 54 },
+  { month: "Out", receita: 80, despesa: 56 },
+  { month: "Nov", receita: 76, despesa: 58 },
+  { month: "Dez", receita: 90, despesa: 62 },
   { month: "Jan", receita: 78, despesa: 52 },
   { month: "Fev", receita: 85, despesa: 60 },
   { month: "Mar", receita: 72, despesa: 58 },
@@ -78,11 +83,7 @@ function Index() {
   const max = 120;
   const { start } = Route.useSearch();
   const startsWithChart = start === "analise";
-  const [messages, setMessages] = useState<Message[]>(
-    startsWithChart
-      ? [{ id: 1, text: "fazer análise financeira", from: "user" }]
-      : []
-  );
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [view, setView] = useState<"empty" | "chart" | "vencendo">(
     startsWithChart ? "chart" : "empty"
@@ -153,7 +154,22 @@ function Index() {
         </header>
 
         <div className="flex-1 space-y-4 overflow-y-auto px-6 pb-4">
-          {messages.map((m, idx) => (
+          {view === "chart" && (
+            <div className="space-y-3 text-sm text-foreground">
+              <p>Qual período você quer analisar?</p>
+              <div className="flex flex-col items-start gap-2 pt-1">
+                <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
+                  <BarChart3 className="h-4 w-4" />
+                  Últimos 12 meses
+                </button>
+                <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
+                  <Plus className="h-4 w-4" />
+                  Outro período
+                </button>
+              </div>
+            </div>
+          )}
+          {messages.map((m) => (
             <div key={m.id}>
               {m.from === "user" ? (
                 <div className="flex justify-center">
@@ -163,27 +179,6 @@ function Index() {
                 </div>
               ) : (
                 <p className="text-sm text-foreground">{m.text}</p>
-              )}
-              {idx === 0 && (
-                <div className="space-y-3 pt-4 text-sm text-foreground">
-                  <p>Olá! Posso te ajudar com isso.</p>
-                  <p>Qual período você quer analisar?</p>
-                  <div className="flex flex-col items-start gap-2 pt-1">
-                    <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
-                      <BarChart3 className="h-4 w-4" />
-                      Últimos 7 meses
-                    </button>
-                    <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
-                      <Plus className="h-4 w-4" />
-                      Outro período
-                    </button>
-                  </div>
-                </div>
-              )}
-              {idx === 1 && (
-                <p className="pt-4 text-sm text-foreground">
-                  Perfeito. Aqui está o comparativo entre receitas e despesas no período.
-                </p>
               )}
             </div>
           ))}
@@ -258,7 +253,7 @@ function Index() {
                 <div className="relative">
                   <input
                     type="text"
-                    defaultValue="Últimos 7 meses"
+                    defaultValue="Últimos 12 meses"
                     className="w-full rounded-full border border-border bg-card px-5 py-3 pr-12 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                   <button className="absolute right-2 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full text-primary hover:bg-accent">
