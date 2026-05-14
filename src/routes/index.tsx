@@ -120,6 +120,21 @@ function Home() {
       "pagar e receber",
       "receber e pagar",
     ];
+    const creditoTerms = [
+      "crédito",
+      "credito",
+      "créditos",
+      "creditos",
+      "ofertas de crédito",
+      "ofertas de credito",
+      "linhas de crédito",
+      "linhas de credito",
+      "empréstimo",
+      "emprestimo",
+      "antecipação",
+      "antecipacao",
+      "capital de giro",
+    ];
     const analiseTerms = [
       "análise financeira",
       "analise financeira",
@@ -129,8 +144,9 @@ function Home() {
       "despesa",
       "financeir",
     ];
-    let start: "analise" | "vencendo" | "pagamento" | undefined;
-    if (pagamentoTerms.some((t) => lower.includes(t))) start = "pagamento";
+    let start: "analise" | "vencendo" | "pagamento" | "credito" | undefined;
+    if (creditoTerms.some((t) => lower.includes(t))) start = "credito";
+    else if (pagamentoTerms.some((t) => lower.includes(t))) start = "pagamento";
     else if (tituloTerms.some((t) => lower.includes(t))) start = "vencendo";
     else if (analiseTerms.some((t) => lower.includes(t))) start = "analise";
     if (start) {
