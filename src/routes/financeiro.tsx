@@ -253,7 +253,7 @@ function Index() {
                 <div className="relative">
                   <input
                     type="text"
-                    defaultValue="Últimos 7 meses"
+                    defaultValue="Últimos 12 meses"
                     className="w-full rounded-full border border-border bg-card px-5 py-3 pr-12 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                   <button className="absolute right-2 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full text-primary hover:bg-accent">
