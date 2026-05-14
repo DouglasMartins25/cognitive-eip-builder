@@ -27,7 +27,56 @@ import {
   CheckCircle2,
   Download,
   Loader2,
+  Star,
+  Clock,
+  Filter,
+  ArrowUpDown,
+  CheckCircle,
+  Zap,
+  TrendingUp as TrendingUpIcon,
 } from "lucide-react";
+
+const creditoOfertas = [
+  {
+    nome: "FinanBank",
+    linha: "Antecipação de Recebíveis",
+    aderencia: 97,
+    tags: ["Melhor Taxa", "Liberação Rápida"],
+    taxa: "1,29%",
+    cet: "18,40%",
+    parcela: "R$ 683.940",
+    limite: "até R$ 2.000.000",
+    economia: "R$ 12.400",
+    garantias: "Duplicatas, Notas Fiscais",
+    liberacao: "4h",
+  },
+  {
+    nome: "SafeCredit",
+    linha: "Risco Sacado",
+    aderencia: 94,
+    tags: ["Menor CET", "Alta Aderência"],
+    taxa: "0,99%",
+    cet: "14,20%",
+    parcela: "R$ 862.445",
+    limite: "até R$ 5.000.000",
+    economia: "R$ 23.800",
+    garantias: "Contrato com Sacado",
+    liberacao: "48h",
+  },
+  {
+    nome: "CapitalPro",
+    linha: "Capital de Giro",
+    aderencia: 91,
+    tags: ["Recomendado", "Melhor Custo-Benefício"],
+    taxa: "1,65%",
+    cet: "22,30%",
+    parcela: "R$ 152.394",
+    limite: "até R$ 3.000.000",
+    economia: "R$ 18.700",
+    garantias: "Imóvel, Aval dos Sócios",
+    liberacao: "48h",
+  },
+];
 
 export const Route = createFileRoute("/financeiro")({
   validateSearch: (search: Record<string, unknown>) => ({
