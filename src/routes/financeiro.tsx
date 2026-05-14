@@ -85,6 +85,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito";
+
 function SideIcon({
   icon: Icon,
   active = false,
