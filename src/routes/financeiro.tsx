@@ -315,9 +315,19 @@ function Index() {
               {titulosVencendoHoje
                 .filter((t) => t.tipo === "despesa")
                 .map((t) => (
-                  <div
+                  <button
                     key={t.id}
-                    className="flex items-center gap-4 rounded-2xl border border-border bg-background px-5 py-4"
+                    type="button"
+                    onClick={() =>
+                      setSelectedComprovante({
+                        id: t.id,
+                        cliente: t.cliente,
+                        documento: t.documento,
+                        valor: t.valor,
+                        autenticacao: autenticacoes[t.id],
+                      })
+                    }
+                    className="flex w-full items-center gap-4 rounded-2xl border border-border bg-background px-5 py-4 text-left transition-colors hover:border-primary/40 hover:bg-accent/40"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
                       <CheckCircle2 className="h-5 w-5" />
@@ -332,14 +342,17 @@ function Index() {
                         </span>
                       </div>
                       <p className="mt-0.5 text-xs text-muted-foreground">
-                        {t.documento} • {t.id} • Autenticação {Math.random().toString(36).slice(2, 10).toUpperCase()}
+                        {t.documento} • {t.id} • Autenticação {autenticacoes[t.id]}
                       </p>
                     </div>
                     <p className="text-sm font-semibold text-foreground">{t.valor}</p>
-                    <button className="flex h-9 w-9 items-center justify-center rounded-full text-primary hover:bg-accent" aria-label="Baixar comprovante">
+                    <span
+                      className="flex h-9 w-9 items-center justify-center rounded-full text-primary hover:bg-accent"
+                      aria-label="Baixar comprovante"
+                    >
                       <Download className="h-4 w-4" />
-                    </button>
-                  </div>
+                    </span>
+                  </button>
                 ))}
             </div>
             <footer className="flex items-center justify-between border-t border-border px-8 py-4">
