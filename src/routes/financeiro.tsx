@@ -206,7 +206,26 @@ function Index() {
       "título",
       "titulo",
     ];
-    if (pagamentoTerms.some((t) => lower.includes(t))) {
+    const creditoTerms = [
+      "crédito",
+      "credito",
+      "créditos",
+      "creditos",
+      "ofertas de crédito",
+      "ofertas de credito",
+      "linhas de crédito",
+      "linhas de credito",
+      "empréstimo",
+      "emprestimo",
+      "antecipação",
+      "antecipacao",
+      "capital de giro",
+    ];
+    if (creditoTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("credito");
+      setView("processing");
+    } else if (pagamentoTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("comprovantes");
       setView("processing");
     } else if (vencendoTerms.some((t) => lower.includes(t))) {
       setView("vencendo");
