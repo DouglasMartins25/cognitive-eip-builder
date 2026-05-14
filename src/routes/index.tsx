@@ -135,6 +135,20 @@ function Home() {
       "antecipacao",
       "capital de giro",
     ];
+    const comparacaoTerms = [
+      "comparar",
+      "comparação",
+      "comparacao",
+      "compare ",
+      " vs ",
+      " versus ",
+      "comparativo",
+      "ano contra ano",
+      "yoy",
+      "year over year",
+      "período financeiro",
+      "periodo financeiro",
+    ];
     const analiseTerms = [
       "análise financeira",
       "analise financeira",
@@ -144,8 +158,9 @@ function Home() {
       "despesa",
       "financeir",
     ];
-    let start: "analise" | "vencendo" | "pagamento" | "credito" | undefined;
-    if (creditoTerms.some((t) => lower.includes(t))) start = "credito";
+    let start: "analise" | "vencendo" | "pagamento" | "credito" | "comparacao" | undefined;
+    if (comparacaoTerms.some((t) => lower.includes(t))) start = "comparacao";
+    else if (creditoTerms.some((t) => lower.includes(t))) start = "credito";
     else if (pagamentoTerms.some((t) => lower.includes(t))) start = "pagamento";
     else if (tituloTerms.some((t) => lower.includes(t))) start = "vencendo";
     else if (analiseTerms.some((t) => lower.includes(t))) start = "analise";
