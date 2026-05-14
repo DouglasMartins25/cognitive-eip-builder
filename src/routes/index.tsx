@@ -61,7 +61,7 @@ function QuickAction({
   to?: string;
 }) {
   const cls =
-    "inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent";
+    "inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent";
   const inner = (
     <>
       <Icon className="h-4 w-4" />
