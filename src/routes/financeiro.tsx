@@ -279,7 +279,7 @@ function Index() {
                 Carregando informações
               </h2>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                Pensando a melhor forma de você visualizar seu pedido...
+                Pensando a melhor forma de você visualizar seus comprovantes...
               </p>
             </div>
           </div>
