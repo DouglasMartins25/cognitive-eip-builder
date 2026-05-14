@@ -450,6 +450,161 @@ function Index() {
               </button>
             </footer>
           </div>
+        ) : view === "credito" ? (
+          <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+            <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                  <Wallet className="h-5 w-5" />
+                </div>
+                <div>
+                  <h2 className="text-base font-medium text-foreground">
+                    Ofertas disponíveis
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {creditoOfertas.length} ofertas personalizadas para o seu perfil
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setView("empty")}
+                className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Voltar
+              </button>
+            </header>
+
+            <div className="flex-1 overflow-auto px-8 py-6">
+              <div className="flex items-center gap-2 text-sm">
+                <Filter className="h-4 w-4 text-muted-foreground" />
+                <button className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground">
+                  Todas as Linhas
+                </button>
+                <button className="rounded-full border border-border bg-card px-4 py-1.5 text-xs text-foreground hover:bg-accent">
+                  Antecipação de Recebíveis
+                </button>
+                <button className="rounded-full border border-border bg-card px-4 py-1.5 text-xs text-foreground hover:bg-accent">
+                  Risco Sacado
+                </button>
+                <button className="rounded-full border border-border bg-card px-4 py-1.5 text-xs text-foreground hover:bg-accent">
+                  Capital de Giro
+                </button>
+              </div>
+
+              <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+                <ArrowUpDown className="h-3.5 w-3.5" />
+                Ordenar por:
+                <button className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-primary">
+                  Maior Aderência
+                </button>
+                <button className="hover:text-foreground">Menor Taxa</button>
+                <button className="hover:text-foreground">Menor CET</button>
+                <button className="hover:text-foreground">Mais Rápido</button>
+                <button className="hover:text-foreground">Maior Limite</button>
+              </div>
+
+              <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-3">
+                {creditoOfertas.map((o) => (
+                  <div
+                    key={o.nome}
+                    className="relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
+                  >
+                    <div className="flex items-center gap-1.5 self-start rounded-br-2xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">
+                      <Star className="h-3 w-3 fill-current" />
+                      Recomendado para Você
+                    </div>
+
+                    <div className="flex items-start justify-between gap-3 px-5 pt-3">
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <h3 className="text-base font-semibold text-foreground">{o.nome}</h3>
+                          <CheckCircle className="h-4 w-4 text-primary" />
+                        </div>
+                        <span className="mt-1.5 inline-block rounded-full bg-muted px-2.5 py-0.5 text-[11px] text-muted-foreground">
+                          {o.linha}
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-primary text-sm font-semibold text-primary">
+                          {o.aderencia}
+                        </div>
+                        <span className="mt-1 text-[10px] text-muted-foreground">Aderência</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap gap-1.5 px-5">
+                      {o.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full border border-primary/30 bg-accent/40 px-2.5 py-0.5 text-[11px] text-primary"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-2 px-5">
+                      <div className="rounded-xl border border-border bg-card px-3 py-2">
+                        <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <TrendingUpIcon className="h-3 w-3" />
+                          Taxa a.m.
+                        </div>
+                        <p className="mt-0.5 text-base font-semibold text-foreground">{o.taxa}</p>
+                      </div>
+                      <div className="rounded-xl border border-border bg-card px-3 py-2">
+                        <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <Star className="h-3 w-3" />
+                          CET a.a.
+                        </div>
+                        <p className="mt-0.5 text-base font-semibold text-foreground">{o.cet}</p>
+                      </div>
+                      <div className="rounded-xl border border-border bg-card px-3 py-2">
+                        <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <Wallet className="h-3 w-3" />
+                          Parcela
+                        </div>
+                        <p className="mt-0.5 text-sm font-semibold text-foreground">{o.parcela}</p>
+                      </div>
+                      <div className="rounded-xl border border-border bg-card px-3 py-2">
+                        <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <Star className="h-3 w-3" />
+                          Limite
+                        </div>
+                        <p className="mt-0.5 text-sm font-semibold text-foreground">{o.limite}</p>
+                      </div>
+                    </div>
+
+                    <div className="mx-5 mt-4 flex items-center gap-2 rounded-xl border border-primary/20 bg-accent/40 px-3 py-2 text-xs text-foreground">
+                      <TrendingUpIcon className="h-3.5 w-3.5 text-primary" />
+                      Economia estimada de{" "}
+                      <span className="font-semibold text-primary">R$ {o.economia.replace("R$ ", "")}</span>
+                    </div>
+
+                    <div className="mt-4 space-y-1 px-5 text-xs text-muted-foreground">
+                      <p>
+                        <span className="text-foreground">Garantias:</span> {o.garantias}
+                      </p>
+                      <p className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        <span className="text-foreground">Liberação:</span> {o.liberacao}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 flex items-center gap-2 border-t border-border px-5 py-4">
+                      <button className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+                        Contratar
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </button>
+                      <button className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground hover:bg-accent">
+                        Comparar
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
