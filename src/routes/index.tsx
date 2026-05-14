@@ -187,15 +187,6 @@ function Index() {
               className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90"
               aria-label="Enviar"
             >
-              <Send className="h-4 w-4" />
-            </button>
-          </div>
-          <div className="flex items-center justify-between rounded-2xl bg-muted px-4 py-3">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Plus className="h-4 w-4" />
-              Relatórios gerados hoje
-            </div>
-            <button className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground hover:opacity-90">
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
