@@ -286,6 +286,109 @@ function Index() {
                       </div>
                     ))}
                   </div>
+                  {/* Evolução mês a mês (área + linha) */}
+                  <div className="mt-6 rounded-2xl border border-border bg-background p-4">
+                    <div className="mb-2 flex items-center justify-between">
+                      <h3 className="text-sm font-medium text-foreground">Evolução de Receitas e Despesas</h3>
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-primary" />
+                          Receitas
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-[oklch(0.7_0.15_25)]" />
+                          Despesas
+                        </div>
+                      </div>
+                    </div>
+                    {(() => {
+                      const w = 700;
+                      const h = 160;
+                      const pad = { l: 36, r: 8, t: 8, b: 22 };
+                      const iw = w - pad.l - pad.r;
+                      const ih = h - pad.t - pad.b;
+                      const yMax = 120;
+                      const x = (i: number) =>
+                        pad.l + (chartData.length === 1 ? 0 : (i * iw) / (chartData.length - 1));
+                      const y = (v: number) => pad.t + ih - (v / yMax) * ih;
+                      const linePath = (key: "receita" | "despesa") =>
+                        chartData
+                          .map((d, i) => `${i === 0 ? "M" : "L"}${x(i)},${y(d[key])}`)
+                          .join(" ");
+                      const areaPath = (key: "receita" | "despesa") =>
+                        `${linePath(key)} L${x(chartData.length - 1)},${y(0)} L${x(0)},${y(0)} Z`;
+                      const yTicks = [0, 30, 60, 90, 120];
+                      return (
+                        <svg viewBox={`0 0 ${w} ${h}`} className="h-[180px] w-full">
+                          <defs>
+                            <linearGradient id="recFill" x1="0" x2="0" y1="0" y2="1">
+                              <stop offset="0%" stopColor="oklch(0.52 0.13 160)" stopOpacity="0.25" />
+                              <stop offset="100%" stopColor="oklch(0.52 0.13 160)" stopOpacity="0" />
+                            </linearGradient>
+                            <linearGradient id="despFill" x1="0" x2="0" y1="0" y2="1">
+                              <stop offset="0%" stopColor="oklch(0.7 0.15 25)" stopOpacity="0.2" />
+                              <stop offset="100%" stopColor="oklch(0.7 0.15 25)" stopOpacity="0" />
+                            </linearGradient>
+                          </defs>
+                          {yTicks.map((t) => (
+                            <g key={t}>
+                              <line
+                                x1={pad.l}
+                                x2={w - pad.r}
+                                y1={y(t)}
+                                y2={y(t)}
+                                stroke="oklch(0.92 0.005 180)"
+                                strokeDasharray="3 3"
+                              />
+                              <text
+                                x={pad.l - 6}
+                                y={y(t) + 3}
+                                textAnchor="end"
+                                fontSize="9"
+                                fill="oklch(0.55 0.015 180)"
+                              >
+                                R${t}k
+                              </text>
+                            </g>
+                          ))}
+                          <path d={areaPath("receita")} fill="url(#recFill)" />
+                          <path d={areaPath("despesa")} fill="url(#despFill)" />
+                          <path
+                            d={linePath("despesa")}
+                            fill="none"
+                            stroke="oklch(0.7 0.15 25)"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d={linePath("receita")}
+                            fill="none"
+                            stroke="oklch(0.52 0.13 160)"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          {chartData.map((d, i) => (
+                            <g key={d.month}>
+                              <circle cx={x(i)} cy={y(d.receita)} r="2.5" fill="oklch(0.52 0.13 160)" />
+                              <circle cx={x(i)} cy={y(d.despesa)} r="2.5" fill="oklch(0.7 0.15 25)" />
+                              <text
+                                x={x(i)}
+                                y={h - 6}
+                                textAnchor="middle"
+                                fontSize="10"
+                                fill="oklch(0.55 0.015 180)"
+                              >
+                                {d.month}
+                              </text>
+                            </g>
+                          ))}
+                        </svg>
+                      );
+                    })()}
+                  </div>
+
                   <div className="mt-2 flex gap-3">
                     {chartData.map((d) => (
                       <div key={d.month} className="flex-1 text-center text-[11px] text-muted-foreground">
