@@ -83,11 +83,7 @@ function Index() {
   const max = 120;
   const { start } = Route.useSearch();
   const startsWithChart = start === "analise";
-  const [messages, setMessages] = useState<Message[]>(
-    startsWithChart
-      ? [{ id: 1, text: "fazer análise financeira", from: "user" }]
-      : []
-  );
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [view, setView] = useState<"empty" | "chart" | "vencendo">(
     startsWithChart ? "chart" : "empty"
