@@ -247,7 +247,7 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 
 function Index() {
   const max = 120;
-  const { start } = Route.useSearch();
+  const { start, variant } = Route.useSearch();
   const initialView: View =
     start === "analise"
       ? "chart"
@@ -262,10 +262,14 @@ function Index() {
               : "empty";
   const initialTarget: ProcessingTarget =
     start === "credito" ? "credito" : start === "comparacao" ? "comparacao" : "comprovantes";
+  const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [view, setView] = useState<View>(initialView);
   const [processingTarget, setProcessingTarget] = useState<ProcessingTarget>(initialTarget);
+  const [comparacaoVariant, setComparacaoVariant] = useState<ComparacaoVariant>(initialVariant);
+  const comparacaoData =
+    comparacaoVariant === "meses" ? comparacaoDataMeses : comparacaoDataAnos;
   const [selectedComprovante, setSelectedComprovante] = useState<
     null | { id: string; cliente: string; documento: string; valor: string; autenticacao: string }
   >(null);
