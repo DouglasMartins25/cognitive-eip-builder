@@ -1289,6 +1289,265 @@ function Index() {
               </div>
             );
           })()
+        ) : view === "boletos" ? (
+          (() => {
+            const fmt = (v: number) =>
+              v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            const today = new Date();
+            const novoVencto = new Date(today);
+            novoVencto.setDate(today.getDate() + 5);
+            const novoVenctoStr = novoVencto.toLocaleDateString("pt-BR");
+            const totalEmitido = titulosVencidosReceber.reduce(
+              (a, t) => a + t.valorAtualizado,
+              0,
+            );
+            const reguaSteps = (vencimento: string) => [
+              {
+                dia: "D+0",
+                titulo: "Boleto emitido e enviado por e-mail",
+                desc: `Novo boleto com vencimento em ${vencimento} enviado ao cliente.`,
+                icon: Receipt,
+                done: true,
+              },
+              {
+                dia: "D+1",
+                titulo: "Lembrete por WhatsApp",
+                desc: "Mensagem automática com link do boleto e canal de atendimento.",
+                icon: MessageSquare,
+                done: false,
+              },
+              {
+                dia: "D+3",
+                titulo: "E-mail de cobrança formal",
+                desc: "E-mail com aviso de juros, multa e impacto no score interno.",
+                icon: Mail,
+                done: false,
+              },
+              {
+                dia: "D+7",
+                titulo: "Ligação do time de cobrança",
+                desc: "Contato telefônico para negociação e parcelamento.",
+                icon: Phone,
+                done: false,
+              },
+              {
+                dia: "D+15",
+                titulo: "Negativação e protesto",
+                desc: "Envio para serviços de proteção ao crédito e protesto em cartório.",
+                icon: Scale,
+                done: false,
+              },
+            ];
+            return (
+              <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+                <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                      <Receipt className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-medium text-foreground">
+                        Novos boletos emitidos com régua de cobrança ativa
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {titulosVencidosReceber.length} boletos gerados · novo vencimento{" "}
+                        {novoVenctoStr} · expanda um título para ver a régua
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setView("vencidos")}
+                    className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </button>
+                </header>
+
+                <div className="flex-1 overflow-auto px-8 py-6">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Boletos emitidos</p>
+                      <p className="mt-1 text-lg font-semibold text-foreground">
+                        {titulosVencidosReceber.length}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Total cobrado</p>
+                      <p className="mt-1 text-lg font-semibold text-primary">
+                        {fmt(totalEmitido)}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Régua de cobrança</p>
+                      <p className="mt-1 text-lg font-semibold text-foreground">
+                        Ativa em todos
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 space-y-3">
+                    {titulosVencidosReceber.map((t) => {
+                      const isOpen = expandedBoleto === t.id;
+                      const novoBoletoId = `BOL-${t.id.split("-")[1]}`;
+                      const steps = reguaSteps(novoVenctoStr);
+                      return (
+                        <div
+                          key={t.id}
+                          className="overflow-hidden rounded-2xl border border-border bg-background"
+                        >
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setExpandedBoleto(isOpen ? null : t.id)
+                            }
+                            className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-muted/40"
+                          >
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                              <Receipt className="h-5 w-5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <p className="truncate text-sm font-medium text-foreground">
+                                  {t.cliente}
+                                </p>
+                                <span className="inline-flex items-center rounded-full bg-[oklch(0.95_0.06_160)] px-2 py-0.5 text-[11px] font-medium text-[oklch(0.4_0.12_160)]">
+                                  Boleto emitido
+                                </span>
+                              </div>
+                              <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                                {novoBoletoId} · referente {t.id} · novo vencimento{" "}
+                                {novoVenctoStr}
+                              </p>
+                            </div>
+                            <div className="hidden text-right md:block">
+                              <p className="text-xs text-muted-foreground">Valor cobrado</p>
+                              <p className="text-sm font-medium tabular-nums text-foreground">
+                                {fmt(t.valorAtualizado)}
+                              </p>
+                            </div>
+                            <div className="hidden text-right md:block">
+                              <p className="text-xs text-muted-foreground">Atraso original</p>
+                              <p className="text-sm font-medium tabular-nums text-[oklch(0.45_0.15_25)]">
+                                {t.diasAtraso} dias
+                              </p>
+                            </div>
+                            <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground">
+                              {isOpen ? (
+                                <ChevronUp className="h-4 w-4" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4" />
+                              )}
+                            </div>
+                          </button>
+                          {isOpen && (
+                            <div className="border-t border-border bg-muted/20 px-5 py-5">
+                              <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+                                <div>
+                                  <p className="text-[11px] text-muted-foreground">
+                                    Valor original
+                                  </p>
+                                  <p className="text-sm font-medium tabular-nums text-foreground">
+                                    {fmt(t.valorOriginal)}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-[11px] text-muted-foreground">
+                                    Juros + multa
+                                  </p>
+                                  <p className="text-sm font-medium tabular-nums text-[oklch(0.45_0.15_25)]">
+                                    + {fmt(t.juros + t.multa)}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-[11px] text-muted-foreground">
+                                    Total no boleto
+                                  </p>
+                                  <p className="text-sm font-medium tabular-nums text-primary">
+                                    {fmt(t.valorAtualizado)}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-[11px] text-muted-foreground">
+                                    Meio de pagamento
+                                  </p>
+                                  <p className="text-sm font-medium text-foreground">
+                                    {t.meioPagamento}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="mb-3 flex items-center justify-between">
+                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                  Régua de cobrança
+                                </p>
+                                <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-0.5 text-[11px] font-medium text-primary">
+                                  <CheckCircle2 className="h-3 w-3" />
+                                  Ativa
+                                </span>
+                              </div>
+                              <ol className="relative space-y-3 border-l border-border pl-5">
+                                {steps.map((s, i) => {
+                                  const Icon = s.icon;
+                                  return (
+                                    <li key={i} className="relative">
+                                      <span
+                                        className={`absolute -left-[26px] flex h-4 w-4 items-center justify-center rounded-full ${
+                                          s.done
+                                            ? "bg-primary text-primary-foreground"
+                                            : "border border-border bg-card text-muted-foreground"
+                                        }`}
+                                      >
+                                        {s.done ? (
+                                          <CheckCircle2 className="h-3 w-3" />
+                                        ) : (
+                                          <Clock className="h-2.5 w-2.5" />
+                                        )}
+                                      </span>
+                                      <div className="flex items-start gap-3 rounded-xl border border-border bg-background px-3 py-2.5">
+                                        <div
+                                          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+                                            s.done
+                                              ? "bg-accent text-primary"
+                                              : "bg-muted text-muted-foreground"
+                                          }`}
+                                        >
+                                          <Icon className="h-3.5 w-3.5" />
+                                        </div>
+                                        <div className="flex-1">
+                                          <div className="flex items-center gap-2">
+                                            <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                              {s.dia}
+                                            </span>
+                                            <p className="text-sm font-medium text-foreground">
+                                              {s.titulo}
+                                            </p>
+                                          </div>
+                                          <p className="mt-0.5 text-xs text-muted-foreground">
+                                            {s.desc}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  );
+                                })}
+                              </ol>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <p className="mt-4 text-[11px] text-muted-foreground">
+                    Boletos com novo vencimento em {novoVenctoStr}. A régua de cobrança
+                    dispara mensagens automáticas em D+1, D+3, D+7 e D+15 caso o pagamento
+                    não seja identificado.
+                  </p>
+                </div>
+              </div>
+            );
+          })()
         ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
