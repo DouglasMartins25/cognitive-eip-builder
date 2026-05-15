@@ -86,10 +86,19 @@ const riscoTerms = [
   "clientes com maior risco","clientes de maior risco","maior risco","clientes mais arriscados",
 ];
 
+const ddaTerms = [
+  "dda","busca dda","buscar dda","buscar novos dda","novos dda",
+  "boletos dda","boleto dda","lançamentos dda","lancamentos dda","lançamento dda","lancamento dda",
+  "dda vinculados","dda vinculado","dda agendados","dda agendado","dda programado","dda programados",
+  "dda pendente","dda pendentes","dda sem vínculo","dda sem vinculo",
+  "títulos de recebimento","titulos de recebimento","título de recebimento","titulo de recebimento",
+];
+
 export function resolveChatRoute(text: string): ChatRouteResult | undefined {
   const lower = text.toLowerCase();
   let start: ChatStart | undefined;
-  if (fluxoCaixaTerms.some((t) => lower.includes(t))) start = "fluxocaixa";
+  if (ddaTerms.some((t) => lower.includes(t))) start = "dda";
+  else if (fluxoCaixaTerms.some((t) => lower.includes(t))) start = "fluxocaixa";
   else if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
   else if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";
   else if (vencidosReceberTerms.some((t) => lower.includes(t))) start = "vencidos";
