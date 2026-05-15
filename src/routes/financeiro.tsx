@@ -547,6 +547,11 @@ function Index() {
   const [selectedComprovante, setSelectedComprovante] = useState<
     null | { id: string; cliente: string; documento: string; valor: string; autenticacao: string }
   >(null);
+  const [selectedOferta, setSelectedOferta] = useState<
+    null | (typeof creditoOfertas)[number]
+  >(null);
+  const [aceitouTermos, setAceitouTermos] = useState(false);
+  const [contratacaoSucesso, setContratacaoSucesso] = useState<null | string>(null);
   const [autenticacoes] = useState<Record<string, string>>(() =>
     Object.fromEntries(
       titulosVencendoHoje
@@ -1204,7 +1209,13 @@ function Index() {
                     </div>
 
                     <div className="mt-4 flex items-center gap-2 border-t border-border px-5 py-4">
-                      <button className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+                      <button
+                        onClick={() => {
+                          setAceitouTermos(false);
+                          setSelectedOferta(o);
+                        }}
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+                      >
                         Contratar
                         <ArrowRight className="h-3.5 w-3.5" />
                       </button>
@@ -3022,6 +3033,158 @@ function Index() {
           </div>
         );
       })()}
+
+      {selectedOferta && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-6 backdrop-blur-sm"
+          onClick={() => setSelectedOferta(null)}
+        >
+          <div
+            className="flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                  <FileText className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-medium text-foreground">
+                    Termos e Condições — {selectedOferta.linha}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    {selectedOferta.nome} · Taxa {selectedOferta.taxa} a.m. · CET {selectedOferta.cet} a.a.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedOferta(null)}
+                className="text-muted-foreground hover:text-foreground"
+                aria-label="Fechar"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-6 py-5 text-sm leading-relaxed text-muted-foreground">
+              <h4 className="mb-2 text-sm font-semibold text-foreground">
+                CONTRATO DE OPERAÇÃO DE CRÉDITO
+              </h4>
+              <p className="mb-3">
+                Pelo presente instrumento particular, de um lado <strong className="text-foreground">{selectedOferta.nome}</strong>, instituição financeira, doravante denominada CREDORA, e de outro lado o CLIENTE, qualificado em sua proposta de crédito, doravante denominado TOMADOR, têm entre si justo e contratado a presente operação de crédito, na modalidade <strong className="text-foreground">{selectedOferta.linha}</strong>, mediante as cláusulas e condições a seguir.
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">1. Objeto</h5>
+              <p className="mb-3">
+                A CREDORA concede ao TOMADOR uma linha de crédito no limite de até {selectedOferta.limite}, com parcela estimada de {selectedOferta.parcela}, sob garantia de {selectedOferta.garantias}, destinada exclusivamente ao financiamento de capital de giro, antecipação de recebíveis ou demais finalidades acordadas em proposta.
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">2. Encargos Financeiros</h5>
+              <p className="mb-3">
+                Sobre o saldo devedor incidirão juros remuneratórios à taxa de {selectedOferta.taxa} ao mês, equivalente a um Custo Efetivo Total (CET) de {selectedOferta.cet} ao ano, calculados de forma capitalizada e exigíveis nas datas de vencimento previstas no cronograma de pagamentos. O TOMADOR declara estar ciente da composição do CET, que inclui juros, tributos, tarifas e demais despesas legalmente exigíveis.
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">3. Liberação dos Recursos</h5>
+              <p className="mb-3">
+                Os recursos serão disponibilizados em conta de titularidade do TOMADOR no prazo estimado de {selectedOferta.liberacao} a contar da assinatura deste instrumento e da apresentação de toda a documentação requerida pela CREDORA, sujeito à análise final de crédito e compliance.
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">4. Garantias</h5>
+              <p className="mb-3">
+                Em garantia do fiel cumprimento de todas as obrigações assumidas, o TOMADOR oferece à CREDORA: {selectedOferta.garantias}. As garantias permanecerão vigentes até a liquidação integral do saldo devedor.
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">5. Inadimplemento</h5>
+              <p className="mb-3">
+                Em caso de atraso no pagamento de qualquer parcela, incidirão sobre o valor em aberto: (i) multa moratória de 2% (dois por cento); (ii) juros de mora de 1% (um por cento) ao mês; e (iii) atualização monetária pelo IPCA. O inadimplemento por prazo superior a 30 (trinta) dias autoriza a CREDORA a declarar o vencimento antecipado da dívida.
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">6. Liquidação Antecipada</h5>
+              <p className="mb-3">
+                É facultado ao TOMADOR a liquidação antecipada total ou parcial do saldo devedor, com redução proporcional dos juros, conforme Resolução CMN nº 4.320/2014.
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">7. Tratamento de Dados (LGPD)</h5>
+              <p className="mb-3">
+                O TOMADOR autoriza a CREDORA a tratar seus dados pessoais e cadastrais para fins de análise de crédito, prevenção a fraudes, cumprimento de obrigações regulatórias e oferta de produtos relacionados, observada a Lei nº 13.709/2018 (LGPD).
+              </p>
+
+              <h5 className="mt-4 mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">8. Foro</h5>
+              <p className="mb-3">
+                Fica eleito o foro da Comarca da sede da CREDORA para dirimir quaisquer dúvidas oriundas do presente contrato, com renúncia expressa de qualquer outro, por mais privilegiado que seja.
+              </p>
+
+              <p className="mt-4 text-xs italic">
+                Este documento representa um modelo simplificado dos termos da operação. A versão definitiva, com todas as cláusulas legais e regulatórias, será disponibilizada para assinatura eletrônica após a aprovação da contratação.
+              </p>
+            </div>
+
+            <div className="border-t border-border px-6 py-4">
+              <label className="flex cursor-pointer items-start gap-3 text-sm text-foreground">
+                <input
+                  type="checkbox"
+                  checked={aceitouTermos}
+                  onChange={(e) => setAceitouTermos(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 cursor-pointer accent-primary"
+                />
+                <span>
+                  Li e aceito os termos e condições do contrato de crédito apresentado acima.
+                </span>
+              </label>
+              <div className="mt-4 flex items-center justify-between gap-3">
+                <button
+                  onClick={() => setSelectedOferta(null)}
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground hover:bg-accent"
+                >
+                  Cancelar
+                </button>
+                <button
+                  disabled={!aceitouTermos}
+                  onClick={() => {
+                    setContratacaoSucesso(selectedOferta.nome);
+                    setSelectedOferta(null);
+                    setAceitouTermos(false);
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  Contratar crédito
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {contratacaoSucesso && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-6 backdrop-blur-sm"
+          onClick={() => setContratacaoSucesso(null)}
+        >
+          <div
+            className="w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center gap-3 border-b border-border bg-accent/40 px-8 py-6 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-primary">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-medium text-foreground">Contratação solicitada</h3>
+              <p className="text-sm text-muted-foreground">
+                Sua solicitação junto à <strong className="text-foreground">{contratacaoSucesso}</strong> foi enviada. Em breve você receberá os próximos passos por e-mail.
+              </p>
+            </div>
+            <div className="flex justify-end px-8 py-4">
+              <button
+                onClick={() => setContratacaoSucesso(null)}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedComprovante && (
         <div
