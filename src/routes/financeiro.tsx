@@ -476,7 +476,35 @@ function Index() {
       "compra os últimos",
       "compra os ultimos",
     ];
-    if (comparacaoTerms.some((t) => lower.includes(t))) {
+    const vencidosReceberTerms = [
+      "títulos vencidos",
+      "titulos vencidos",
+      "título vencido",
+      "titulo vencido",
+      "recebimento vencido",
+      "recebimentos vencidos",
+      "recebimento em atraso",
+      "recebimentos em atraso",
+      "receber em atraso",
+      "a receber em atraso",
+      "ainda não foram pagos",
+      "ainda nao foram pagos",
+      "não pagaram",
+      "nao pagaram",
+      "não pagos pelos meus clientes",
+      "nao pagos pelos meus clientes",
+      "inadimplên",
+      "inadimplen",
+      "inadimplência",
+      "inadimplencia",
+      "clientes em atraso",
+      "cobrança",
+      "cobranca",
+    ];
+    if (vencidosReceberTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("vencidos");
+      setView("processing");
+    } else if (comparacaoTerms.some((t) => lower.includes(t))) {
       const mesesTerms = [
         "últimos 2 meses",
         "ultimos 2 meses",
