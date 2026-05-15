@@ -97,8 +97,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito" | "dda";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito" | "dda";
 
 const fluxoCaixa = {
   liquidoMensal: [
@@ -509,7 +509,7 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 function Index() {
   const max = 120;
   const { start, variant } = Route.useSearch();
-  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco", "analise", "fluxocaixa"];
+  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco", "analise", "fluxocaixa", "dda"];
   const initialView: View =
     start === "vencendo"
       ? "vencendo"
@@ -531,7 +531,9 @@ function Index() {
                 ? "boletos"
                 : start === "risco"
                   ? "risco"
-                  : "comprovantes";
+                  : start === "dda"
+                    ? "dda"
+                    : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -795,7 +797,18 @@ function Index() {
       "previsão de caixa",
       "previsao de caixa",
     ];
-    if (fluxoCaixaTerms.some((t) => lower.includes(t))) {
+    const ddaTerms = [
+      "dda","busca dda","buscar dda","buscar novos dda","novos dda",
+      "boletos dda","boleto dda","lançamentos dda","lancamentos dda",
+      "lançamento dda","lancamento dda","dda vinculados","dda agendados",
+      "dda agendado","dda programado","dda programados","dda pendente",
+      "dda pendentes","dda sem vínculo","dda sem vinculo",
+      "títulos de recebimento","titulos de recebimento",
+    ];
+    if (ddaTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("dda");
+      setView("processing");
+    } else if (fluxoCaixaTerms.some((t) => lower.includes(t))) {
       setProcessingTarget("fluxocaixa");
       setView("processing");
     } else if (riscoTerms.some((t) => lower.includes(t))) {
@@ -917,6 +930,11 @@ function Index() {
               Encontrei {titulosVencendoHoje.length} títulos com vencimento para hoje. Veja a lista ao lado.
             </p>
           )}
+          {view === "dda" && (
+            <p className="text-sm text-foreground">
+              Trouxe os boletos DDA emitidos no seu CNPJ — já cruzados com os títulos da origem. Confira ao lado.
+            </p>
+          )}
         </div>
 
         <div className="space-y-2 px-6 pb-5">
@@ -987,7 +1005,9 @@ function Index() {
                           ? "Emitindo novos boletos e ativando a régua de cobrança para cada título..."
                           : processingTarget === "risco"
                             ? "Analisando o score, histórico e exposição de cada cliente da carteira..."
-                            : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                            : processingTarget === "dda"
+                              ? "Buscando pagamentos DDA emitidos no seu CNPJ e cruzando com os títulos da origem..."
+                              : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
@@ -2102,6 +2122,164 @@ function Index() {
                       })}
                     </div>
                   </div>
+                </div>
+              </div>
+            );
+          })()
+        ) : view === "dda" ? (
+          (() => {
+            const fmt = (v: number) =>
+              v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            const ddaRegistros = [
+              { status: "Vinculado", match: "98%", fornecedor: "Metais Gerais", cnpj: "12.345.678/0001-90", pagador: "Indústria Vértice", cnpjPag: "98.765.432/0001-12", venc: "07/08/2025", valor: 1425.6, criado: "05/08/25", atualizado: "05/08/25", numero: "3547276" },
+              { status: "Vínculo manual", match: "92%", fornecedor: "Tech Components", cnpj: "22.111.090/0001-44", pagador: "Indústria Vértice", cnpjPag: "98.765.432/0001-12", venc: "08/08/2025", valor: 8740.0, criado: "05/08/25", atualizado: "06/08/25", numero: "3547277" },
+              { status: "Falha no vínculo", match: "61%", fornecedor: "Logística Andes", cnpj: "33.222.111/0001-22", pagador: "Indústria Vértice", cnpjPag: "98.765.432/0001-12", venc: "08/08/2025", valor: 2310.45, criado: "05/08/25", atualizado: "06/08/25", numero: "3547278" },
+              { status: "Pendente", match: "84%", fornecedor: "Embalagens Sul", cnpj: "44.555.666/0001-77", pagador: "Indústria Vértice", cnpjPag: "98.765.432/0001-12", venc: "09/08/2025", valor: 5120.9, criado: "06/08/25", atualizado: "06/08/25", numero: "3547279" },
+              { status: "Pendente", match: "78%", fornecedor: "Energia Plena", cnpj: "55.444.333/0001-66", pagador: "Indústria Vértice", cnpjPag: "98.765.432/0001-12", venc: "10/08/2025", valor: 14280.0, criado: "06/08/25", atualizado: "06/08/25", numero: "3547280" },
+              { status: "Vinculado", match: "99%", fornecedor: "Suprimentos MG", cnpj: "66.777.888/0001-55", pagador: "Indústria Vértice", cnpjPag: "98.765.432/0001-12", venc: "11/08/2025", valor: 980.0, criado: "06/08/25", atualizado: "06/08/25", numero: "3547281" },
+              { status: "Sem registros", match: "—", fornecedor: "Não identificado", cnpj: "—", pagador: "Indústria Vértice", cnpjPag: "98.765.432/0001-12", venc: "12/08/2025", valor: 642.3, criado: "06/08/25", atualizado: "06/08/25", numero: "3547282" },
+            ];
+            const totalDDA = ddaRegistros.length;
+            const vinculados = ddaRegistros.filter((r) => r.status === "Vinculado" || r.status === "Vínculo manual").length;
+            const pendentes = ddaRegistros.filter((r) => r.status === "Pendente").length;
+            const semRegistros = ddaRegistros.filter((r) => r.status === "Sem registros").length;
+            const statusStyle: Record<string, string> = {
+              "Vinculado": "bg-accent text-accent-foreground",
+              "Vínculo manual": "bg-[oklch(0.93_0.05_240)] text-[oklch(0.40_0.14_240)]",
+              "Falha no vínculo": "bg-[oklch(0.93_0.06_55)] text-[oklch(0.45_0.15_55)]",
+              "Pendente": "bg-[oklch(0.95_0.06_85)] text-[oklch(0.45_0.13_75)]",
+              "Sem registros": "bg-[oklch(0.95_0.04_25)] text-[oklch(0.45_0.15_25)]",
+            };
+            return (
+              <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+                <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                      <Search className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-medium text-foreground">Busca DDA</h2>
+                      <p className="text-sm text-muted-foreground">
+                        Veja e gerencie boletos gerados no seu CNPJ
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent">
+                      <RefreshCw className="h-4 w-4" />
+                      Buscar novos DDAs
+                    </button>
+                    <button
+                      onClick={() => setView("empty")}
+                      className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Voltar
+                    </button>
+                  </div>
+                </header>
+
+                <div className="flex-1 overflow-auto px-8 py-6">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
+                    <div className="rounded-2xl border-2 border-primary/60 bg-background px-4 py-3">
+                      <p className="text-xs font-medium text-foreground">Todos os registros</p>
+                      <p className="text-[11px] text-muted-foreground">Boletos do DDA</p>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{totalDDA}</p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-xs font-medium text-foreground">Vinculados</p>
+                          <p className="text-[11px] text-muted-foreground">Registros de origem e DDA</p>
+                        </div>
+                        <CheckCircle2 className="h-5 w-5 text-primary" />
+                      </div>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{vinculados}</p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-xs font-medium text-foreground">Vínculo pendente</p>
+                          <p className="text-[11px] text-muted-foreground">Registros de origem e DDA</p>
+                        </div>
+                        <Clock className="h-5 w-5 text-[oklch(0.55_0.15_75)]" />
+                      </div>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{pendentes}</p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-xs font-medium text-foreground">Sem registros na origem</p>
+                          <p className="text-[11px] text-muted-foreground">Sem títulos correspondentes</p>
+                        </div>
+                        <AlertCircle className="h-5 w-5 text-[oklch(0.55_0.18_25)]" />
+                      </div>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{semRegistros}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap items-center gap-2">
+                    <button className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-xs font-medium text-primary">
+                      Status <ChevronUp className="h-3 w-3" />
+                    </button>
+                    <button className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent">
+                      <CalendarClock className="h-3 w-3" /> Data de vencimento <ChevronDown className="h-3 w-3" />
+                    </button>
+                    <button className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent">
+                      <Clock className="h-3 w-3" /> Última atualização <ChevronDown className="h-3 w-3" />
+                    </button>
+                    <button className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent">
+                      Fornecedor <ChevronDown className="h-3 w-3" />
+                    </button>
+                    <button className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent">
+                      Empresa <ChevronDown className="h-3 w-3" />
+                    </button>
+                    <button className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent">
+                      <Plus className="h-3 w-3" /> Mais filtros
+                    </button>
+                    <div className="ml-auto text-xs text-muted-foreground">1-{totalDDA} de {totalDDA}</div>
+                  </div>
+
+                  <div className="mt-3 overflow-auto rounded-2xl border border-border">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-medium">Status</th>
+                          <th className="px-4 py-3 text-left font-medium">Match</th>
+                          <th className="px-4 py-3 text-left font-medium">Fornecedor</th>
+                          <th className="px-4 py-3 text-left font-medium">CNPJ</th>
+                          <th className="px-4 py-3 text-left font-medium">Pagador</th>
+                          <th className="px-4 py-3 text-left font-medium">Vencimento</th>
+                          <th className="px-4 py-3 text-right font-medium">Valor do DDA</th>
+                          <th className="px-4 py-3 text-left font-medium">Última atualização</th>
+                          <th className="px-4 py-3 text-left font-medium">Nº único</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {ddaRegistros.map((r) => (
+                          <tr key={r.numero} className="text-foreground">
+                            <td className="px-4 py-3">
+                              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium ${statusStyle[r.status]}`}>
+                                {r.status}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-muted-foreground">{r.match}</td>
+                            <td className="px-4 py-3">{r.fornecedor}</td>
+                            <td className="px-4 py-3 text-muted-foreground tabular-nums">{r.cnpj}</td>
+                            <td className="px-4 py-3">{r.pagador}</td>
+                            <td className="px-4 py-3 text-muted-foreground">{r.venc}</td>
+                            <td className="px-4 py-3 text-right font-medium tabular-nums">{fmt(r.valor)}</td>
+                            <td className="px-4 py-3 text-muted-foreground">{r.atualizado}</td>
+                            <td className="px-4 py-3 text-muted-foreground tabular-nums">{r.numero}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <p className="mt-3 text-[11px] text-muted-foreground">
+                    Boletos DDA emitidos contra o seu CNPJ — vinculados automaticamente aos títulos da origem quando há correspondência.
+                  </p>
                 </div>
               </div>
             );
