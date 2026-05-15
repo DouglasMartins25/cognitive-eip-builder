@@ -71,9 +71,9 @@ const alertas = [
     tipo: "critico",
     icon: AlertCircle,
     agente: "A2",
-    titulo: "Pagamento duplicado bloqueado",
-    descricao: "NF 48.291 · Metais Gerais · R$ 184.700 · Bloqueio automático às 07:12",
-    acao: "Ver XAI",
+    titulo: "Pagamentos fora do padrão — autorização necessária",
+    descricao: "4 pagamentos acima do limite habitual · Total R$ 612.300 · Maior: Metais Gerais R$ 248.900 (+187% vs média)",
+    acao: "Autorizar",
   },
   {
     tipo: "atencao",
