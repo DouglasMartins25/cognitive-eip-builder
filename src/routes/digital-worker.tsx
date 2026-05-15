@@ -129,7 +129,7 @@ function DigitalWorker() {
   const acoesPendentes = alertas.length;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
-    { id: 1, from: "bot", text: "Bom dia, João. Sou o Digital Worker Financeiro. Os 7 agentes processaram 3.466 transações esta noite — 3 ações aguardam sua decisão." },
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o Digital Worker Finance. Os 7 agentes processaram 3.466 transações esta noite — 3 ações aguardam sua decisão." },
   ]);
   const handleSend = () => {
     const text = input.trim();
@@ -170,7 +170,7 @@ function DigitalWorker() {
       {/* Chat column */}
       <section className="flex w-[340px] flex-col border-r border-border bg-card">
         <header className="flex items-center justify-between px-6 py-5">
-          <h1 className="text-base font-medium text-foreground">Digital Worker Financeiro</h1>
+          <h1 className="text-base font-medium text-foreground">Digital Worker Finance</h1>
           <button className="text-muted-foreground hover:text-foreground">
             <Maximize2 className="h-4 w-4" />
           </button>
@@ -199,7 +199,7 @@ function DigitalWorker() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSend();
               }}
-              placeholder="Pergunte ao Digital Worker Financeiro..."
+              placeholder="Pergunte ao Digital Worker Finance..."
               className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
@@ -361,7 +361,7 @@ function DigitalWorker() {
 
           <div className="mt-6 flex items-center gap-2 text-[11px] text-muted-foreground">
             <Bot className="h-3.5 w-3.5" />
-            Digital Worker Financeiro · 7 agentes ativos · última sincronização há 2 min
+            Digital Worker Finance · 7 agentes ativos · última sincronização há 2 min
           </div>
         </div>
       </main>
