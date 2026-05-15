@@ -930,6 +930,11 @@ function Index() {
               Encontrei {titulosVencendoHoje.length} títulos com vencimento para hoje. Veja a lista ao lado.
             </p>
           )}
+          {view === "dda" && (
+            <p className="text-sm text-foreground">
+              Trouxe os boletos DDA emitidos no seu CNPJ — já cruzados com os títulos da origem. Confira ao lado.
+            </p>
+          )}
         </div>
 
         <div className="space-y-2 px-6 pb-5">
