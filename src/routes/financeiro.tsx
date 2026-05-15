@@ -352,9 +352,17 @@ function Index() {
             ? "processing"
             : start === "comparacao"
               ? "processing"
-              : "empty";
+              : start === "vencidos"
+                ? "processing"
+                : "empty";
   const initialTarget: ProcessingTarget =
-    start === "credito" ? "credito" : start === "comparacao" ? "comparacao" : "comprovantes";
+    start === "credito"
+      ? "credito"
+      : start === "comparacao"
+        ? "comparacao"
+        : start === "vencidos"
+          ? "vencidos"
+          : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
