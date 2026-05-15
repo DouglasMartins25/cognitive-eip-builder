@@ -498,6 +498,9 @@ function Index() {
   const [processingTarget, setProcessingTarget] = useState<ProcessingTarget>(initialTarget);
   const [comparacaoVariant, setComparacaoVariant] = useState<ComparacaoVariant>(initialVariant);
   const [expandedBoleto, setExpandedBoleto] = useState<string | null>(null);
+  const [selectedCliente, setSelectedCliente] = useState<
+    null | (typeof carteiraRisco.clientes)[number]
+  >(null);
   const comparacaoData =
     comparacaoVariant === "meses" ? comparacaoDataMeses : comparacaoDataAnos;
   const [selectedComprovante, setSelectedComprovante] = useState<
@@ -1883,7 +1886,11 @@ function Index() {
                                 ? "text-[oklch(0.55_0.15_85)]"
                                 : "text-[oklch(0.55_0.18_25)]";
                           return (
-                            <tr key={c.nome} className="text-foreground">
+                            <tr
+                              key={c.nome}
+                              onClick={() => setSelectedCliente(c)}
+                              className="cursor-pointer text-foreground transition-colors hover:bg-accent/40"
+                            >
                               <td className="px-4 py-3">
                                 <p className="font-medium">{c.nome}</p>
                                 <p className="text-xs text-muted-foreground">{c.segmento}</p>
@@ -2282,6 +2289,341 @@ function Index() {
         <button className="hover:text-foreground"><User className="h-5 w-5" /></button>
         <button className="hover:text-foreground"><FileText className="h-5 w-5" /></button>
       </aside>
+
+      {selectedCliente && (() => {
+        const c = selectedCliente;
+        const fmt = (v: number) =>
+          v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+        const faixaTone = (f: string) =>
+          f === "Baixo"
+            ? "bg-accent text-primary"
+            : f === "Moderado"
+              ? "bg-[oklch(0.96_0.05_85)] text-[oklch(0.45_0.13_85)]"
+              : f === "Alto"
+                ? "bg-[oklch(0.95_0.06_45)] text-[oklch(0.45_0.16_45)]"
+                : "bg-[oklch(0.95_0.05_25)] text-[oklch(0.45_0.16_25)]";
+        const util = Math.round((c.utilizado / c.limite) * 100);
+        const ScoreIcon =
+          c.score >= 80 ? ShieldCheck : c.score >= 60 ? Shield : ShieldAlert;
+        const scoreTone =
+          c.score >= 80
+            ? "text-primary"
+            : c.score >= 60
+              ? "text-[oklch(0.55_0.15_85)]"
+              : "text-[oklch(0.55_0.18_25)]";
+        const scoreRingColor =
+          c.score >= 80
+            ? "oklch(0.72 0.14 160)"
+            : c.score >= 60
+              ? "oklch(0.78 0.13 85)"
+              : "oklch(0.6 0.18 25)";
+        // Histórico de score (últimos 6 meses) — derivado da tendência
+        const historico = Array.from({ length: 6 }).map((_, i) => {
+          const base = c.score - c.tendencia * (5 - i) * 0.6;
+          return Math.max(20, Math.min(100, Math.round(base + (i % 2 === 0 ? -1 : 1))));
+        });
+        const meses = ["Dez", "Jan", "Fev", "Mar", "Abr", "Mai"];
+        // Fatores que compõem o score
+        const fatores = [
+          {
+            label: "Pagamentos em dia",
+            valor: c.atraso === 0 ? 95 : c.atraso < 15 ? 72 : c.atraso < 30 ? 48 : 22,
+            peso: "35%",
+          },
+          {
+            label: "Utilização do limite",
+            valor: Math.max(10, 100 - util),
+            peso: "25%",
+          },
+          {
+            label: "Tempo de relacionamento",
+            valor: c.faixa === "Baixo" ? 88 : c.faixa === "Moderado" ? 70 : 55,
+            peso: "15%",
+          },
+          {
+            label: "Histórico de compras",
+            valor: c.tendencia >= 0 ? 82 : 60,
+            peso: "15%",
+          },
+          {
+            label: "Reputação externa (Serasa/SPC)",
+            valor: c.faixa === "Crítico" ? 30 : c.faixa === "Alto" ? 55 : 80,
+            peso: "10%",
+          },
+        ];
+        const recomendacoes =
+          c.faixa === "Crítico"
+            ? [
+                "Suspender novas vendas a prazo até regularização",
+                "Acionar régua de cobrança jurídica (D+15)",
+                "Negociar parcelamento com entrada mínima de 30%",
+              ]
+            : c.faixa === "Alto"
+              ? [
+                  "Reduzir limite de crédito em 30%",
+                  "Solicitar garantias adicionais para novas vendas",
+                  "Monitorar semanalmente o comportamento de pagamento",
+                ]
+              : c.faixa === "Moderado"
+                ? [
+                    "Manter limite atual e revisar em 60 dias",
+                    "Oferecer desconto para pagamento antecipado",
+                    "Acompanhar evolução do score Serasa",
+                  ]
+                : [
+                    "Cliente elegível para aumento de limite (+20%)",
+                    "Oferecer condições especiais de pagamento",
+                    "Considerar para programa de fidelidade",
+                  ];
+        const fatorTone = (v: number) =>
+          v >= 75
+            ? "bg-primary"
+            : v >= 50
+              ? "bg-[oklch(0.78_0.13_85)]"
+              : "bg-[oklch(0.65_0.18_25)]";
+        return (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-6 backdrop-blur-sm"
+            onClick={() => setSelectedCliente(null)}
+          >
+            <div
+              className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-card shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4 border-b border-border bg-accent/30 px-7 py-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-card text-foreground shadow-sm">
+                    <Users className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                      Detalhe do score
+                    </p>
+                    <h3 className="mt-1 text-lg font-semibold text-foreground">{c.nome}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {c.segmento} · Última compra em {c.ultimaCompra}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedCliente(null)}
+                  className="rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground hover:bg-accent"
+                >
+                  Fechar
+                </button>
+              </div>
+
+              {/* Score + métricas */}
+              <div className="grid gap-5 px-7 py-6 lg:grid-cols-[220px_1fr]">
+                {/* Score circular */}
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-border bg-accent/20 p-5">
+                  <div className="relative h-32 w-32">
+                    <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
+                      <circle
+                        cx="60"
+                        cy="60"
+                        r="52"
+                        fill="none"
+                        stroke="oklch(0.92 0.01 240)"
+                        strokeWidth="10"
+                      />
+                      <circle
+                        cx="60"
+                        cy="60"
+                        r="52"
+                        fill="none"
+                        stroke={scoreRingColor}
+                        strokeWidth="10"
+                        strokeLinecap="round"
+                        strokeDasharray={`${(c.score / 100) * 326.7} 326.7`}
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <ScoreIcon className={`h-4 w-4 ${scoreTone}`} />
+                      <span className="text-3xl font-semibold tabular-nums text-foreground">
+                        {c.score}
+                      </span>
+                      <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                        de 100
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center gap-1.5 text-xs">
+                    {c.tendencia >= 0 ? (
+                      <TrendingUp className="h-3.5 w-3.5 text-primary" />
+                    ) : (
+                      <TrendingDown className="h-3.5 w-3.5 text-[oklch(0.55_0.18_25)]" />
+                    )}
+                    <span
+                      className={
+                        c.tendencia >= 0
+                          ? "text-primary"
+                          : "text-[oklch(0.55_0.18_25)]"
+                      }
+                    >
+                      {c.tendencia >= 0 ? "+" : ""}
+                      {c.tendencia} pts em 30 dias
+                    </span>
+                  </div>
+                  <span
+                    className={`mt-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium ${faixaTone(c.faixa)}`}
+                  >
+                    Risco {c.faixa.toLowerCase()}
+                  </span>
+                </div>
+
+                {/* Métricas chave */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-border bg-card p-4">
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      Limite aprovado
+                    </p>
+                    <p className="mt-1 text-lg font-semibold tabular-nums text-foreground">
+                      {fmt(c.limite)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-4">
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      Em uso
+                    </p>
+                    <p className="mt-1 text-lg font-semibold tabular-nums text-foreground">
+                      {fmt(c.utilizado)}
+                    </p>
+                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                      <div
+                        className={
+                          util > 85
+                            ? "h-full bg-[oklch(0.6_0.18_25)]"
+                            : util > 65
+                              ? "h-full bg-[oklch(0.7_0.15_45)]"
+                              : "h-full bg-primary"
+                        }
+                        style={{ width: `${Math.min(util, 100)}%` }}
+                      />
+                    </div>
+                    <p className="mt-1 text-[11px] text-muted-foreground">{util}% utilizado</p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-4">
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      Ticket médio
+                    </p>
+                    <p className="mt-1 text-lg font-semibold tabular-nums text-foreground">
+                      {fmt(c.ticket)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-4">
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      Maior atraso
+                    </p>
+                    <p
+                      className={`mt-1 text-lg font-semibold tabular-nums ${
+                        c.atraso > 0
+                          ? "text-[oklch(0.5_0.16_25)]"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {c.atraso > 0 ? `${c.atraso} dias` : "Em dia"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Histórico de score */}
+              <div className="border-t border-border px-7 py-6">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-primary" />
+                  <h4 className="text-sm font-semibold text-foreground">
+                    Evolução do score (últimos 6 meses)
+                  </h4>
+                </div>
+                <div className="mt-4 flex items-end gap-2">
+                  {historico.map((v, i) => (
+                    <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
+                      <span className="text-[10px] tabular-nums text-muted-foreground">{v}</span>
+                      <div
+                        className="w-full rounded-md bg-primary/80"
+                        style={{ height: `${(v / 100) * 80}px`, opacity: 0.4 + (i / 6) * 0.6 }}
+                      />
+                      <span className="text-[10px] text-muted-foreground">{meses[i]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Fatores do score */}
+              <div className="border-t border-border px-7 py-6">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                  <h4 className="text-sm font-semibold text-foreground">
+                    Fatores que compõem o score
+                  </h4>
+                </div>
+                <div className="mt-4 space-y-3">
+                  {fatores.map((f) => (
+                    <div key={f.label}>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-foreground">{f.label}</span>
+                        <span className="tabular-nums text-muted-foreground">
+                          {f.valor}/100 · peso {f.peso}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted">
+                        <div
+                          className={`h-full ${fatorTone(f.valor)}`}
+                          style={{ width: `${f.valor}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sinais detectados */}
+              <div className="border-t border-border px-7 py-6">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-primary" />
+                  <h4 className="text-sm font-semibold text-foreground">
+                    Sinais detectados pela BIA
+                  </h4>
+                </div>
+                <ul className="mt-3 space-y-2">
+                  {c.sinais.map((s) => (
+                    <li
+                      key={s}
+                      className="flex items-start gap-2 rounded-xl border border-border bg-accent/20 px-3 py-2 text-xs text-foreground"
+                    >
+                      <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Recomendações */}
+              <div className="border-t border-border bg-accent/20 px-7 py-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-primary" />
+                  <h4 className="text-sm font-semibold text-foreground">
+                    Recomendações da BIA
+                  </h4>
+                </div>
+                <ul className="mt-3 space-y-2">
+                  {recomendacoes.map((r) => (
+                    <li
+                      key={r}
+                      className="flex items-start gap-2 text-xs text-foreground"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {selectedComprovante && (
         <div
