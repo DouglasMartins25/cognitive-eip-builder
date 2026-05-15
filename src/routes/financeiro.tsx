@@ -562,7 +562,7 @@ function Index() {
 
   useEffect(() => {
     if (view === "processing") {
-      const t = setTimeout(() => setView(processingTarget), 5000);
+      const t = setTimeout(() => setView(processingTarget), 4000);
       return () => clearTimeout(t);
     }
   }, [view, processingTarget]);
