@@ -204,6 +204,16 @@ function Home() {
       "clientes em atraso",
       "cobrança",
       "cobranca",
+      "em atraso",
+      "estão em atraso",
+      "estao em atraso",
+      "atrasado",
+      "atrasados",
+      "títulos atrasados",
+      "titulos atrasados",
+      "títulos a receber",
+      "titulos a receber",
+      "title a receber",
     ];
     let start:
       | "analise"
