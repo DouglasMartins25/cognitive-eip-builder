@@ -1886,7 +1886,11 @@ function Index() {
                                 ? "text-[oklch(0.55_0.15_85)]"
                                 : "text-[oklch(0.55_0.18_25)]";
                           return (
-                            <tr key={c.nome} className="text-foreground">
+                            <tr
+                              key={c.nome}
+                              onClick={() => setSelectedCliente(c)}
+                              className="cursor-pointer text-foreground transition-colors hover:bg-accent/40"
+                            >
                               <td className="px-4 py-3">
                                 <p className="font-medium">{c.nome}</p>
                                 <p className="text-xs text-muted-foreground">{c.segmento}</p>
