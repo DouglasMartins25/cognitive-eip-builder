@@ -2184,12 +2184,28 @@ function Index() {
                               Crédito disponível - {m}
                             </span>
                           ))}
+                          {creditoContratado.map((m) => (
+                            <span
+                              key={m}
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.94_0.07_160)] px-3 py-1 text-[11px] font-medium text-[oklch(0.38_0.13_160)]"
+                            >
+                              <CheckCircle2 className="h-3 w-3" />
+                              Crédito contratado - {m}
+                            </span>
+                          ))}
                         </div>
                       </div>
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]">
-                        <Wallet className="h-3 w-3" />
-                        {fluxoCaixa.sugestoesCredito.length} meses com sugestão de crédito
-                      </span>
+                      {withCredit ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.94_0.07_160)] px-3 py-1 text-[11px] font-medium text-[oklch(0.38_0.13_160)]">
+                          <CheckCircle2 className="h-3 w-3" />
+                          {creditoContratado.length} meses cobertos por crédito contratado
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]">
+                          <Wallet className="h-3 w-3" />
+                          {sugestoes.length} meses com sugestão de crédito
+                        </span>
+                      )}
                     </div>
                     {(() => {
                       const w = 760;
