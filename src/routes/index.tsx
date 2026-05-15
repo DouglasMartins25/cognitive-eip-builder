@@ -291,8 +291,10 @@ function Home() {
       | "vencidos"
       | "boletos"
       | "risco"
+      | "fluxocaixa"
       | undefined;
-    if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
+    if (fluxoCaixaTerms.some((t) => lower.includes(t))) start = "fluxocaixa";
+    else if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
     else if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";
     else if (vencidosReceberTerms.some((t) => lower.includes(t))) start = "vencidos";
     else if (comparacaoTerms.some((t) => lower.includes(t))) start = "comparacao";
