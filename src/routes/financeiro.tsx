@@ -2107,11 +2107,32 @@ function Index() {
               </div>
             );
           })()
-        ) : view === "fluxocaixa" ? (
+        ) : view === "fluxocaixa" || view === "fluxocaixa-credito" ? (
           (() => {
+            const withCredit = view === "fluxocaixa-credito";
             const fmtMil = (v: number) =>
               `${v < 0 ? "-" : ""}${Math.abs(v)} mil`;
-            const liq = fluxoCaixa.liquidoMensal;
+            const liqBase = fluxoCaixa.liquidoMensal;
+            const liq = withCredit
+              ? liqBase.map((d) =>
+                  d.mes === "Fev"
+                    ? { ...d, valor: 55 }
+                    : d.mes === "Jun"
+                      ? { ...d, valor: 65 }
+                      : d,
+                )
+              : liqBase;
+            const fluxoMensal = withCredit
+              ? fluxoCaixa.fluxoMensal.map((d) =>
+                  d.mes === "Fev"
+                    ? { ...d, entrada: d.entrada + 100 }
+                    : d.mes === "Jun"
+                      ? { ...d, entrada: d.entrada + 90 }
+                      : d,
+                )
+              : fluxoCaixa.fluxoMensal;
+            const sugestoes = withCredit ? [] : fluxoCaixa.sugestoesCredito;
+            const creditoContratado = withCredit ? ["FEV/26", "JUN/26"] : [];
             const liqMax = Math.max(...liq.map((d) => d.valor));
             const liqMin = Math.min(...liq.map((d) => d.valor));
             const yMax = Math.ceil(liqMax / 65) * 65 + 30;
@@ -2125,10 +2146,14 @@ function Index() {
                     </div>
                     <div>
                       <h2 className="text-base font-medium text-foreground">
-                        Projeção de fluxo de caixa
+                        {withCredit
+                          ? "Projeção de fluxo de caixa com crédito contratado"
+                          : "Projeção de fluxo de caixa"}
                       </h2>
                       <p className="text-sm text-muted-foreground">
-                        Consolidação de entradas, saídas e valor líquido por mês
+                        {withCredit
+                          ? "Simulação do fluxo após aplicação do crédito nos meses críticos"
+                          : "Consolidação de entradas, saídas e valor líquido por mês"}
                       </p>
                     </div>
                   </div>
