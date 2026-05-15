@@ -97,8 +97,47 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa";
+
+const fluxoCaixa = {
+  liquidoMensal: [
+    { mes: "Jan", valor: 125 },
+    { mes: "Fev", valor: -45 },
+    { mes: "Mar", valor: 85 },
+    { mes: "Abr", valor: 165 },
+    { mes: "Mai", valor: 95 },
+    { mes: "Jun", valor: -25 },
+    { mes: "Jul", valor: 145 },
+    { mes: "Ago", valor: 185 },
+    { mes: "Set", valor: 75 },
+    { mes: "Out", valor: 135 },
+    { mes: "Nov", valor: 155 },
+  ],
+  fluxoMensal: [
+    { mes: "Jan", entrada: 320, saida: 195 },
+    { mes: "Fev", entrada: 540, saida: 380 },
+    { mes: "Mar", entrada: 360, saida: 275 },
+    { mes: "Abr", entrada: 380, saida: 260 },
+    { mes: "Mai", entrada: 370, saida: 245 },
+    { mes: "Jun", entrada: 600, saida: 420 },
+    { mes: "Jul", entrada: 350, saida: 270 },
+    { mes: "Ago", entrada: 530, saida: 360 },
+    { mes: "Set", entrada: 525, saida: 340 },
+    { mes: "Out", entrada: 520, saida: 345 },
+    { mes: "Nov", entrada: 90, saida: 70 },
+  ],
+  porCategoria: [
+    { categoria: "Serviços", entrada: 980, saida: 320 },
+    { categoria: "Produtos", entrada: 720, saida: 280 },
+    { categoria: "Consultoria", entrada: 420, saida: 210 },
+    { categoria: "Assinaturas", entrada: 380, saida: 140 },
+    { categoria: "Licenciamento", entrada: 280, saida: 120 },
+    { categoria: "Manutenção", entrada: 180, saida: 90 },
+    { categoria: "Treinamento", entrada: 120, saida: 70 },
+  ],
+  sugestoesCredito: ["FEV/26", "JUN/26"],
+};
 type ComparacaoVariant = "anos" | "meses";
 
 const comparacaoDataAnos = {
