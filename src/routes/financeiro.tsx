@@ -2058,6 +2058,302 @@ function Index() {
               </div>
             );
           })()
+        ) : view === "fluxocaixa" ? (
+          (() => {
+            const fmtMil = (v: number) =>
+              `${v < 0 ? "-" : ""}${Math.abs(v)} mil`;
+            const liq = fluxoCaixa.liquidoMensal;
+            const liqMax = Math.max(...liq.map((d) => d.valor));
+            const liqMin = Math.min(...liq.map((d) => d.valor));
+            const yMax = Math.ceil(liqMax / 65) * 65 + 30;
+            const yMin = Math.floor(liqMin / 65) * 65 - 20;
+            return (
+              <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+                <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                      <Activity className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-medium text-foreground">
+                        Projeção de fluxo de caixa
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Consolidação de entradas, saídas e valor líquido por mês
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setView("empty")}
+                    className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </button>
+                </header>
+
+                <div className="flex-1 overflow-auto px-8 py-6 space-y-5">
+                  {/* Valor líquido por mês */}
+                  <div className="rounded-2xl border border-border bg-background p-5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-sm font-semibold text-foreground">
+                          Valor líquido por mês
+                        </h3>
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          {fluxoCaixa.sugestoesCredito.map((m) => (
+                            <span
+                              key={m}
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]"
+                            >
+                              <Wallet className="h-3 w-3" />
+                              Crédito disponível - {m}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]">
+                        <Wallet className="h-3 w-3" />
+                        {fluxoCaixa.sugestoesCredito.length} meses com sugestão de crédito
+                      </span>
+                    </div>
+                    {(() => {
+                      const w = 760;
+                      const h = 280;
+                      const pad = { l: 50, r: 12, t: 24, b: 30 };
+                      const iw = w - pad.l - pad.r;
+                      const ih = h - pad.t - pad.b;
+                      const range = yMax - yMin;
+                      const y = (v: number) => pad.t + ih - ((v - yMin) / range) * ih;
+                      const groupW = iw / liq.length;
+                      const barW = groupW * 0.5;
+                      const ticks = [yMin, Math.round((yMin + yMax) / 4 / 5) * 5, 0, Math.round(((yMax + yMin) / 2 + yMax) / 2 / 5) * 5, yMax];
+                      const uniq = Array.from(new Set(ticks)).sort((a, b) => a - b);
+                      return (
+                        <svg viewBox={`0 0 ${w} ${h}`} className="mt-4 h-[260px] w-full">
+                          {uniq.map((t) => (
+                            <g key={t}>
+                              <line
+                                x1={pad.l}
+                                x2={w - pad.r}
+                                y1={y(t)}
+                                y2={y(t)}
+                                stroke="oklch(0.92 0.005 180)"
+                                strokeDasharray="3 3"
+                              />
+                              <text
+                                x={pad.l - 6}
+                                y={y(t) + 3}
+                                textAnchor="end"
+                                fontSize="10"
+                                fill="oklch(0.55 0.015 180)"
+                              >
+                                {fmtMil(t)}
+                              </text>
+                            </g>
+                          ))}
+                          {liq.map((d, i) => {
+                            const cx = pad.l + groupW * i + groupW / 2;
+                            const positive = d.valor >= 0;
+                            const top = positive ? y(d.valor) : y(0);
+                            const height = Math.abs(y(d.valor) - y(0));
+                            return (
+                              <g key={d.mes}>
+                                <rect
+                                  x={cx - barW / 2}
+                                  y={top}
+                                  width={barW}
+                                  height={height}
+                                  rx={3}
+                                  fill={positive ? "oklch(0.52 0.13 160)" : "oklch(0.55 0.18 25)"}
+                                />
+                                <text
+                                  x={cx}
+                                  y={positive ? top - 6 : top + height + 12}
+                                  textAnchor="middle"
+                                  fontSize="10"
+                                  fill="oklch(0.35 0.015 180)"
+                                >
+                                  {fmtMil(d.valor)}
+                                </text>
+                                <text
+                                  x={cx}
+                                  y={h - 8}
+                                  textAnchor="middle"
+                                  fontSize="11"
+                                  fill="oklch(0.45 0.015 180)"
+                                >
+                                  {d.mes}
+                                </text>
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Fluxo por mês + por categoria */}
+                  <div className="grid gap-5 lg:grid-cols-2">
+                    <div className="rounded-2xl border border-border bg-background p-5">
+                      <h3 className="text-sm font-semibold text-foreground">
+                        <span className="text-foreground">FLUXO DE CAIXA</span>{" "}
+                        <span className="text-muted-foreground">POR MÊS</span>
+                      </h3>
+                      {(() => {
+                        const data = fluxoCaixa.fluxoMensal;
+                        const w = 460;
+                        const h = 240;
+                        const pad = { l: 48, r: 8, t: 16, b: 36 };
+                        const iw = w - pad.l - pad.r;
+                        const ih = h - pad.t - pad.b;
+                        const yMaxF = 600;
+                        const groupW = iw / data.length;
+                        const barW = groupW * 0.32;
+                        const y = (v: number) => pad.t + ih - (v / yMaxF) * ih;
+                        const ticks = [0, 150, 300, 450, 600];
+                        return (
+                          <svg viewBox={`0 0 ${w} ${h}`} className="mt-3 h-[220px] w-full">
+                            {ticks.map((t) => (
+                              <g key={t}>
+                                <line
+                                  x1={pad.l}
+                                  x2={w - pad.r}
+                                  y1={y(t)}
+                                  y2={y(t)}
+                                  stroke="oklch(0.92 0.005 180)"
+                                  strokeDasharray="3 3"
+                                />
+                                <text
+                                  x={pad.l - 6}
+                                  y={y(t) + 3}
+                                  textAnchor="end"
+                                  fontSize="9"
+                                  fill="oklch(0.55 0.015 180)"
+                                >
+                                  R${t === 0 ? "0" : `${t} Mil`}
+                                </text>
+                              </g>
+                            ))}
+                            {data.map((d, i) => {
+                              const cx = pad.l + groupW * i + groupW / 2;
+                              return (
+                                <g key={d.mes}>
+                                  <rect
+                                    x={cx - barW - 1}
+                                    y={y(d.entrada)}
+                                    width={barW}
+                                    height={y(0) - y(d.entrada)}
+                                    rx={2}
+                                    fill="oklch(0.52 0.13 160)"
+                                  />
+                                  <rect
+                                    x={cx + 1}
+                                    y={y(d.saida)}
+                                    width={barW}
+                                    height={y(0) - y(d.saida)}
+                                    rx={2}
+                                    fill="oklch(0.55 0.18 25)"
+                                  />
+                                  <text
+                                    x={cx}
+                                    y={h - 18}
+                                    textAnchor="middle"
+                                    fontSize="10"
+                                    fill="oklch(0.45 0.015 180)"
+                                  >
+                                    {d.mes}
+                                  </text>
+                                </g>
+                              );
+                            })}
+                          </svg>
+                        );
+                      })()}
+                      <div className="mt-2 flex items-center justify-center gap-5 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-[oklch(0.52_0.13_160)]" />
+                          Entradas
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-[oklch(0.55_0.18_25)]" />
+                          Saídas
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border bg-background p-5">
+                      <h3 className="text-sm font-semibold text-foreground">
+                        <span className="text-foreground">FLUXO</span>{" "}
+                        <span className="text-muted-foreground">POR CATEGORIA</span>
+                      </h3>
+                      <div className="mt-4 space-y-3">
+                        {(() => {
+                          const cats = fluxoCaixa.porCategoria;
+                          const max = Math.max(...cats.flatMap((c) => [c.entrada, c.saida]));
+                          return cats.map((c) => (
+                            <div key={c.categoria} className="grid grid-cols-[110px_1fr] items-center gap-3">
+                              <span className="truncate text-xs text-muted-foreground">
+                                {c.categoria}
+                              </span>
+                              <div className="space-y-1">
+                                <div
+                                  className="h-3 rounded-sm bg-[oklch(0.52_0.13_160)]"
+                                  style={{ width: `${(c.entrada / max) * 100}%` }}
+                                />
+                                <div
+                                  className="h-3 rounded-sm bg-[oklch(0.55_0.18_25)]"
+                                  style={{ width: `${(c.saida / max) * 100}%` }}
+                                />
+                              </div>
+                            </div>
+                          ));
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Insights */}
+                  <div className="rounded-2xl border border-border bg-accent/30 p-5">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <h3 className="text-sm font-semibold text-foreground">
+                        Insights do fluxo de caixa
+                      </h3>
+                    </div>
+                    <div className="mt-3 grid gap-2 lg:grid-cols-2">
+                      <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]">
+                          <AlertCircle className="h-3.5 w-3.5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-foreground">
+                            FEV/26 e JUN/26 com fluxo negativo
+                          </p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            Recomendamos antecipar recebíveis ou contratar capital de giro para cobrir o gap.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                          <TrendingUp className="h-3.5 w-3.5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-foreground">
+                            AGO/26 é o mês de maior geração de caixa
+                          </p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            Saldo líquido projetado de R$ 185 mil — ideal para reforçar reservas ou quitar dívidas.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()
         ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
