@@ -665,7 +665,39 @@ function Index() {
       "cobrar clientes",
       "cobrar os clientes",
     ];
-    if (boletosTerms.some((t) => lower.includes(t))) {
+    const riscoTerms = [
+      "saúde da minha carteira",
+      "saude da minha carteira",
+      "saúde da carteira",
+      "saude da carteira",
+      "saúde carteira",
+      "saude carteira",
+      "score do meu cliente",
+      "score dos meus clientes",
+      "score do meus clientes",
+      "score dos clientes",
+      "score do cliente",
+      "score de cliente",
+      "análise de risco",
+      "analise de risco",
+      "análise dos risco",
+      "analise dos risco",
+      "risco do cliente",
+      "risco dos clientes",
+      "risco dos meus clientes",
+      "risco do meus clientes",
+      "risco da carteira",
+      "risco de crédito",
+      "risco de credito",
+      "perfil de risco",
+      "exposição da carteira",
+      "exposicao da carteira",
+      "carteira de clientes",
+    ];
+    if (riscoTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("risco");
+      setView("processing");
+    } else if (boletosTerms.some((t) => lower.includes(t))) {
       setProcessingTarget("boletos");
       setView("processing");
     } else if (vencidosReceberTerms.some((t) => lower.includes(t))) {
