@@ -2291,7 +2291,7 @@ function Index() {
                         <span className="text-muted-foreground">POR MÊS</span>
                       </h3>
                       {(() => {
-                        const data = fluxoCaixa.fluxoMensal;
+                        const data = fluxoMensal;
                         const w = 460;
                         const h = 240;
                         const pad = { l: 48, r: 8, t: 16, b: 36 };
