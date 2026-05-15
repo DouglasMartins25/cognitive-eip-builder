@@ -376,6 +376,20 @@ function Index() {
       "compra os ultimos",
     ];
     if (comparacaoTerms.some((t) => lower.includes(t))) {
+      const mesesTerms = [
+        "últimos 2 meses",
+        "ultimos 2 meses",
+        "últimos dois meses",
+        "ultimos dois meses",
+        "últimos meses",
+        "ultimos meses",
+        "mês passado",
+        "mes passado",
+        "fevereiro",
+        "março",
+        "marco",
+      ];
+      setComparacaoVariant(mesesTerms.some((t) => lower.includes(t)) ? "meses" : "anos");
       setProcessingTarget("comparacao");
       setView("processing");
     } else if (creditoTerms.some((t) => lower.includes(t))) {
