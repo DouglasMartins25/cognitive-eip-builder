@@ -291,9 +291,19 @@ function DigitalWorker() {
                     </p>
                     <p className="mt-0.5 text-xs text-foreground/70">{a.descricao}</p>
                   </div>
-                  <button className={`rounded-lg border bg-card px-4 py-2 text-xs font-medium ${styles.btn} hover:opacity-80`}>
-                    {a.acao}
-                  </button>
+                  {a.to ? (
+                    <Link
+                      to={a.to}
+                      search={a.start ? { start: a.start } : undefined}
+                      className={`rounded-lg border bg-card px-4 py-2 text-xs font-medium ${styles.btn} hover:opacity-80`}
+                    >
+                      {a.acao}
+                    </Link>
+                  ) : (
+                    <button className={`rounded-lg border bg-card px-4 py-2 text-xs font-medium ${styles.btn} hover:opacity-80`}>
+                      {a.acao}
+                    </button>
+                  )}
                 </div>
               );
             })}
