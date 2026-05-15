@@ -2175,7 +2175,7 @@ function Index() {
                           Valor líquido por mês
                         </h3>
                         <div className="mt-2 flex flex-wrap items-center gap-2">
-                          {fluxoCaixa.sugestoesCredito.map((m) => (
+                          {sugestoes.map((m) => (
                             <span
                               key={m}
                               className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]"
