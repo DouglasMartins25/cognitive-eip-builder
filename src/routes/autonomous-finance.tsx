@@ -14,13 +14,12 @@ import {
   ArrowLeft,
   Bot,
   AlertCircle,
+  CheckCircle2,
   ShieldCheck,
   Activity,
-  Zap,
-  Database,
-  GitBranch,
-  CheckCircle2,
-  TrendingUp,
+  FileWarning,
+  Scale,
+  Receipt,
 } from "lucide-react";
 
 export const Route = createFileRoute("/autonomous-finance")({
@@ -50,113 +49,97 @@ function SideIcon({
   );
 }
 
-const principios = [
-  {
-    icon: ShieldCheck,
-    titulo: "Governança primeiro",
-    desc: "Workers nunca operam fora de política, alçada, compliance, regras fiscais ou limites financeiros.",
-  },
-  {
-    icon: GitBranch,
-    titulo: "Escalonamento por exceção",
-    desc: "O humano atua apenas em risco, ambiguidade, conflito, baixa confiança ou impacto relevante.",
-  },
-  {
-    icon: Activity,
-    titulo: "Operação contínua",
-    desc: "24/7, processando eventos em tempo real, aprendendo padrões e reduzindo backlog operacional.",
-  },
-  {
-    icon: Zap,
-    titulo: "Event-driven",
-    desc: "Ativados por anomalias, lançamentos fora do padrão, mudanças legislativas e eventos críticos.",
-  },
-];
-
-const tiposComparacao = [
-  { tipo: "Assistente", faz: "Responde", exemplo: "Há uma anomalia no fluxo de caixa." },
-  { tipo: "Agente", faz: "Analisa e recomenda", exemplo: "Sugiro revisar este pagamento suspeito." },
-  { tipo: "Digital Worker", faz: "Executa", exemplo: "Alerta gerado e encaminhado ao gestor." },
-];
-
 const agentes = [
+  { id: "A1", nome: "Anomalia Financeira", status: "alert" },
+  { id: "A2", nome: "Compliance Tributário", status: "alert" },
+] as const;
+
+const kpis = [
+  { label: "Transações monitoradas hoje", valor: "8.421", delta: "↑ 1.204 vs ontem", up: true },
+  { label: "Anomalias detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
+  { label: "Cobertura Reforma Tributária", valor: "100%", delta: "847 regras vigentes monitoradas", up: true },
+  { label: "Contingências evitadas", valor: "R$ 1,8M", delta: "↑ R$ 312k esta semana", up: true },
+];
+
+const alertas: {
+  tipo: "critico" | "atencao" | "info";
+  icon: typeof AlertCircle;
+  agente: string;
+  titulo: string;
+  descricao: string;
+  acao: string;
+}[] = [
   {
-    id: "A1",
-    nome: "Worker de Anomalia Financeira",
+    tipo: "critico",
     icon: AlertCircle,
-    objetivo:
-      "Garantir a integridade e o padrão da operação financeira por meio de detecção contínua de anomalias em pagamentos e recebimentos.",
-    monitora: [
-      "Volume e frequência de pagamentos por fornecedor",
-      "Padrão de recebimentos por cliente",
-      "Variações anômalas em valores e datas",
-      "Duplicidade de lançamentos e fluxo de caixa",
-    ],
-    detecta: [
-      "Pagamentos duplicados ou com valores divergentes",
-      "Fornecedores com variação acima do histórico",
-      "Recebimentos fora do padrão do cliente",
-      "Risco de liquidez detectado com antecedência",
-    ],
-    inputs: [
-      "Contas a pagar e contas a receber",
-      "Lançamentos e conciliações bancárias",
-      "Fluxo de caixa e histórico transacional",
-    ],
-    outputs: [
-      "Alertas classificados por criticidade",
-      "Relatórios de anomalias detectadas",
-      "Insights de comportamento financeiro",
-    ],
+    agente: "A1",
+    titulo: "Pagamento duplicado detectado — bloqueado antes da execução",
+    descricao: "NF 48.291 · Fornecedor Metais Gerais · R$ 87.450 · 2º lançamento idêntico em 4h",
+    acao: "Revisar",
   },
   {
-    id: "A2",
-    nome: "Worker de Compliance Tributário",
+    tipo: "critico",
+    icon: FileWarning,
+    agente: "A2",
+    titulo: "CST divergente da nova legislação IBS/CBS",
+    descricao: "342 itens com CST desatualizado · Risco de autuação estimado: R$ 412k · Sugestão de reparametrização pronta",
+    acao: "Aplicar correção",
+  },
+  {
+    tipo: "atencao",
+    icon: Activity,
+    agente: "A1",
+    titulo: "Variação de valor 187% acima do histórico",
+    descricao: "Fornecedor Tech Components · Pagamento R$ 248.900 vs média 12m R$ 86.700",
+    acao: "Autorizar",
+  },
+  {
+    tipo: "atencao",
+    icon: Scale,
+    agente: "A2",
+    titulo: "Alíquota IBS aplicada incorretamente",
+    descricao: "NCM 8471.30 · 28 operações últimos 7 dias · Crédito fiscal subaproveitado R$ 64.200",
+    acao: "Recalcular",
+  },
+  {
+    tipo: "info",
     icon: ShieldCheck,
-    objetivo:
-      "Assegurar a conformidade fiscal e tributária da operação frente à Reforma Tributária, normativas e legislação vigente.",
-    monitora: [
-      "Legislação da Reforma Tributária e regulamentações",
-      "Instruções normativas, decretos e portarias",
-      "Cronograma de vigência e prazos de transição",
-      "Impacto por setor, regime e tipo de operação",
-    ],
-    detecta: [
-      "CFOP, CST e NCM divergentes da nova legislação",
-      "Alíquotas IBS/CBS aplicadas incorretamente",
-      "Regras de crédito/débito fiscal inconsistentes",
-      "Parametrizações de regimes especiais desatualizadas",
-    ],
-    inputs: [
-      "Parametrizações fiscais do ERP",
-      "Tabelas oficiais de alíquotas IBS/CBS",
-      "Instruções normativas e decretos",
-      "Histórico de configurações do sistema",
-    ],
-    outputs: [
-      "Alertas de inconformidade fiscal classificados",
-      "Diagnóstico de parametrizações do ERP",
-      "Mapa de impacto da Reforma Tributária",
-    ],
+    agente: "A2",
+    titulo: "Nova IN RFB nº 2.314/26 publicada",
+    descricao: "Impacto analisado: 14 parametrizações afetadas · Plano de adequação pronto para revisão",
+    acao: "Ver plano",
   },
 ];
 
-const fluxo = [
-  "Evento financeiro / mudança legislativa detectada",
-  "Worker analisa contexto e aplica políticas",
-  "Gera alerta classificado e encaminha ao gestor",
-  "Monitora resolução e aprende com o padrão",
-  "Escala apenas exceções críticas ao humano",
+const atividades = [
+  { hora: "01:08", agente: "A1", desc: "8.421 lançamentos analisados — 17 anomalias sinalizadas" },
+  { hora: "02:42", agente: "A2", desc: "Cronograma da Reforma Tributária revalidado · 0 lacunas" },
+  { hora: "03:55", agente: "A1", desc: "Pagamento duplicado NF 48.291 bloqueado automaticamente" },
+  { hora: "05:21", agente: "A2", desc: "847 regras CFOP/CST/NCM cruzadas com tabelas oficiais" },
+  { hora: "06:14", agente: "A2", desc: "IN RFB nº 2.314/26 ingerida e mapeada para 14 parametrizações" },
+  { hora: "06:47", agente: "A1", desc: "Modelo de série temporal retreinado com 90 dias de fluxo" },
+  { hora: "07:03", agente: "A1", desc: "Recebimento atrasado Cliente Vértice escalado ao gestor" },
 ];
 
-const valores = [
-  { label: "Risco operacional", valor: "↓ 78%", desc: "anomalias detectadas em tempo real" },
-  { label: "Cobertura legislativa", valor: "100%", desc: "Reforma Tributária analisada continuamente" },
-  { label: "Tempo de adequação", valor: "−92%", desc: "entre mudança legislativa e ajuste" },
-  { label: "Conferência manual", valor: "−85%", desc: "monitoramento 24/7 sem esforço humano" },
+const anomalias = [
+  { tipo: "Pagamento duplicado", qtd: 3, sev: "critico" },
+  { tipo: "Valor fora do histórico", qtd: 6, sev: "atencao" },
+  { tipo: "Recebimento em atraso", qtd: 4, sev: "atencao" },
+  { tipo: "Concentração anômala", qtd: 2, sev: "info" },
+  { tipo: "Risco de liquidez D+9", qtd: 2, sev: "critico" },
+];
+
+const compliance = [
+  { regra: "CFOP × operação", cobertura: 100, status: "ok" },
+  { regra: "CST atualizado IBS/CBS", cobertura: 87, status: "alert" },
+  { regra: "NCM × alíquota oficial", cobertura: 96, status: "warn" },
+  { regra: "Regimes especiais", cobertura: 100, status: "ok" },
+  { regra: "Créditos fiscais", cobertura: 92, status: "warn" },
 ];
 
 function AutonomousFinance() {
+  const acoesPendentes = alertas.length;
+
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       <aside className="flex w-16 flex-col items-center justify-between border-r border-border bg-sidebar py-5">
@@ -191,194 +174,161 @@ function AutonomousFinance() {
           {/* Hero */}
           <div className="rounded-2xl bg-[oklch(0.2_0.04_240)] p-6 text-white">
             <p className="text-[11px] font-semibold tracking-widest text-white/60">
-              SANKHYA FINANCE · DIGITAL WORKERS
+              SEXTA-FEIRA, 15 DE MAIO DE 2026 · 07:24 · AUTONOMOUS FINANCE
             </p>
             <h1 className="mt-3 text-3xl font-semibold leading-tight">
-              Autonomous Finance.{" "}
-              <span className="text-[oklch(0.78_0.18_150)]">Da automação assistiva</span>{" "}
-              para execução operacional autônoma.
+              Bom dia, João Silva.{" "}
+              <span className="text-[oklch(0.78_0.18_150)]">{acoesPendentes} ações</span>{" "}
+              dos workers aguardam decisão.
             </h1>
             <p className="mt-2 text-sm text-white/60">
-              O ERP deixa de apenas registrar transações para incorporar mão de obra digital
-              que monitora eventos, interpreta contexto, decide dentro de políticas e executa
-              processos ponta a ponta — escalando humanos apenas em exceções.
+              Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais nesta noite.
+              17 anomalias detectadas — 12 resolvidas automaticamente.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {agentes.map((a) => (
                 <span
                   key={a.id}
-                  className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.5_0.12_150)]/60 bg-[oklch(0.25_0.08_150)]/40 px-3 py-1 text-xs text-white"
+                  className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.55_0.18_260)]/60 bg-[oklch(0.3_0.1_260)]/40 px-3 py-1 text-xs text-white"
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.78_0.18_150)]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.7_0.18_260)]" />
                   <span className="font-semibold">{a.id}</span> {a.nome}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Diferença */}
-          <p className="mt-8 text-[11px] font-semibold tracking-widest text-muted-foreground">
-            ASSISTENTE × AGENTE × DIGITAL WORKER
-          </p>
-          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-            {tiposComparacao.map((t) => (
-              <div key={t.tipo} className="rounded-xl border border-border bg-card p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t.tipo}</p>
-                <p className="mt-2 text-sm font-medium text-foreground">{t.faz}</p>
-                <p className="mt-2 text-xs italic text-muted-foreground">"{t.exemplo}"</p>
+          {/* KPIs */}
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {kpis.map((k) => (
+              <div key={k.label} className="rounded-xl border border-border bg-card p-4">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  {k.label}
+                </p>
+                <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
+                <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
+                  {k.delta}
+                </p>
               </div>
             ))}
           </div>
 
-          {/* Princípios */}
+          {/* Alertas */}
           <p className="mt-8 text-[11px] font-semibold tracking-widest text-muted-foreground">
-            PRINCÍPIOS DE ARQUITETURA
+            ALERTAS GERADOS PELOS WORKERS — REQUEREM SUA ATENÇÃO
           </p>
-          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {principios.map((p) => {
-              const Icon = p.icon;
-              return (
-                <div key={p.titulo} className="flex gap-3 rounded-xl border border-border bg-card p-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{p.titulo}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{p.desc}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Agentes detalhados */}
-          <p className="mt-8 text-[11px] font-semibold tracking-widest text-muted-foreground">
-            AGENTES ATIVOS NO SANKHYA FINANCE
-          </p>
-          <div className="mt-3 space-y-4">
-            {agentes.map((a) => {
+          <div className="mt-3 space-y-3">
+            {alertas.map((a, i) => {
+              const styles =
+                a.tipo === "critico"
+                  ? { bg: "bg-[oklch(0.95_0.04_25)]", border: "border-[oklch(0.7_0.15_25)]/40", icon: "bg-[oklch(0.55_0.2_25)] text-white", text: "text-[oklch(0.45_0.18_25)]", btn: "border-[oklch(0.55_0.2_25)] text-[oklch(0.45_0.18_25)]" }
+                  : a.tipo === "atencao"
+                  ? { bg: "bg-[oklch(0.96_0.05_85)]", border: "border-[oklch(0.7_0.14_70)]/40", icon: "bg-[oklch(0.6_0.16_60)] text-white", text: "text-[oklch(0.45_0.14_60)]", btn: "border-[oklch(0.6_0.16_60)] text-[oklch(0.45_0.14_60)]" }
+                  : { bg: "bg-[oklch(0.95_0.04_260)]", border: "border-[oklch(0.65_0.15_260)]/40", icon: "bg-[oklch(0.5_0.18_260)] text-white", text: "text-[oklch(0.4_0.18_260)]", btn: "border-[oklch(0.5_0.18_260)] text-[oklch(0.4_0.18_260)]" };
               const Icon = a.icon;
               return (
-                <div key={a.id} className="rounded-xl border border-border bg-card p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold tracking-wide text-muted-foreground">
-                        Agente {a.id.replace("A", "")}
-                      </p>
-                      <p className="text-base font-semibold text-foreground">{a.nome}</p>
-                    </div>
+                <div key={i} className={`flex items-center gap-4 rounded-xl border ${styles.border} ${styles.bg} p-4`}>
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${styles.icon}`}>
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <p className="mt-3 text-sm text-foreground/80">{a.objetivo}</p>
-
-                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                      <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">MONITORA</p>
-                      <ul className="mt-2 space-y-1.5">
-                        {a.monitora.map((m) => (
-                          <li key={m} className="flex items-start gap-2 text-xs text-foreground">
-                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
-                            {m}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">DETECTA</p>
-                      <ul className="mt-2 space-y-1.5">
-                        {a.detecta.map((m) => (
-                          <li key={m} className="flex items-start gap-2 text-xs text-foreground">
-                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[oklch(0.6_0.16_60)]" />
-                            {m}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  <div className="flex-1">
+                    <p className={`text-sm font-semibold ${styles.text}`}>
+                      {a.titulo} <span className="text-xs font-normal opacity-70">— {a.agente}</span>
+                    </p>
+                    <p className="mt-0.5 text-xs text-foreground/70">{a.descricao}</p>
                   </div>
-
-                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div className="rounded-lg bg-muted/50 p-3">
-                      <div className="flex items-center gap-2">
-                        <Database className="h-3.5 w-3.5 text-muted-foreground" />
-                        <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">INPUTS</p>
-                      </div>
-                      <ul className="mt-2 space-y-1">
-                        {a.inputs.map((i) => (
-                          <li key={i} className="text-xs text-foreground/80">· {i}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="rounded-lg bg-primary/5 p-3">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                        <p className="text-[11px] font-semibold tracking-widest text-primary">OUTPUTS</p>
-                      </div>
-                      <ul className="mt-2 space-y-1">
-                        {a.outputs.map((o) => (
-                          <li key={o} className="text-xs text-foreground/80">· {o}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+                  <button className={`rounded-lg border bg-card px-4 py-2 text-xs font-medium ${styles.btn} hover:opacity-80`}>
+                    {a.acao}
+                  </button>
                 </div>
               );
             })}
           </div>
 
-          {/* Fluxo */}
-          <p className="mt-8 text-[11px] font-semibold tracking-widest text-muted-foreground">
-            FLUXO DE EXECUÇÃO AUTÔNOMA
-          </p>
-          <div className="mt-3 rounded-xl border border-border bg-card p-5">
-            <ol className="space-y-3">
-              {fluxo.map((passo, i) => (
-                <li key={passo} className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
-                    {i + 1}
-                  </span>
-                  <span className="pt-0.5 text-sm text-foreground">{passo}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
+          {/* Two columns */}
+          <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div className="rounded-xl border border-border bg-card p-5">
+              <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
+                ATIVIDADE AUTÔNOMA ESTA NOITE
+              </p>
+              <ul className="mt-4 space-y-3">
+                {atividades.map((at, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="mt-0.5 w-12 shrink-0 text-xs font-mono text-muted-foreground">{at.hora}</span>
+                    <span className="mt-0.5 inline-flex h-5 shrink-0 items-center rounded bg-muted px-1.5 text-[10px] font-semibold text-foreground/80">
+                      {at.agente}
+                    </span>
+                    <span className="flex-1 text-xs text-foreground">{at.desc}</span>
+                    <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                      <CheckCircle2 className="h-3 w-3" /> AUTO
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Valor gerado */}
-          <p className="mt-8 text-[11px] font-semibold tracking-widest text-muted-foreground">
-            VALOR GERADO
-          </p>
-          <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {valores.map((v) => (
-              <div key={v.label} className="rounded-xl border border-border bg-card p-4">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                  {v.label}
-                </p>
-                <p className="mt-3 text-2xl font-semibold text-primary">{v.valor}</p>
-                <p className="mt-2 text-xs text-muted-foreground">{v.desc}</p>
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-[oklch(0.55_0.2_25)]" />
+                  <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
+                    ANOMALIAS POR TIPO — A1
+                  </p>
+                </div>
+                <ul className="mt-4 space-y-2.5">
+                  {anomalias.map((a) => {
+                    const color =
+                      a.sev === "critico"
+                        ? "bg-[oklch(0.55_0.2_25)]"
+                        : a.sev === "atencao"
+                        ? "bg-[oklch(0.6_0.16_60)]"
+                        : "bg-[oklch(0.5_0.18_260)]";
+                    return (
+                      <li key={a.tipo} className="flex items-center gap-3 text-xs">
+                        <span className={`h-2 w-2 rounded-full ${color}`} />
+                        <span className="flex-1 text-foreground">{a.tipo}</span>
+                        <span className="font-mono font-semibold text-foreground">{a.qtd}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-            ))}
-          </div>
 
-          <div className="mt-8 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-5">
-            <div className="flex items-start gap-3">
-              <TrendingUp className="mt-1 h-5 w-5 text-primary" />
-              <div>
-                <p className="text-sm font-semibold text-foreground">
-                  O ERP como sistema operacional da empresa
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  A conformidade com a Reforma Tributária não pode depender de revisão manual periódica.
-                  Ela precisa ser contínua, inteligente e automatizada — operada por workers digitais
-                  especializados que escalam humanos apenas em exceções.
-                </p>
+              <div className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2">
+                  <Receipt className="h-4 w-4 text-primary" />
+                  <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
+                    COMPLIANCE TRIBUTÁRIO — A2
+                  </p>
+                </div>
+                <ul className="mt-4 space-y-3">
+                  {compliance.map((c) => {
+                    const color =
+                      c.status === "ok"
+                        ? "bg-[oklch(0.65_0.15_150)]"
+                        : c.status === "warn"
+                        ? "bg-[oklch(0.7_0.14_70)]"
+                        : "bg-[oklch(0.7_0.15_25)]";
+                    return (
+                      <li key={c.regra} className="text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-foreground">{c.regra}</span>
+                          <span className="font-mono font-semibold text-foreground">{c.cobertura}%</span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 w-full rounded bg-muted">
+                          <div className={`h-1.5 rounded ${color}`} style={{ width: `${c.cobertura}%` }} />
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </div>
           </div>
 
           <div className="mt-6 flex items-center gap-2 text-[11px] text-muted-foreground">
             <Bot className="h-3.5 w-3.5" />
-            Autonomous Finance · 2 agentes ativos · Sankhya Finance
+            Autonomous Finance · 2 workers ativos · última sincronização há 1 min
           </div>
         </div>
       </main>
