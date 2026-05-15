@@ -2412,32 +2412,91 @@ function Index() {
                       </h3>
                     </div>
                     <div className="mt-3 grid gap-2 lg:grid-cols-2">
-                      <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]">
-                          <AlertCircle className="h-3.5 w-3.5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-foreground">
-                            FEV/26 e JUN/26 com fluxo negativo
-                          </p>
-                          <p className="mt-0.5 text-xs text-muted-foreground">
-                            Recomendamos antecipar recebíveis ou contratar capital de giro para cobrir o gap.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
-                          <TrendingUp className="h-3.5 w-3.5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-foreground">
-                            AGO/26 é o mês de maior geração de caixa
-                          </p>
-                          <p className="mt-0.5 text-xs text-muted-foreground">
-                            Saldo líquido projetado de R$ 185 mil — ideal para reforçar reservas ou quitar dívidas.
-                          </p>
-                        </div>
-                      </div>
+                      {withCredit ? (
+                        <>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.94_0.07_160)] text-[oklch(0.38_0.13_160)]">
+                              <CheckCircle2 className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                Gaps de FEV/26 e JUN/26 cobertos pelo crédito
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Aporte de R$ 100 mil em FEV/26 e R$ 90 mil em JUN/26 reverte os meses negativos para fluxo positivo.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                              <TrendingUp className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                Fluxo líquido anual passa a ser 100% positivo
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Com a contratação, todos os 11 meses ficam acima de zero, eliminando risco de descoberto e juros emergenciais.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]">
+                              <AlertCircle className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                Custo financeiro estimado de R$ 6,2 mil
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Juros e encargos do capital de giro dentro do prazo contratado — diluído nos meses subsequentes.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                              <Sparkles className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                AGO/26 segue como pico de geração de caixa
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Saldo líquido projetado de R$ 185 mil — recomendado para amortização antecipada do crédito.
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]">
+                              <AlertCircle className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                FEV/26 e JUN/26 com fluxo negativo
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Recomendamos antecipar recebíveis ou contratar capital de giro para cobrir o gap.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                              <TrendingUp className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                AGO/26 é o mês de maior geração de caixa
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Saldo líquido projetado de R$ 185 mil — ideal para reforçar reservas ou quitar dívidas.
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
