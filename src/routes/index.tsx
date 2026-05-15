@@ -180,8 +180,41 @@ function Home() {
       "despesa",
       "financeir",
     ];
-    let start: "analise" | "vencendo" | "pagamento" | "credito" | "comparacao" | undefined;
-    if (comparacaoTerms.some((t) => lower.includes(t))) start = "comparacao";
+    const vencidosReceberTerms = [
+      "títulos vencidos",
+      "titulos vencidos",
+      "título vencido",
+      "titulo vencido",
+      "recebimento vencido",
+      "recebimentos vencidos",
+      "recebimento em atraso",
+      "recebimentos em atraso",
+      "receber em atraso",
+      "a receber em atraso",
+      "ainda não foram pagos",
+      "ainda nao foram pagos",
+      "não pagaram",
+      "nao pagaram",
+      "não pagos pelos meus clientes",
+      "nao pagos pelos meus clientes",
+      "inadimplên",
+      "inadimplen",
+      "inadimplência",
+      "inadimplencia",
+      "clientes em atraso",
+      "cobrança",
+      "cobranca",
+    ];
+    let start:
+      | "analise"
+      | "vencendo"
+      | "pagamento"
+      | "credito"
+      | "comparacao"
+      | "vencidos"
+      | undefined;
+    if (vencidosReceberTerms.some((t) => lower.includes(t))) start = "vencidos";
+    else if (comparacaoTerms.some((t) => lower.includes(t))) start = "comparacao";
     else if (creditoTerms.some((t) => lower.includes(t))) start = "credito";
     else if (pagamentoTerms.some((t) => lower.includes(t))) start = "pagamento";
     else if (tituloTerms.some((t) => lower.includes(t))) start = "vencendo";
