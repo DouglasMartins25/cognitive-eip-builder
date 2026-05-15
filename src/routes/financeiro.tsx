@@ -1114,6 +1114,129 @@ function Index() {
               </div>
             </div>
           </div>
+        ) : view === "vencidos" ? (
+          (() => {
+            const fmt = (v: number) =>
+              v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            const totalOriginal = titulosVencidosReceber.reduce((a, t) => a + t.valorOriginal, 0);
+            const totalJuros = titulosVencidosReceber.reduce((a, t) => a + t.juros + t.multa, 0);
+            const totalAtualizado = titulosVencidosReceber.reduce(
+              (a, t) => a + t.valorAtualizado,
+              0,
+            );
+            return (
+              <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+                <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[oklch(0.95_0.04_25)] text-[oklch(0.45_0.15_25)]">
+                      <AlertCircle className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-medium text-foreground">
+                        Títulos a receber em atraso
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {titulosVencidosReceber.length} títulos vencidos · juros e multa calculados
+                        até hoje
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setView("empty")}
+                    className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </button>
+                </header>
+
+                <div className="flex-1 overflow-auto px-8 py-6">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Valor original em atraso</p>
+                      <p className="mt-1 text-lg font-semibold text-foreground">
+                        {fmt(totalOriginal)}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Juros + multa acumulados</p>
+                      <p className="mt-1 text-lg font-semibold text-[oklch(0.45_0.15_25)]">
+                        {fmt(totalJuros)}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Total atualizado a receber</p>
+                      <p className="mt-1 text-lg font-semibold text-primary">
+                        {fmt(totalAtualizado)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 overflow-auto rounded-2xl border border-border">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-medium">Título</th>
+                          <th className="px-4 py-3 text-left font-medium">Cliente</th>
+                          <th className="px-4 py-3 text-left font-medium">Emissão</th>
+                          <th className="px-4 py-3 text-left font-medium">Vencimento</th>
+                          <th className="px-4 py-3 text-right font-medium">Atraso</th>
+                          <th className="px-4 py-3 text-right font-medium">Valor original</th>
+                          <th className="px-4 py-3 text-right font-medium">Juros + multa</th>
+                          <th className="px-4 py-3 text-right font-medium">Valor atualizado</th>
+                          <th className="px-4 py-3 text-left font-medium">Meio de pagamento</th>
+                          <th className="px-4 py-3 text-left font-medium" />
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {titulosVencidosReceber.map((t) => (
+                          <tr key={t.id} className="text-foreground">
+                            <td className="px-4 py-3">
+                              <p className="font-medium">{t.id}</p>
+                              <p className="text-xs text-muted-foreground">{t.documento}</p>
+                            </td>
+                            <td className="px-4 py-3">{t.cliente}</td>
+                            <td className="px-4 py-3 text-muted-foreground">{t.emissao}</td>
+                            <td className="px-4 py-3 text-muted-foreground">{t.vencimento}</td>
+                            <td className="px-4 py-3 text-right">
+                              <span className="inline-flex items-center rounded-full bg-[oklch(0.95_0.04_25)] px-2 py-0.5 text-[11px] font-medium text-[oklch(0.45_0.15_25)]">
+                                {t.diasAtraso} dias
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-right tabular-nums">
+                              {fmt(t.valorOriginal)}
+                            </td>
+                            <td className="px-4 py-3 text-right tabular-nums text-[oklch(0.45_0.15_25)]">
+                              + {fmt(t.juros + t.multa)}
+                            </td>
+                            <td className="px-4 py-3 text-right font-medium tabular-nums">
+                              {fmt(t.valorAtualizado)}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground">
+                                {t.meioPagamento}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                                <Send className="h-3 w-3" />
+                                Cobrar
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <p className="mt-3 text-[11px] text-muted-foreground">
+                    Juros calculados a 1% a.m. e multa de 2% sobre o valor original conforme
+                    contrato padrão.
+                  </p>
+                </div>
+              </div>
+            );
+          })()
         ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
