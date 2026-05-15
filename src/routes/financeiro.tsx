@@ -738,7 +738,24 @@ function Index() {
       "exposicao da carteira",
       "carteira de clientes",
     ];
-    if (riscoTerms.some((t) => lower.includes(t))) {
+    const fluxoCaixaTerms = [
+      "fluxo de caixa",
+      "fluxo caixa",
+      "fluxocaixa",
+      "projeção do fluxo",
+      "projecao do fluxo",
+      "projeção de caixa",
+      "projecao de caixa",
+      "avaliar fluxo",
+      "como está o fluxo",
+      "como esta o fluxo",
+      "previsão de caixa",
+      "previsao de caixa",
+    ];
+    if (fluxoCaixaTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("fluxocaixa");
+      setView("processing");
+    } else if (riscoTerms.some((t) => lower.includes(t))) {
       setProcessingTarget("risco");
       setView("processing");
     } else if (boletosTerms.some((t) => lower.includes(t))) {
