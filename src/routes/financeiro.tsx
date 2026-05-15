@@ -2292,6 +2292,16 @@ function Index() {
 
       {selectedCliente && (() => {
         const c = selectedCliente;
+        const fmt = (v: number) =>
+          v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+        const faixaTone = (f: string) =>
+          f === "Baixo"
+            ? "bg-accent text-primary"
+            : f === "Moderado"
+              ? "bg-[oklch(0.96_0.05_85)] text-[oklch(0.45_0.13_85)]"
+              : f === "Alto"
+                ? "bg-[oklch(0.95_0.06_45)] text-[oklch(0.45_0.16_45)]"
+                : "bg-[oklch(0.95_0.05_25)] text-[oklch(0.45_0.16_25)]";
         const util = Math.round((c.utilizado / c.limite) * 100);
         const ScoreIcon =
           c.score >= 80 ? ShieldCheck : c.score >= 60 ? Shield : ShieldAlert;
