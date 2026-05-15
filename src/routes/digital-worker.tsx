@@ -69,7 +69,16 @@ const kpis = [
   { label: "Compliance fiscal", valor: "100%", delta: "↑ IBS/CBS aderente", up: true },
 ];
 
-const alertas = [
+const alertas: {
+  tipo: "critico" | "atencao" | "info";
+  icon: typeof AlertCircle;
+  agente: string;
+  titulo: string;
+  descricao: string;
+  acao: string;
+  to?: string;
+  start?: string;
+}[] = [
   {
     tipo: "critico",
     icon: AlertCircle,
@@ -77,6 +86,8 @@ const alertas = [
     titulo: "Pagamentos fora do padrão — autorização necessária",
     descricao: "4 pagamentos acima do limite habitual · Total R$ 612.300 · Maior: Metais Gerais R$ 248.900 (+187% vs média)",
     acao: "Autorizar",
+    to: "/financeiro",
+    start: "pagamento",
   },
   {
     tipo: "atencao",
@@ -85,6 +96,8 @@ const alertas = [
     titulo: "Gap de caixa detectado",
     descricao: "Caixa D+9 projetado em R$ 2,1M — abaixo do threshold R$ 3,5M. Oferta de crédito preparada.",
     acao: "Ver oferta",
+    to: "/financeiro",
+    start: "credito",
   },
   {
     tipo: "info",
