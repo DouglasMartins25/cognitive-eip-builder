@@ -21,6 +21,7 @@ import {
   Bot,
   CheckCircle2,
 } from "lucide-react";
+import { resolveChatRoute } from "@/lib/chat-routing";
 
 export const Route = createFileRoute("/")({
   component: Home,
