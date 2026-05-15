@@ -1000,7 +1000,9 @@ function Index() {
                           ? "Emitindo novos boletos e ativando a régua de cobrança para cada título..."
                           : processingTarget === "risco"
                             ? "Analisando o score, histórico e exposição de cada cliente da carteira..."
-                            : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                            : processingTarget === "dda"
+                              ? "Buscando pagamentos DDA emitidos no seu CNPJ e cruzando com os títulos da origem..."
+                              : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
