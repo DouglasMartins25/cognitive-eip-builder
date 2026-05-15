@@ -240,6 +240,35 @@ function Home() {
       "cobrar clientes",
       "cobrar os clientes",
     ];
+    const riscoTerms = [
+      "saúde da minha carteira",
+      "saude da minha carteira",
+      "saúde da carteira",
+      "saude da carteira",
+      "saúde carteira",
+      "saude carteira",
+      "score do meu cliente",
+      "score dos meus clientes",
+      "score do meus clientes",
+      "score dos clientes",
+      "score do cliente",
+      "score de cliente",
+      "análise de risco",
+      "analise de risco",
+      "análise dos risco",
+      "analise dos risco",
+      "risco do cliente",
+      "risco dos clientes",
+      "risco dos meus clientes",
+      "risco do meus clientes",
+      "risco da carteira",
+      "risco de crédito",
+      "risco de credito",
+      "perfil de risco",
+      "exposição da carteira",
+      "exposicao da carteira",
+      "carteira de clientes",
+    ];
     let start:
       | "analise"
       | "vencendo"
@@ -248,8 +277,10 @@ function Home() {
       | "comparacao"
       | "vencidos"
       | "boletos"
+      | "risco"
       | undefined;
-    if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";
+    if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
+    else if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";
     else if (vencidosReceberTerms.some((t) => lower.includes(t))) start = "vencidos";
     else if (comparacaoTerms.some((t) => lower.includes(t))) start = "comparacao";
     else if (creditoTerms.some((t) => lower.includes(t))) start = "credito";

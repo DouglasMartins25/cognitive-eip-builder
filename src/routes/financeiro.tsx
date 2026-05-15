@@ -40,6 +40,11 @@ import {
   Phone,
   MessageSquare,
   Scale,
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
+  Activity,
+  Users,
 } from "lucide-react";
 
 const creditoOfertas = [
@@ -92,8 +97,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco";
 type ComparacaoVariant = "anos" | "meses";
 
 const comparacaoDataAnos = {
@@ -343,27 +348,137 @@ const titulosVencidosReceber = [
   },
 ];
 
+const carteiraRisco = {
+  scoreGeral: 78,
+  saudeLabel: "Saudável",
+  totalCarteira: 248500,
+  inadimplencia: 6.4,
+  tendencia: -1.2,
+  distribuicao: [
+    { faixa: "Baixo risco", clientes: 14, valor: 158400, cor: "oklch(0.72 0.14 160)", pct: 64 },
+    { faixa: "Risco moderado", clientes: 7, valor: 58700, cor: "oklch(0.78 0.13 85)", pct: 24 },
+    { faixa: "Alto risco", clientes: 4, valor: 23900, cor: "oklch(0.7 0.16 45)", pct: 9 },
+    { faixa: "Crítico", clientes: 2, valor: 7500, cor: "oklch(0.6 0.18 25)", pct: 3 },
+  ],
+  clientes: [
+    {
+      nome: "Mercado Vista Alegre",
+      segmento: "Varejo alimentar",
+      score: 92,
+      tendencia: 3,
+      faixa: "Baixo",
+      limite: 25000,
+      utilizado: 12400,
+      atraso: 0,
+      ticket: 4250,
+      ultimaCompra: "08/05/2026",
+      sinais: ["Pagamentos em dia há 18 meses", "Compras crescentes", "Score Serasa 820"],
+    },
+    {
+      nome: "Distribuidora Norte Sul",
+      segmento: "Distribuição",
+      score: 84,
+      tendencia: 1,
+      faixa: "Baixo",
+      limite: 60000,
+      utilizado: 38200,
+      atraso: 0,
+      ticket: 12800,
+      ultimaCompra: "11/05/2026",
+      sinais: ["Cliente fiel há 4 anos", "Aumento de frequência", "Boa reputação no mercado"],
+    },
+    {
+      nome: "Tech Solutions Ltda",
+      segmento: "Tecnologia",
+      score: 71,
+      tendencia: -2,
+      faixa: "Moderado",
+      limite: 30000,
+      utilizado: 22100,
+      atraso: 12,
+      ticket: 6320,
+      ultimaCompra: "02/05/2026",
+      sinais: ["1 título em atraso", "Utilização do limite em 73%", "Score Serasa em queda"],
+    },
+    {
+      nome: "Padaria Central",
+      segmento: "Varejo alimentar",
+      score: 68,
+      tendencia: -1,
+      faixa: "Moderado",
+      limite: 8000,
+      utilizado: 5200,
+      atraso: 18,
+      ticket: 980,
+      ultimaCompra: "28/04/2026",
+      sinais: ["Atraso recorrente em < 30 dias", "Volume estável", "Sem registros negativos"],
+    },
+    {
+      nome: "Auto Peças Veloz",
+      segmento: "Autopeças",
+      score: 58,
+      tendencia: -4,
+      faixa: "Alto",
+      limite: 15000,
+      utilizado: 13800,
+      atraso: 25,
+      ticket: 8750,
+      ultimaCompra: "20/04/2026",
+      sinais: ["Limite quase esgotado", "Atrasos crescentes", "Queda de 12% no faturamento"],
+    },
+    {
+      nome: "Restaurante Sabor da Terra",
+      segmento: "Alimentação",
+      score: 45,
+      tendencia: -8,
+      faixa: "Crítico",
+      limite: 6000,
+      utilizado: 5800,
+      atraso: 42,
+      ticket: 3450,
+      ultimaCompra: "15/03/2026",
+      sinais: ["Atraso > 40 dias", "Negativação no SPC", "Redução de pedidos"],
+    },
+  ],
+  alertas: [
+    {
+      titulo: "Concentração em 3 clientes",
+      desc: "55% da carteira está concentrada em apenas 3 clientes. Diversifique para reduzir exposição.",
+      tone: "warning" as const,
+    },
+    {
+      titulo: "2 clientes em situação crítica",
+      desc: "Restaurante Sabor da Terra e mais 1 cliente acumulam R$ 7,5k em risco elevado de inadimplência.",
+      tone: "negative" as const,
+    },
+    {
+      titulo: "Score médio da carteira: 78",
+      desc: "Acima da média do setor (72). Mantenha a política atual de concessão e revise mensalmente.",
+      tone: "positive" as const,
+    },
+    {
+      titulo: "Inadimplência caindo",
+      desc: "Índice passou de 7,6% para 6,4% nos últimos 60 dias. Reflexo da régua de cobrança ativa.",
+      tone: "positive" as const,
+    },
+  ],
+};
+
 type Message = { id: number; text: string; from: "user" | "bot" };
+
 
 function Index() {
   const max = 120;
   const { start, variant } = Route.useSearch();
+  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco"];
   const initialView: View =
     start === "analise"
       ? "chart"
       : start === "vencendo"
         ? "vencendo"
-        : start === "pagamento"
+        : start && processingStarts.includes(start)
           ? "processing"
-      : start === "credito"
-            ? "processing"
-            : start === "comparacao"
-              ? "processing"
-              : start === "vencidos"
-                ? "processing"
-                : start === "boletos"
-                  ? "processing"
-                  : "empty";
+          : "empty";
   const initialTarget: ProcessingTarget =
     start === "credito"
       ? "credito"
@@ -373,7 +488,9 @@ function Index() {
           ? "vencidos"
           : start === "boletos"
             ? "boletos"
-            : "comprovantes";
+            : start === "risco"
+              ? "risco"
+              : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -548,7 +665,39 @@ function Index() {
       "cobrar clientes",
       "cobrar os clientes",
     ];
-    if (boletosTerms.some((t) => lower.includes(t))) {
+    const riscoTerms = [
+      "saúde da minha carteira",
+      "saude da minha carteira",
+      "saúde da carteira",
+      "saude da carteira",
+      "saúde carteira",
+      "saude carteira",
+      "score do meu cliente",
+      "score dos meus clientes",
+      "score do meus clientes",
+      "score dos clientes",
+      "score do cliente",
+      "score de cliente",
+      "análise de risco",
+      "analise de risco",
+      "análise dos risco",
+      "analise dos risco",
+      "risco do cliente",
+      "risco dos clientes",
+      "risco dos meus clientes",
+      "risco do meus clientes",
+      "risco da carteira",
+      "risco de crédito",
+      "risco de credito",
+      "perfil de risco",
+      "exposição da carteira",
+      "exposicao da carteira",
+      "carteira de clientes",
+    ];
+    if (riscoTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("risco");
+      setView("processing");
+    } else if (boletosTerms.some((t) => lower.includes(t))) {
       setProcessingTarget("boletos");
       setView("processing");
     } else if (vencidosReceberTerms.some((t) => lower.includes(t))) {
@@ -727,7 +876,9 @@ function Index() {
                       ? "Analisando os títulos financeiros e calculando juros e multas dos atrasos..."
                       : processingTarget === "boletos"
                         ? "Emitindo novos boletos e ativando a régua de cobrança para cada título..."
-                        : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                        : processingTarget === "risco"
+                          ? "Analisando o score, histórico e exposição de cada cliente da carteira..."
+                          : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
@@ -1544,6 +1695,294 @@ function Index() {
                     dispara mensagens automáticas em D+1, D+3, D+7 e D+15 caso o pagamento
                     não seja identificado.
                   </p>
+                </div>
+              </div>
+            );
+          })()
+        ) : view === "risco" ? (
+          (() => {
+            const fmt = (v: number) =>
+              v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            const r = carteiraRisco;
+            const scoreColor =
+              r.scoreGeral >= 80
+                ? "oklch(0.6 0.14 160)"
+                : r.scoreGeral >= 60
+                  ? "oklch(0.65 0.15 85)"
+                  : "oklch(0.6 0.18 25)";
+            const faixaTone = (f: string) =>
+              f === "Baixo"
+                ? "bg-[oklch(0.95_0.05_160)] text-[oklch(0.4_0.12_160)]"
+                : f === "Moderado"
+                  ? "bg-[oklch(0.96_0.05_85)] text-[oklch(0.45_0.13_85)]"
+                  : f === "Alto"
+                    ? "bg-[oklch(0.96_0.06_45)] text-[oklch(0.45_0.15_45)]"
+                    : "bg-[oklch(0.95_0.05_25)] text-[oklch(0.45_0.15_25)]";
+            const total = r.distribuicao.reduce((a, d) => a + d.pct, 0);
+            return (
+              <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+                <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary">
+                      <Shield className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-medium text-foreground">
+                        Análise de risco da carteira
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Score, exposição e sinais de alerta de cada cliente
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setView("empty")}
+                    className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </button>
+                </header>
+
+                <div className="flex-1 overflow-auto px-8 py-6">
+                  {/* Score geral + KPIs */}
+                  <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+                    <div className="flex items-center gap-4 rounded-2xl border border-border bg-background px-5 py-4 lg:col-span-1">
+                      {(() => {
+                        const radius = 32;
+                        const c = 2 * Math.PI * radius;
+                        const offset = c - (r.scoreGeral / 100) * c;
+                        return (
+                          <svg viewBox="0 0 80 80" className="h-20 w-20 -rotate-90">
+                            <circle cx="40" cy="40" r={radius} stroke="oklch(0.92 0.005 180)" strokeWidth="8" fill="none" />
+                            <circle
+                              cx="40"
+                              cy="40"
+                              r={radius}
+                              stroke={scoreColor}
+                              strokeWidth="8"
+                              fill="none"
+                              strokeLinecap="round"
+                              strokeDasharray={c}
+                              strokeDashoffset={offset}
+                            />
+                            <text x="40" y="44" textAnchor="middle" fontSize="18" fontWeight="600" fill="oklch(0.25 0.02 180)" transform="rotate(90 40 40)">
+                              {r.scoreGeral}
+                            </text>
+                          </svg>
+                        );
+                      })()}
+                      <div>
+                        <p className="text-xs text-muted-foreground">Score geral da carteira</p>
+                        <p className="mt-0.5 text-base font-semibold text-foreground">
+                          {r.saudeLabel}
+                        </p>
+                        <span className="mt-1 inline-flex items-center gap-1 text-xs text-primary">
+                          <TrendingUp className="h-3 w-3" />
+                          Acima da média do setor
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Wallet className="h-3.5 w-3.5 text-primary" />
+                        Exposição total
+                      </div>
+                      <p className="mt-1 text-lg font-semibold text-foreground">{fmt(r.totalCarteira)}</p>
+                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                        {r.clientes.length}+ clientes ativos
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Activity className="h-3.5 w-3.5 text-[oklch(0.6_0.18_25)]" />
+                        Inadimplência
+                      </div>
+                      <p className="mt-1 text-lg font-semibold text-foreground">{r.inadimplencia}%</p>
+                      <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-primary">
+                        <TrendingDown className="h-3 w-3" />
+                        {Math.abs(r.tendencia)}pp em 60 dias
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Users className="h-3.5 w-3.5 text-primary" />
+                        Clientes monitorados
+                      </div>
+                      <p className="mt-1 text-lg font-semibold text-primary">
+                        {r.distribuicao.reduce((a, d) => a + d.clientes, 0)}
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                        Score atualizado diariamente
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Distribuição por faixa de risco */}
+                  <div className="mt-5 rounded-2xl border border-border bg-background p-5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-medium text-foreground">
+                        Distribuição da carteira por faixa de risco
+                      </h3>
+                      <span className="text-xs text-muted-foreground">% da exposição</span>
+                    </div>
+                    <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full">
+                      {r.distribuicao.map((d) => (
+                        <div
+                          key={d.faixa}
+                          style={{ width: `${(d.pct / total) * 100}%`, background: d.cor }}
+                          title={`${d.faixa}: ${d.pct}%`}
+                        />
+                      ))}
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                      {r.distribuicao.map((d) => (
+                        <div key={d.faixa} className="rounded-xl border border-border bg-card px-3 py-2">
+                          <div className="flex items-center gap-2">
+                            <span className="h-2.5 w-2.5 rounded-full" style={{ background: d.cor }} />
+                            <p className="text-xs font-medium text-foreground">{d.faixa}</p>
+                          </div>
+                          <p className="mt-1.5 text-sm font-semibold text-foreground">{fmt(d.valor)}</p>
+                          <p className="text-[11px] text-muted-foreground">
+                            {d.clientes} clientes · {d.pct}%
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Tabela de clientes */}
+                  <div className="mt-5 overflow-auto rounded-2xl border border-border">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-medium">Cliente</th>
+                          <th className="px-4 py-3 text-left font-medium">Score</th>
+                          <th className="px-4 py-3 text-left font-medium">Faixa</th>
+                          <th className="px-4 py-3 text-right font-medium">Limite</th>
+                          <th className="px-4 py-3 text-left font-medium">Utilização</th>
+                          <th className="px-4 py-3 text-right font-medium">Atraso</th>
+                          <th className="px-4 py-3 text-left font-medium">Sinais</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {r.clientes.map((c) => {
+                          const util = Math.round((c.utilizado / c.limite) * 100);
+                          const utilTone =
+                            util > 85
+                              ? "bg-[oklch(0.6_0.18_25)]"
+                              : util > 65
+                                ? "bg-[oklch(0.7_0.15_45)]"
+                                : "bg-primary";
+                          const ScoreIcon =
+                            c.score >= 80 ? ShieldCheck : c.score >= 60 ? Shield : ShieldAlert;
+                          const scoreTone =
+                            c.score >= 80
+                              ? "text-primary"
+                              : c.score >= 60
+                                ? "text-[oklch(0.55_0.15_85)]"
+                                : "text-[oklch(0.55_0.18_25)]";
+                          return (
+                            <tr key={c.nome} className="text-foreground">
+                              <td className="px-4 py-3">
+                                <p className="font-medium">{c.nome}</p>
+                                <p className="text-xs text-muted-foreground">{c.segmento}</p>
+                              </td>
+                              <td className="px-4 py-3">
+                                <div className="flex items-center gap-2">
+                                  <ScoreIcon className={`h-4 w-4 ${scoreTone}`} />
+                                  <span className="text-sm font-semibold tabular-nums">{c.score}</span>
+                                  <span
+                                    className={`inline-flex items-center text-[11px] ${
+                                      c.tendencia >= 0
+                                        ? "text-primary"
+                                        : "text-[oklch(0.55_0.18_25)]"
+                                    }`}
+                                  >
+                                    {c.tendencia >= 0 ? (
+                                      <TrendingUp className="h-3 w-3" />
+                                    ) : (
+                                      <TrendingDown className="h-3 w-3" />
+                                    )}
+                                    {Math.abs(c.tendencia)}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3">
+                                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${faixaTone(c.faixa)}`}>
+                                  {c.faixa}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-right tabular-nums">{fmt(c.limite)}</td>
+                              <td className="px-4 py-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
+                                    <div className={`h-full ${utilTone}`} style={{ width: `${Math.min(util, 100)}%` }} />
+                                  </div>
+                                  <span className="text-xs tabular-nums text-muted-foreground">{util}%</span>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3 text-right tabular-nums">
+                                {c.atraso > 0 ? (
+                                  <span className="text-[oklch(0.5_0.16_25)]">{c.atraso} dias</span>
+                                ) : (
+                                  <span className="text-muted-foreground">—</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-3">
+                                <ul className="space-y-0.5 text-[11px] text-muted-foreground">
+                                  {c.sinais.slice(0, 2).map((s) => (
+                                    <li key={s} className="flex items-start gap-1">
+                                      <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-muted-foreground" />
+                                      {s}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Alertas e insights */}
+                  <div className="mt-5 rounded-2xl border border-border bg-accent/30 p-5">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <h3 className="text-sm font-semibold text-foreground">
+                        Alertas e recomendações
+                      </h3>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Sinais detectados pela BIA com base no comportamento da carteira
+                    </p>
+                    <div className="mt-4 grid gap-2 lg:grid-cols-2">
+                      {r.alertas.map((a) => {
+                        const tone =
+                          a.tone === "positive"
+                            ? { bg: "bg-accent", fg: "text-primary", Icon: ShieldCheck }
+                            : a.tone === "warning"
+                              ? { bg: "bg-[oklch(0.96_0.05_85)]", fg: "text-[oklch(0.5_0.13_85)]", Icon: AlertCircle }
+                              : { bg: "bg-[oklch(0.95_0.05_25)]", fg: "text-[oklch(0.5_0.16_25)]", Icon: ShieldAlert };
+                        const Icon = tone.Icon;
+                        return (
+                          <div
+                            key={a.titulo}
+                            className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3"
+                          >
+                            <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${tone.bg} ${tone.fg}`}>
+                              <Icon className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">{a.titulo}</p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">{a.desc}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
             );
