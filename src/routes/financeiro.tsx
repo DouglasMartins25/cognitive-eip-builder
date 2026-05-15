@@ -1209,7 +1209,13 @@ function Index() {
                     </div>
 
                     <div className="mt-4 flex items-center gap-2 border-t border-border px-5 py-4">
-                      <button className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+                      <button
+                        onClick={() => {
+                          setAceitouTermos(false);
+                          setSelectedOferta(o);
+                        }}
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+                      >
                         Contratar
                         <ArrowRight className="h-3.5 w-3.5" />
                       </button>
