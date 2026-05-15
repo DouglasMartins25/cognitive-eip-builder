@@ -98,7 +98,7 @@ export const Route = createFileRoute("/financeiro")({
 });
 
 type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise";
 type ComparacaoVariant = "anos" | "meses";
 
 const comparacaoDataAnos = {
@@ -470,27 +470,27 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 function Index() {
   const max = 120;
   const { start, variant } = Route.useSearch();
-  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco"];
+  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco", "analise"];
   const initialView: View =
-    start === "analise"
-      ? "chart"
-      : start === "vencendo"
-        ? "vencendo"
-        : start && processingStarts.includes(start)
-          ? "processing"
-          : "empty";
+    start === "vencendo"
+      ? "vencendo"
+      : start && processingStarts.includes(start)
+        ? "processing"
+        : "empty";
   const initialTarget: ProcessingTarget =
-    start === "credito"
-      ? "credito"
-      : start === "comparacao"
-        ? "comparacao"
-        : start === "vencidos"
-          ? "vencidos"
-          : start === "boletos"
-            ? "boletos"
-            : start === "risco"
-              ? "risco"
-              : "comprovantes";
+    start === "analise"
+      ? "analise"
+      : start === "credito"
+        ? "credito"
+        : start === "comparacao"
+          ? "comparacao"
+          : start === "vencidos"
+            ? "vencidos"
+            : start === "boletos"
+              ? "boletos"
+              : start === "risco"
+                ? "risco"
+                : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -738,7 +738,8 @@ function Index() {
       lower.includes("despesa") ||
       lower.includes("financeir")
     ) {
-      setView("chart");
+      setProcessingTarget("analise");
+      setView("processing");
     }
   };
 
@@ -871,17 +872,19 @@ function Index() {
                 Carregando informações
               </h2>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                {processingTarget === "credito"
-                  ? "Pensando a melhor forma de você visualizar as ofertas de crédito..."
-                  : processingTarget === "comparacao"
-                    ? "Analisando os períodos e gerando insights da comparação financeira..."
-                    : processingTarget === "vencidos"
-                      ? "Analisando os títulos financeiros e calculando juros e multas dos atrasos..."
-                      : processingTarget === "boletos"
-                        ? "Emitindo novos boletos e ativando a régua de cobrança para cada título..."
-                        : processingTarget === "risco"
-                          ? "Analisando o score, histórico e exposição de cada cliente da carteira..."
-                          : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                {processingTarget === "analise"
+                  ? "Realizando análise financeira e consolidando receitas, despesas e projeções..."
+                  : processingTarget === "credito"
+                    ? "Pensando a melhor forma de você visualizar as ofertas de crédito..."
+                    : processingTarget === "comparacao"
+                      ? "Analisando os períodos e gerando insights da comparação financeira..."
+                      : processingTarget === "vencidos"
+                        ? "Analisando os títulos financeiros e calculando juros e multas dos atrasos..."
+                        : processingTarget === "boletos"
+                          ? "Emitindo novos boletos e ativando a régua de cobrança para cada título..."
+                          : processingTarget === "risco"
+                            ? "Analisando o score, histórico e exposição de cada cliente da carteira..."
+                            : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
