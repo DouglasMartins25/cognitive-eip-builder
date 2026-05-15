@@ -86,8 +86,9 @@ export const Route = createFileRoute("/financeiro")({
 
 type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao";
 type ProcessingTarget = "comprovantes" | "credito" | "comparacao";
+type ComparacaoVariant = "anos" | "meses";
 
-const comparacaoData = {
+const comparacaoDataAnos = {
   periodoA: "Março 2026",
   periodoB: "Março 2025",
   metricas: [
