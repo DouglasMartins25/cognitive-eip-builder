@@ -464,6 +464,8 @@ const carteiraRisco = {
   ],
 };
 
+type Message = { id: number; text: string; from: "user" | "bot" };
+
 
 function Index() {
   const max = 120;
