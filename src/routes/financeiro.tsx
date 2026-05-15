@@ -33,6 +33,13 @@ import {
   ArrowUpDown,
   CheckCircle,
   TrendingUp as TrendingUpIcon,
+  ChevronDown,
+  ChevronUp,
+  Receipt,
+  Mail,
+  Phone,
+  MessageSquare,
+  Scale,
 } from "lucide-react";
 
 const creditoOfertas = [
@@ -85,8 +92,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos";
 type ComparacaoVariant = "anos" | "meses";
 
 const comparacaoDataAnos = {
