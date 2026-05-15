@@ -2408,7 +2408,7 @@ function Index() {
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-primary" />
                       <h3 className="text-sm font-semibold text-foreground">
-                        Insights do fluxo de caixa
+                        {withCredit ? "Insights do fluxo de caixa com crédito" : "Insights do fluxo de caixa"}
                       </h3>
                     </div>
                     <div className="mt-3 grid gap-2 lg:grid-cols-2">
