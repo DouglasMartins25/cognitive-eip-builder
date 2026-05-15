@@ -673,7 +673,9 @@ function Index() {
                   ? "Pensando a melhor forma de você visualizar as ofertas de crédito..."
                   : processingTarget === "comparacao"
                     ? "Analisando os períodos e gerando insights da comparação financeira..."
-                    : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                    : processingTarget === "vencidos"
+                      ? "Analisando os títulos financeiros e calculando juros e multas dos atrasos..."
+                      : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
