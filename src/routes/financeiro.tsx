@@ -547,6 +547,11 @@ function Index() {
   const [selectedComprovante, setSelectedComprovante] = useState<
     null | { id: string; cliente: string; documento: string; valor: string; autenticacao: string }
   >(null);
+  const [selectedOferta, setSelectedOferta] = useState<
+    null | (typeof creditoOfertas)[number]
+  >(null);
+  const [aceitouTermos, setAceitouTermos] = useState(false);
+  const [contratacaoSucesso, setContratacaoSucesso] = useState<null | string>(null);
   const [autenticacoes] = useState<Record<string, string>>(() =>
     Object.fromEntries(
       titulosVencendoHoje
