@@ -97,8 +97,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito";
 
 const fluxoCaixa = {
   liquidoMensal: [
@@ -976,6 +976,8 @@ function Index() {
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
                 {processingTarget === "fluxocaixa"
                   ? "Consolidando entradas, saídas e projeções para montar o seu fluxo de caixa..."
+                  : processingTarget === "fluxocaixa-credito"
+                  ? "Recalculando o fluxo de caixa com o crédito recém-contratado..."
                   : processingTarget === "analise"
                   ? "Realizando análise financeira e consolidando receitas, despesas e projeções..."
                   : processingTarget === "credito"
@@ -2107,11 +2109,32 @@ function Index() {
               </div>
             );
           })()
-        ) : view === "fluxocaixa" ? (
+        ) : view === "fluxocaixa" || view === "fluxocaixa-credito" ? (
           (() => {
+            const withCredit = view === "fluxocaixa-credito";
             const fmtMil = (v: number) =>
               `${v < 0 ? "-" : ""}${Math.abs(v)} mil`;
-            const liq = fluxoCaixa.liquidoMensal;
+            const liqBase = fluxoCaixa.liquidoMensal;
+            const liq = withCredit
+              ? liqBase.map((d) =>
+                  d.mes === "Fev"
+                    ? { ...d, valor: 55 }
+                    : d.mes === "Jun"
+                      ? { ...d, valor: 65 }
+                      : d,
+                )
+              : liqBase;
+            const fluxoMensal = withCredit
+              ? fluxoCaixa.fluxoMensal.map((d) =>
+                  d.mes === "Fev"
+                    ? { ...d, entrada: d.entrada + 100 }
+                    : d.mes === "Jun"
+                      ? { ...d, entrada: d.entrada + 90 }
+                      : d,
+                )
+              : fluxoCaixa.fluxoMensal;
+            const sugestoes = withCredit ? [] : fluxoCaixa.sugestoesCredito;
+            const creditoContratado = withCredit ? ["FEV/26", "JUN/26"] : [];
             const liqMax = Math.max(...liq.map((d) => d.valor));
             const liqMin = Math.min(...liq.map((d) => d.valor));
             const yMax = Math.ceil(liqMax / 65) * 65 + 30;
@@ -2125,10 +2148,14 @@ function Index() {
                     </div>
                     <div>
                       <h2 className="text-base font-medium text-foreground">
-                        Projeção de fluxo de caixa
+                        {withCredit
+                          ? "Projeção de fluxo de caixa com crédito contratado"
+                          : "Projeção de fluxo de caixa"}
                       </h2>
                       <p className="text-sm text-muted-foreground">
-                        Consolidação de entradas, saídas e valor líquido por mês
+                        {withCredit
+                          ? "Simulação do fluxo após aplicação do crédito nos meses críticos"
+                          : "Consolidação de entradas, saídas e valor líquido por mês"}
                       </p>
                     </div>
                   </div>
@@ -2150,7 +2177,7 @@ function Index() {
                           Valor líquido por mês
                         </h3>
                         <div className="mt-2 flex flex-wrap items-center gap-2">
-                          {fluxoCaixa.sugestoesCredito.map((m) => (
+                          {sugestoes.map((m) => (
                             <span
                               key={m}
                               className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]"
@@ -2159,12 +2186,28 @@ function Index() {
                               Crédito disponível - {m}
                             </span>
                           ))}
+                          {creditoContratado.map((m) => (
+                            <span
+                              key={m}
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.94_0.07_160)] px-3 py-1 text-[11px] font-medium text-[oklch(0.38_0.13_160)]"
+                            >
+                              <CheckCircle2 className="h-3 w-3" />
+                              Crédito contratado - {m}
+                            </span>
+                          ))}
                         </div>
                       </div>
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]">
-                        <Wallet className="h-3 w-3" />
-                        {fluxoCaixa.sugestoesCredito.length} meses com sugestão de crédito
-                      </span>
+                      {withCredit ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.94_0.07_160)] px-3 py-1 text-[11px] font-medium text-[oklch(0.38_0.13_160)]">
+                          <CheckCircle2 className="h-3 w-3" />
+                          {creditoContratado.length} meses cobertos por crédito contratado
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.05_85)] px-3 py-1 text-[11px] font-medium text-[oklch(0.45_0.13_70)]">
+                          <Wallet className="h-3 w-3" />
+                          {sugestoes.length} meses com sugestão de crédito
+                        </span>
+                      )}
                     </div>
                     {(() => {
                       const w = 760;
@@ -2250,7 +2293,7 @@ function Index() {
                         <span className="text-muted-foreground">POR MÊS</span>
                       </h3>
                       {(() => {
-                        const data = fluxoCaixa.fluxoMensal;
+                        const data = fluxoMensal;
                         const w = 460;
                         const h = 240;
                         const pad = { l: 48, r: 8, t: 16, b: 36 };
@@ -2367,36 +2410,95 @@ function Index() {
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-primary" />
                       <h3 className="text-sm font-semibold text-foreground">
-                        Insights do fluxo de caixa
+                        {withCredit ? "Insights do fluxo de caixa com crédito" : "Insights do fluxo de caixa"}
                       </h3>
                     </div>
                     <div className="mt-3 grid gap-2 lg:grid-cols-2">
-                      <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]">
-                          <AlertCircle className="h-3.5 w-3.5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-foreground">
-                            FEV/26 e JUN/26 com fluxo negativo
-                          </p>
-                          <p className="mt-0.5 text-xs text-muted-foreground">
-                            Recomendamos antecipar recebíveis ou contratar capital de giro para cobrir o gap.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
-                          <TrendingUp className="h-3.5 w-3.5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-foreground">
-                            AGO/26 é o mês de maior geração de caixa
-                          </p>
-                          <p className="mt-0.5 text-xs text-muted-foreground">
-                            Saldo líquido projetado de R$ 185 mil — ideal para reforçar reservas ou quitar dívidas.
-                          </p>
-                        </div>
-                      </div>
+                      {withCredit ? (
+                        <>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.94_0.07_160)] text-[oklch(0.38_0.13_160)]">
+                              <CheckCircle2 className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                Gaps de FEV/26 e JUN/26 cobertos pelo crédito
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Aporte de R$ 100 mil em FEV/26 e R$ 90 mil em JUN/26 reverte os meses negativos para fluxo positivo.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                              <TrendingUp className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                Fluxo líquido anual passa a ser 100% positivo
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Com a contratação, todos os 11 meses ficam acima de zero, eliminando risco de descoberto e juros emergenciais.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]">
+                              <AlertCircle className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                Custo financeiro estimado de R$ 6,2 mil
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Juros e encargos do capital de giro dentro do prazo contratado — diluído nos meses subsequentes.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                              <Sparkles className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                AGO/26 segue como pico de geração de caixa
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Saldo líquido projetado de R$ 185 mil — recomendado para amortização antecipada do crédito.
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[oklch(0.95_0.04_70)] text-[oklch(0.55_0.15_70)]">
+                              <AlertCircle className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                FEV/26 e JUN/26 com fluxo negativo
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Recomendamos antecipar recebíveis ou contratar capital de giro para cobrir o gap.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                              <TrendingUp className="h-3.5 w-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                AGO/26 é o mês de maior geração de caixa
+                              </p>
+                              <p className="mt-0.5 text-xs text-muted-foreground">
+                                Saldo líquido projetado de R$ 185 mil — ideal para reforçar reservas ou quitar dívidas.
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -3176,7 +3278,11 @@ function Index() {
             </div>
             <div className="flex justify-end px-8 py-4">
               <button
-                onClick={() => setContratacaoSucesso(null)}
+                onClick={() => {
+                  setContratacaoSucesso(null);
+                  setProcessingTarget("fluxocaixa-credito");
+                  setView("processing");
+                }}
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90"
               >
                 Fechar
