@@ -797,7 +797,18 @@ function Index() {
       "previsão de caixa",
       "previsao de caixa",
     ];
-    if (fluxoCaixaTerms.some((t) => lower.includes(t))) {
+    const ddaTerms = [
+      "dda","busca dda","buscar dda","buscar novos dda","novos dda",
+      "boletos dda","boleto dda","lançamentos dda","lancamentos dda",
+      "lançamento dda","lancamento dda","dda vinculados","dda agendados",
+      "dda agendado","dda programado","dda programados","dda pendente",
+      "dda pendentes","dda sem vínculo","dda sem vinculo",
+      "títulos de recebimento","titulos de recebimento",
+    ];
+    if (ddaTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("dda");
+      setView("processing");
+    } else if (fluxoCaixaTerms.some((t) => lower.includes(t))) {
       setProcessingTarget("fluxocaixa");
       setView("processing");
     } else if (riscoTerms.some((t) => lower.includes(t))) {
