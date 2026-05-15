@@ -97,7 +97,7 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito";
 type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa";
 
 const fluxoCaixa = {
