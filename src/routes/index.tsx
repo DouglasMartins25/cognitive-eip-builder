@@ -240,6 +240,19 @@ function Home() {
       "cobrar clientes",
       "cobrar os clientes",
     ];
+    const fluxoCaixaTerms = [
+      "fluxo de caixa",
+      "fluxo caixa",
+      "projeção do fluxo",
+      "projecao do fluxo",
+      "projeção de caixa",
+      "projecao de caixa",
+      "avaliar fluxo",
+      "como está o fluxo",
+      "como esta o fluxo",
+      "previsão de caixa",
+      "previsao de caixa",
+    ];
     const riscoTerms = [
       "saúde da minha carteira",
       "saude da minha carteira",
@@ -278,8 +291,10 @@ function Home() {
       | "vencidos"
       | "boletos"
       | "risco"
+      | "fluxocaixa"
       | undefined;
-    if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
+    if (fluxoCaixaTerms.some((t) => lower.includes(t))) start = "fluxocaixa";
+    else if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
     else if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";
     else if (vencidosReceberTerms.some((t) => lower.includes(t))) start = "vencidos";
     else if (comparacaoTerms.some((t) => lower.includes(t))) start = "comparacao";
