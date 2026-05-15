@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Inbox,
   Crop,
@@ -12,11 +13,13 @@ import {
   User,
   FileText,
   ArrowLeft,
+  ArrowRight,
   Bot,
   AlertCircle,
   CheckCircle2,
   Activity,
   ShieldCheck,
+  Maximize2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/digital-worker")({
