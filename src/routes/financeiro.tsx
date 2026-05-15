@@ -470,22 +470,15 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 function Index() {
   const max = 120;
   const { start, variant } = Route.useSearch();
+  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco"];
   const initialView: View =
     start === "analise"
       ? "chart"
       : start === "vencendo"
         ? "vencendo"
-        : start === "pagamento"
+        : start && processingStarts.includes(start)
           ? "processing"
-      : start === "credito"
-            ? "processing"
-            : start === "comparacao"
-              ? "processing"
-              : start === "vencidos"
-                ? "processing"
-                : start === "boletos"
-                  ? "processing"
-                  : "empty";
+          : "empty";
   const initialTarget: ProcessingTarget =
     start === "credito"
       ? "credito"
@@ -495,7 +488,9 @@ function Index() {
           ? "vencidos"
           : start === "boletos"
             ? "boletos"
-            : "comprovantes";
+            : start === "risco"
+              ? "risco"
+              : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
