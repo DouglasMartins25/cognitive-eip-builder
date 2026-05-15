@@ -143,6 +143,61 @@ const comparacaoDataAnos = {
   ],
 };
 
+const comparacaoDataMeses: typeof comparacaoDataAnos = {
+  periodoA: "Março 2026",
+  periodoB: "Fevereiro 2026",
+  metricas: [
+    { label: "Receita", a: 92000, b: 81000, format: "currency", positiveIsGood: true },
+    { label: "Custo", a: 64000, b: 60000, format: "currency", positiveIsGood: false },
+    { label: "Caixa", a: 28000, b: 22000, format: "currency", positiveIsGood: true },
+    { label: "Necessidade de crédito", a: 0, b: 8000, format: "currency", positiveIsGood: false },
+    { label: "Custo de juros", a: 1200, b: 1900, format: "currency", positiveIsGood: false },
+  ],
+  serie: [
+    { label: "Receita", a: 92, b: 81 },
+    { label: "Custo", a: 64, b: 60 },
+    { label: "Margem", a: 28, b: 21 },
+  ],
+  insights: [
+    {
+      title: "Receita cresceu 13,6% no mês",
+      desc: "Mar/2026 fechou em R$ 92k vs R$ 81k em Fev/2026. Aumento puxado por novos contratos fechados na 2ª quinzena.",
+      impact: "+R$ 11k receita",
+      tone: "positive" as const,
+    },
+    {
+      title: "Custos sob controle",
+      desc: "Custo cresceu apenas 6,7% (R$ 60k → R$ 64k), abaixo do ritmo da receita. Margem ganhou 4pp.",
+      impact: "+4pp margem",
+      tone: "positive" as const,
+    },
+    {
+      title: "Caixa fortaleceu 27%",
+      desc: "Posição de caixa subiu de R$ 22k para R$ 28k, sustentada por melhor giro de recebíveis.",
+      impact: "+R$ 6k caixa",
+      tone: "positive" as const,
+    },
+    {
+      title: "Necessidade de crédito zerada",
+      desc: "Em Fev/2026 ainda foi preciso captar R$ 8k. Em Mar/2026 a operação se autofinanciou.",
+      impact: "-R$ 8k captação",
+      tone: "positive" as const,
+    },
+    {
+      title: "Despesa financeira caiu 36,8%",
+      desc: "Juros pagos passaram de R$ 1,9k para R$ 1,2k, reflexo da menor utilização de crédito no mês.",
+      impact: "-R$ 0,7k juros",
+      tone: "positive" as const,
+    },
+    {
+      title: "Atenção à concentração de receita",
+      desc: "65% da receita de Mar/2026 vem de 3 clientes (vs 52% em Fev/2026). Avaliar diversificação da carteira.",
+      impact: "+13pp concentração",
+      tone: "warning" as const,
+    },
+  ],
+};
+
 function SideIcon({
   icon: Icon,
   active = false,
