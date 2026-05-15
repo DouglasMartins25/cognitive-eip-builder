@@ -466,7 +466,7 @@ function Home() {
               </div>
               <div className="flex-1 text-left">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-foreground">Digital Worker Financeiro</p>
+                  <p className="text-sm font-semibold text-foreground">Digital Worker Finance</p>
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                     <CheckCircle2 className="h-2.5 w-2.5" /> 7 agentes ativos
                   </span>
