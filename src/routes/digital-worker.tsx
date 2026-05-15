@@ -128,6 +128,7 @@ const dre = [
 
 function DigitalWorker() {
   const acoesPendentes = alertas.length;
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
     { id: 1, from: "bot", text: "Bom dia, João. Sou o Digital Worker Finance. Os 7 agentes processaram 3.466 transações esta noite — 3 ações aguardam sua decisão." },
@@ -135,6 +136,14 @@ function DigitalWorker() {
   const handleSend = () => {
     const text = input.trim();
     if (!text) return;
+    const route = resolveChatRoute(text);
+    if (route) {
+      const searchParams: { start: string; variant?: string } = { start: route.start };
+      if (route.variant) searchParams.variant = route.variant;
+      navigate({ to: "/financeiro", search: searchParams });
+      setInput("");
+      return;
+    }
     setMessages((m) => [
       ...m,
       { id: m.length + 1, from: "user", text },
