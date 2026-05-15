@@ -479,7 +479,7 @@ function Index() {
         : "empty";
   const initialTarget: ProcessingTarget =
     start === "analise"
-      ? "analise"
+      ? "comparacao"
       : start === "credito"
         ? "credito"
         : start === "comparacao"
