@@ -223,7 +223,7 @@ function AutonomousFinance() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSend();
               }}
-              placeholder="Pergunte ao Autonomous Finance..."
+              placeholder="Pergunte ao Finance Digital Workers..."
               className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
