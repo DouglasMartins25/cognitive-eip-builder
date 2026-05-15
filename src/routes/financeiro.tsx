@@ -85,8 +85,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos";
 type ComparacaoVariant = "anos" | "meses";
 
 const comparacaoDataAnos = {
