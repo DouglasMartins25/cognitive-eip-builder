@@ -98,7 +98,7 @@ export const Route = createFileRoute("/financeiro")({
 });
 
 type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito";
 
 const fluxoCaixa = {
   liquidoMensal: [
