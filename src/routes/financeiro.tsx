@@ -355,13 +355,15 @@ function Index() {
         ? "vencendo"
         : start === "pagamento"
           ? "processing"
-          : start === "credito"
+      : start === "credito"
             ? "processing"
             : start === "comparacao"
               ? "processing"
               : start === "vencidos"
                 ? "processing"
-                : "empty";
+                : start === "boletos"
+                  ? "processing"
+                  : "empty";
   const initialTarget: ProcessingTarget =
     start === "credito"
       ? "credito"
@@ -369,13 +371,16 @@ function Index() {
         ? "comparacao"
         : start === "vencidos"
           ? "vencidos"
-          : "comprovantes";
+          : start === "boletos"
+            ? "boletos"
+            : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [view, setView] = useState<View>(initialView);
   const [processingTarget, setProcessingTarget] = useState<ProcessingTarget>(initialTarget);
   const [comparacaoVariant, setComparacaoVariant] = useState<ComparacaoVariant>(initialVariant);
+  const [expandedBoleto, setExpandedBoleto] = useState<string | null>(null);
   const comparacaoData =
     comparacaoVariant === "meses" ? comparacaoDataMeses : comparacaoDataAnos;
   const [selectedComprovante, setSelectedComprovante] = useState<
