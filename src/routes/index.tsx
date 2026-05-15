@@ -480,9 +480,6 @@ function Home() {
           </div>
         </div>
 
-        <p className="pb-5 text-center text-[11px] text-muted-foreground">
-          A BIA é uma IA e pode cometer erros. Verifique informações importantes
-        </p>
       </main>
 
       {/* Right sidebar */}
