@@ -77,8 +77,8 @@ const alertas: {
     tipo: "critico",
     icon: AlertCircle,
     agente: "A1",
-    titulo: "Pagamento duplicado detectado — bloqueado antes da execução",
-    descricao: "NF 48.291 · Fornecedor Metais Gerais · R$ 87.450 · 2º lançamento idêntico em 4h",
+    titulo: "Pagamento fora do padrão — revisão necessária",
+    descricao: "NF 48.291 · Fornecedor Metais Gerais · R$ 87.450 · Acima da média de pagamentos e sem histórico para este fornecedor",
     acao: "Revisar",
   },
   {
