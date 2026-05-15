@@ -509,7 +509,7 @@ type Message = { id: number; text: string; from: "user" | "bot" };
 function Index() {
   const max = 120;
   const { start, variant } = Route.useSearch();
-  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco", "analise"];
+  const processingStarts = ["pagamento", "credito", "comparacao", "vencidos", "boletos", "risco", "analise", "fluxocaixa"];
   const initialView: View =
     start === "vencendo"
       ? "vencendo"
@@ -519,17 +519,19 @@ function Index() {
   const initialTarget: ProcessingTarget =
     start === "analise"
       ? "comparacao"
-      : start === "credito"
-        ? "credito"
-        : start === "comparacao"
-          ? "comparacao"
-          : start === "vencidos"
-            ? "vencidos"
-            : start === "boletos"
-              ? "boletos"
-              : start === "risco"
-                ? "risco"
-                : "comprovantes";
+      : start === "fluxocaixa"
+        ? "fluxocaixa"
+        : start === "credito"
+          ? "credito"
+          : start === "comparacao"
+            ? "comparacao"
+            : start === "vencidos"
+              ? "vencidos"
+              : start === "boletos"
+                ? "boletos"
+                : start === "risco"
+                  ? "risco"
+                  : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
