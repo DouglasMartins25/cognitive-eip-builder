@@ -85,8 +85,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos";
 type ComparacaoVariant = "anos" | "meses";
 
 const comparacaoDataAnos = {
@@ -240,7 +240,100 @@ const titulosVencendoHoje = [
   { id: "TIT-003", cliente: "Energia Brasil S/A", documento: "Boleto 88291", valor: "R$ 2.140,00", status: "A pagar", tipo: "despesa" },
   { id: "TIT-004", cliente: "Padaria Central", documento: "NF 12347", valor: "R$ 980,00", status: "A receber", tipo: "receita" },
   { id: "TIT-005", cliente: "Aluguel Sede", documento: "Contrato 0021", valor: "R$ 8.500,00", status: "A pagar", tipo: "despesa" },
-  { id: "TIT-006", cliente: "Tech Solutions Ltda", documento: "NF 12348", valor: "R$ 6.320,00", status: "A receber", tipo: "receita" },
+];
+
+const titulosVencidosReceber = [
+  {
+    id: "REC-1042",
+    cliente: "Mercado Vista Alegre",
+    documento: "NF 11820",
+    emissao: "12/02/2026",
+    vencimento: "27/02/2026",
+    diasAtraso: 77,
+    valorOriginal: 4250,
+    juros: 218.45,
+    multa: 85,
+    valorAtualizado: 4553.45,
+    meioPagamento: "Boleto",
+  },
+  {
+    id: "REC-1058",
+    cliente: "Distribuidora Norte Sul",
+    documento: "NF 11885",
+    emissao: "20/02/2026",
+    vencimento: "06/03/2026",
+    diasAtraso: 70,
+    valorOriginal: 12800,
+    juros: 597.33,
+    multa: 256,
+    valorAtualizado: 13653.33,
+    meioPagamento: "Boleto",
+  },
+  {
+    id: "REC-1071",
+    cliente: "Padaria Central",
+    documento: "NF 11932",
+    emissao: "01/03/2026",
+    vencimento: "16/03/2026",
+    diasAtraso: 60,
+    valorOriginal: 980,
+    juros: 39.2,
+    multa: 19.6,
+    valorAtualizado: 1038.8,
+    meioPagamento: "Pix",
+  },
+  {
+    id: "REC-1090",
+    cliente: "Tech Solutions Ltda",
+    documento: "NF 12011",
+    emissao: "10/03/2026",
+    vencimento: "25/03/2026",
+    diasAtraso: 51,
+    valorOriginal: 6320,
+    juros: 215.04,
+    multa: 126.4,
+    valorAtualizado: 6661.44,
+    meioPagamento: "TED",
+  },
+  {
+    id: "REC-1112",
+    cliente: "Farmácia Saúde+",
+    documento: "NF 12077",
+    emissao: "22/03/2026",
+    vencimento: "06/04/2026",
+    diasAtraso: 39,
+    valorOriginal: 2780,
+    juros: 72.28,
+    multa: 55.6,
+    valorAtualizado: 2907.88,
+    meioPagamento: "Boleto",
+  },
+  {
+    id: "REC-1133",
+    cliente: "Restaurante Sabor da Terra",
+    documento: "NF 12148",
+    emissao: "05/04/2026",
+    vencimento: "20/04/2026",
+    diasAtraso: 25,
+    valorOriginal: 3450,
+    juros: 57.5,
+    multa: 69,
+    valorAtualizado: 3576.5,
+    meioPagamento: "Pix",
+  },
+  {
+    id: "REC-1156",
+    cliente: "Auto Peças Veloz",
+    documento: "NF 12219",
+    emissao: "18/04/2026",
+    vencimento: "03/05/2026",
+    diasAtraso: 12,
+    valorOriginal: 8750,
+    juros: 70,
+    multa: 175,
+    valorAtualizado: 8995,
+    meioPagamento: "Boleto",
+  },
 ];
 
 type Message = { id: number; text: string; from: "user" | "bot" };
@@ -259,9 +352,17 @@ function Index() {
             ? "processing"
             : start === "comparacao"
               ? "processing"
-              : "empty";
+              : start === "vencidos"
+                ? "processing"
+                : "empty";
   const initialTarget: ProcessingTarget =
-    start === "credito" ? "credito" : start === "comparacao" ? "comparacao" : "comprovantes";
+    start === "credito"
+      ? "credito"
+      : start === "comparacao"
+        ? "comparacao"
+        : start === "vencidos"
+          ? "vencidos"
+          : "comprovantes";
   const initialVariant: ComparacaoVariant = variant === "meses" ? "meses" : "anos";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -375,7 +476,35 @@ function Index() {
       "compra os últimos",
       "compra os ultimos",
     ];
-    if (comparacaoTerms.some((t) => lower.includes(t))) {
+    const vencidosReceberTerms = [
+      "títulos vencidos",
+      "titulos vencidos",
+      "título vencido",
+      "titulo vencido",
+      "recebimento vencido",
+      "recebimentos vencidos",
+      "recebimento em atraso",
+      "recebimentos em atraso",
+      "receber em atraso",
+      "a receber em atraso",
+      "ainda não foram pagos",
+      "ainda nao foram pagos",
+      "não pagaram",
+      "nao pagaram",
+      "não pagos pelos meus clientes",
+      "nao pagos pelos meus clientes",
+      "inadimplên",
+      "inadimplen",
+      "inadimplência",
+      "inadimplencia",
+      "clientes em atraso",
+      "cobrança",
+      "cobranca",
+    ];
+    if (vencidosReceberTerms.some((t) => lower.includes(t))) {
+      setProcessingTarget("vencidos");
+      setView("processing");
+    } else if (comparacaoTerms.some((t) => lower.includes(t))) {
       const mesesTerms = [
         "últimos 2 meses",
         "ultimos 2 meses",
@@ -544,7 +673,9 @@ function Index() {
                   ? "Pensando a melhor forma de você visualizar as ofertas de crédito..."
                   : processingTarget === "comparacao"
                     ? "Analisando os períodos e gerando insights da comparação financeira..."
-                    : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                    : processingTarget === "vencidos"
+                      ? "Analisando os títulos financeiros e calculando juros e multas dos atrasos..."
+                      : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
@@ -983,6 +1114,129 @@ function Index() {
               </div>
             </div>
           </div>
+        ) : view === "vencidos" ? (
+          (() => {
+            const fmt = (v: number) =>
+              v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            const totalOriginal = titulosVencidosReceber.reduce((a, t) => a + t.valorOriginal, 0);
+            const totalJuros = titulosVencidosReceber.reduce((a, t) => a + t.juros + t.multa, 0);
+            const totalAtualizado = titulosVencidosReceber.reduce(
+              (a, t) => a + t.valorAtualizado,
+              0,
+            );
+            return (
+              <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+                <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[oklch(0.95_0.04_25)] text-[oklch(0.45_0.15_25)]">
+                      <AlertCircle className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-medium text-foreground">
+                        Títulos a receber em atraso
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {titulosVencidosReceber.length} títulos vencidos · juros e multa calculados
+                        até hoje
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setView("empty")}
+                    className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </button>
+                </header>
+
+                <div className="flex-1 overflow-auto px-8 py-6">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Valor original em atraso</p>
+                      <p className="mt-1 text-lg font-semibold text-foreground">
+                        {fmt(totalOriginal)}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Juros + multa acumulados</p>
+                      <p className="mt-1 text-lg font-semibold text-[oklch(0.45_0.15_25)]">
+                        {fmt(totalJuros)}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-background px-4 py-3">
+                      <p className="text-xs text-muted-foreground">Total atualizado a receber</p>
+                      <p className="mt-1 text-lg font-semibold text-primary">
+                        {fmt(totalAtualizado)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 overflow-auto rounded-2xl border border-border">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-medium">Título</th>
+                          <th className="px-4 py-3 text-left font-medium">Cliente</th>
+                          <th className="px-4 py-3 text-left font-medium">Emissão</th>
+                          <th className="px-4 py-3 text-left font-medium">Vencimento</th>
+                          <th className="px-4 py-3 text-right font-medium">Atraso</th>
+                          <th className="px-4 py-3 text-right font-medium">Valor original</th>
+                          <th className="px-4 py-3 text-right font-medium">Juros + multa</th>
+                          <th className="px-4 py-3 text-right font-medium">Valor atualizado</th>
+                          <th className="px-4 py-3 text-left font-medium">Meio de pagamento</th>
+                          <th className="px-4 py-3 text-left font-medium" />
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {titulosVencidosReceber.map((t) => (
+                          <tr key={t.id} className="text-foreground">
+                            <td className="px-4 py-3">
+                              <p className="font-medium">{t.id}</p>
+                              <p className="text-xs text-muted-foreground">{t.documento}</p>
+                            </td>
+                            <td className="px-4 py-3">{t.cliente}</td>
+                            <td className="px-4 py-3 text-muted-foreground">{t.emissao}</td>
+                            <td className="px-4 py-3 text-muted-foreground">{t.vencimento}</td>
+                            <td className="px-4 py-3 text-right">
+                              <span className="inline-flex items-center rounded-full bg-[oklch(0.95_0.04_25)] px-2 py-0.5 text-[11px] font-medium text-[oklch(0.45_0.15_25)]">
+                                {t.diasAtraso} dias
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-right tabular-nums">
+                              {fmt(t.valorOriginal)}
+                            </td>
+                            <td className="px-4 py-3 text-right tabular-nums text-[oklch(0.45_0.15_25)]">
+                              + {fmt(t.juros + t.multa)}
+                            </td>
+                            <td className="px-4 py-3 text-right font-medium tabular-nums">
+                              {fmt(t.valorAtualizado)}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground">
+                                {t.meioPagamento}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                                <Send className="h-3 w-3" />
+                                Cobrar
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <p className="mt-3 text-[11px] text-muted-foreground">
+                    Juros calculados a 1% a.m. e multa de 2% sobre o valor original conforme
+                    contrato padrão.
+                  </p>
+                </div>
+              </div>
+            );
+          })()
         ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
           <header className="flex items-start gap-4 border-b border-border px-8 py-5">
