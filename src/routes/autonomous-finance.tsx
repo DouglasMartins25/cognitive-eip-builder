@@ -143,6 +143,29 @@ const compliance = [
 
 function AutonomousFinance() {
   const acoesPendentes = alertas.length;
+  const navigate = useNavigate();
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o Autonomous Finance. Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais — 5 ações aguardam sua decisão." },
+  ]);
+  const handleSend = () => {
+    const text = input.trim();
+    if (!text) return;
+    const route = resolveChatRoute(text);
+    if (route) {
+      const searchParams: { start: string; variant?: string } = { start: route.start };
+      if (route.variant) searchParams.variant = route.variant;
+      navigate({ to: "/financeiro", search: searchParams });
+      setInput("");
+      return;
+    }
+    setMessages((m) => [
+      ...m,
+      { id: m.length + 1, from: "user", text },
+      { id: m.length + 2, from: "bot", text: "Estou correlacionando os sinais dos workers de Anomalia Financeira e Compliance Tributário e em instantes trarei o resultado." },
+    ]);
+    setInput("");
+  };
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -169,7 +192,53 @@ function AutonomousFinance() {
         </button>
       </aside>
 
+      <section className="flex w-[340px] flex-col border-r border-border bg-card">
+        <header className="flex items-center justify-between px-6 py-5">
+          <h1 className="text-base font-medium text-foreground">Autonomous Finance</h1>
+          <button className="text-muted-foreground hover:text-foreground">
+            <Maximize2 className="h-4 w-4" />
+          </button>
+        </header>
+        <div className="flex-1 space-y-4 overflow-y-auto px-6 pb-4">
+          {messages.map((m) => (
+            <div key={m.id}>
+              {m.from === "user" ? (
+                <div className="flex justify-center">
+                  <div className="rounded-full bg-bubble px-5 py-2.5 text-sm text-bubble-foreground">
+                    {m.text}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-foreground">{m.text}</p>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="space-y-2 px-6 pb-5">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSend();
+              }}
+              placeholder="Pergunte ao Autonomous Finance..."
+              className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+            />
+            <button
+              onClick={handleSend}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+              aria-label="Enviar"
+            >
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
       <main className="flex flex-1 flex-col overflow-y-auto">
+
         <div className="mx-auto w-full max-w-5xl px-8 py-8">
           <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" /> Voltar
