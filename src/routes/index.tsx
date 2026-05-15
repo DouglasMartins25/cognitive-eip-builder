@@ -281,6 +281,20 @@ function Home() {
       "exposição da carteira",
       "exposicao da carteira",
       "carteira de clientes",
+      "minha carteira de clientes",
+      "minha carteira",
+      "saúde financeira da minha carteira",
+      "saude financeira da minha carteira",
+      "saúde financeira da carteira",
+      "saude financeira da carteira",
+      "visão da minha carteira",
+      "visao da minha carteira",
+      "visão da carteira",
+      "visao da carteira",
+      "clientes com maior risco",
+      "clientes de maior risco",
+      "maior risco",
+      "clientes mais arriscados",
     ];
     let start:
       | "analise"
