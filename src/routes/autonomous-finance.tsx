@@ -146,7 +146,7 @@ function AutonomousFinance() {
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
-    { id: 1, from: "bot", text: "Bom dia, João. Sou o Autonomous Finance. Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais — 5 ações aguardam sua decisão." },
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o Finance Digital Workers. Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais — 5 ações aguardam sua decisão." },
   ]);
   const handleSend = () => {
     const text = input.trim();
@@ -194,7 +194,7 @@ function AutonomousFinance() {
 
       <section className="flex w-[340px] flex-col border-r border-border bg-card">
         <header className="flex items-center justify-between px-6 py-5">
-          <h1 className="text-base font-medium text-foreground">Autonomous Finance</h1>
+          <h1 className="text-base font-medium text-foreground">Finance Digital Workers</h1>
           <button className="text-muted-foreground hover:text-foreground">
             <Maximize2 className="h-4 w-4" />
           </button>
@@ -223,7 +223,7 @@ function AutonomousFinance() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSend();
               }}
-              placeholder="Pergunte ao Autonomous Finance..."
+              placeholder="Pergunte ao Finance Digital Workers..."
               className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
@@ -247,7 +247,7 @@ function AutonomousFinance() {
           {/* Hero */}
           <div className="rounded-2xl bg-[oklch(0.2_0.04_240)] p-6 text-white">
             <p className="text-[11px] font-semibold tracking-widest text-white/60">
-              SEXTA-FEIRA, 15 DE MAIO DE 2026 · 07:24 · AUTONOMOUS FINANCE
+              SEXTA-FEIRA, 15 DE MAIO DE 2026 · 07:24 · FINANCE DIGITAL WORKERS
             </p>
             <h1 className="mt-3 text-3xl font-semibold leading-tight">
               Bom dia, João Silva.{" "}
@@ -401,7 +401,7 @@ function AutonomousFinance() {
 
           <div className="mt-6 flex items-center gap-2 text-[11px] text-muted-foreground">
             <Bot className="h-3.5 w-3.5" />
-            Autonomous Finance · 2 workers ativos · última sincronização há 1 min
+            Finance Digital Workers · 2 workers ativos · última sincronização há 1 min
           </div>
         </div>
       </main>
