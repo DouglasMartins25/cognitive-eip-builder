@@ -187,7 +187,24 @@ function Home() {
     else if (tituloTerms.some((t) => lower.includes(t))) start = "vencendo";
     else if (analiseTerms.some((t) => lower.includes(t))) start = "analise";
     if (start) {
-      navigate({ to: "/financeiro", search: { start } });
+      const searchParams: { start: string; variant?: string } = { start };
+      if (start === "comparacao") {
+        const mesesTerms = [
+          "últimos 2 meses",
+          "ultimos 2 meses",
+          "últimos dois meses",
+          "ultimos dois meses",
+          "últimos meses",
+          "ultimos meses",
+          "mês passado",
+          "mes passado",
+          "fevereiro",
+          "março",
+          "marco",
+        ];
+        searchParams.variant = mesesTerms.some((t) => lower.includes(t)) ? "meses" : "anos";
+      }
+      navigate({ to: "/financeiro", search: searchParams });
     }
     setInput("");
   };
