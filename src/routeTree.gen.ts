@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
+import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as IndexRouteImport } from './routes/index'
 
 const FinanceiroRoute = FinanceiroRouteImport.update({
   id: '/financeiro',
   path: '/financeiro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DigitalWorkerRoute = DigitalWorkerRouteImport.update({
+  id: '/digital-worker',
+  path: '/digital-worker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/financeiro'
+  fullPaths: '/' | '/digital-worker' | '/financeiro'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/financeiro'
-  id: '__root__' | '/' | '/financeiro'
+  to: '/' | '/digital-worker' | '/financeiro'
+  id: '__root__' | '/' | '/digital-worker' | '/financeiro'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DigitalWorkerRoute: typeof DigitalWorkerRoute
   FinanceiroRoute: typeof FinanceiroRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/financeiro'
       fullPath: '/financeiro'
       preLoaderRoute: typeof FinanceiroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/digital-worker': {
+      id: '/digital-worker'
+      path: '/digital-worker'
+      fullPath: '/digital-worker'
+      preLoaderRoute: typeof DigitalWorkerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DigitalWorkerRoute: DigitalWorkerRoute,
   FinanceiroRoute: FinanceiroRoute,
 }
 export const routeTree = rootRouteImport

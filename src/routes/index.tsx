@@ -18,6 +18,8 @@ import {
   DollarSign,
   UserPlus,
   LineChart,
+  Bot,
+  CheckCircle2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
