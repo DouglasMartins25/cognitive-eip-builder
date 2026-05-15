@@ -479,7 +479,7 @@ function Index() {
         : "empty";
   const initialTarget: ProcessingTarget =
     start === "analise"
-      ? "analise"
+      ? "comparacao"
       : start === "credito"
         ? "credito"
         : start === "comparacao"
@@ -738,7 +738,8 @@ function Index() {
       lower.includes("despesa") ||
       lower.includes("financeir")
     ) {
-      setProcessingTarget("analise");
+      setComparacaoVariant("anos");
+      setProcessingTarget("comparacao");
       setView("processing");
     }
   };
