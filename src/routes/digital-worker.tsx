@@ -154,6 +154,55 @@ function DigitalWorker() {
         </button>
       </aside>
 
+      {/* Chat column */}
+      <section className="flex w-[340px] flex-col border-r border-border bg-card">
+        <header className="flex items-center justify-between px-6 py-5">
+          <h1 className="text-base font-medium text-foreground">Digital Worker Financeiro</h1>
+          <button className="text-muted-foreground hover:text-foreground">
+            <Maximize2 className="h-4 w-4" />
+          </button>
+        </header>
+        <div className="flex-1 space-y-4 overflow-y-auto px-6 pb-4">
+          {messages.map((m) => (
+            <div key={m.id}>
+              {m.from === "user" ? (
+                <div className="flex justify-center">
+                  <div className="rounded-full bg-bubble px-5 py-2.5 text-sm text-bubble-foreground">
+                    {m.text}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-foreground">{m.text}</p>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="space-y-2 px-6 pb-5">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSend();
+              }}
+              placeholder="Pergunte ao Digital Worker Financeiro..."
+              className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+            />
+            <button
+              onClick={handleSend}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+              aria-label="Enviar"
+            >
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+          <p className="text-center text-[11px] text-muted-foreground">
+            A BIA é uma IA e pode cometer erros. Verifique informações importantes
+          </p>
+        </div>
+      </section>
+
       <main className="flex flex-1 flex-col overflow-y-auto">
         <div className="mx-auto w-full max-w-5xl px-8 py-8">
           <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
