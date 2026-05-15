@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
 import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
+import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
 import { Route as IndexRouteImport } from './routes/index'
 
 const FinanceiroRoute = FinanceiroRouteImport.update({
@@ -23,6 +24,11 @@ const DigitalWorkerRoute = DigitalWorkerRouteImport.update({
   path: '/digital-worker',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AutonomousFinanceRoute = AutonomousFinanceRouteImport.update({
+  id: '/autonomous-finance',
+  path: '/autonomous-finance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,30 +37,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/digital-worker' | '/financeiro'
+  fullPaths: '/' | '/autonomous-finance' | '/digital-worker' | '/financeiro'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/digital-worker' | '/financeiro'
-  id: '__root__' | '/' | '/digital-worker' | '/financeiro'
+  to: '/' | '/autonomous-finance' | '/digital-worker' | '/financeiro'
+  id:
+    | '__root__'
+    | '/'
+    | '/autonomous-finance'
+    | '/digital-worker'
+    | '/financeiro'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AutonomousFinanceRoute: typeof AutonomousFinanceRoute
   DigitalWorkerRoute: typeof DigitalWorkerRoute
   FinanceiroRoute: typeof FinanceiroRoute
 }
@@ -75,6 +90,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DigitalWorkerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/autonomous-finance': {
+      id: '/autonomous-finance'
+      path: '/autonomous-finance'
+      fullPath: '/autonomous-finance'
+      preLoaderRoute: typeof AutonomousFinanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +109,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AutonomousFinanceRoute: AutonomousFinanceRoute,
   DigitalWorkerRoute: DigitalWorkerRoute,
   FinanceiroRoute: FinanceiroRoute,
 }
