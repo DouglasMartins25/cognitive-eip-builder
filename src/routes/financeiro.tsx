@@ -725,7 +725,9 @@ function Index() {
                     ? "Analisando os períodos e gerando insights da comparação financeira..."
                     : processingTarget === "vencidos"
                       ? "Analisando os títulos financeiros e calculando juros e multas dos atrasos..."
-                      : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                      : processingTarget === "boletos"
+                        ? "Emitindo novos boletos e ativando a régua de cobrança para cada título..."
+                        : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
