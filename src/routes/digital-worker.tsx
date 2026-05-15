@@ -114,6 +114,20 @@ const dre = [
 
 function DigitalWorker() {
   const acoesPendentes = alertas.length;
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o Digital Worker Financeiro. Os 7 agentes processaram 3.466 transações esta noite — 3 ações aguardam sua decisão." },
+  ]);
+  const handleSend = () => {
+    const text = input.trim();
+    if (!text) return;
+    setMessages((m) => [
+      ...m,
+      { id: m.length + 1, from: "user", text },
+      { id: m.length + 2, from: "bot", text: "Estou analisando sua solicitação e em instantes trarei o resultado consolidado pelos agentes." },
+    ]);
+    setInput("");
+  };
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
