@@ -876,7 +876,9 @@ function Index() {
                       ? "Analisando os títulos financeiros e calculando juros e multas dos atrasos..."
                       : processingTarget === "boletos"
                         ? "Emitindo novos boletos e ativando a régua de cobrança para cada título..."
-                        : "Pensando a melhor forma de você visualizar seus comprovantes..."}
+                        : processingTarget === "risco"
+                          ? "Analisando o score, histórico e exposição de cada cliente da carteira..."
+                          : "Pensando a melhor forma de você visualizar seus comprovantes..."}
               </p>
             </div>
           </div>
