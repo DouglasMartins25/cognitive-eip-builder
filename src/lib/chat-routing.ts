@@ -18,6 +18,8 @@ const pagamentoTerms = [
   "realizar pagamento","realizar o pagamento","realizar pagamentos","realizar os pagamentos",
   "efetuar pagamento","efetuar os pagamentos","pagar título","pagar titulo","pagar títulos","pagar titulos",
   "fazer pagamento","fazer os pagamentos","autorizar pagamento","autorizar os pagamentos",
+  "pague os boletos","pague os boletos de hoje","realizar pagamentos de boleto","pagar boletos de hoje",
+  "pagar boleto","pagar boletos",
 ];
 const tituloTerms = [
   "título","titulo","títulos","titulos","vencendo hoje","vencimento hoje","vencer hoje",
