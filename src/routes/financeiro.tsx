@@ -40,6 +40,11 @@ import {
   Phone,
   MessageSquare,
   Scale,
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
+  Activity,
+  Users,
 } from "lucide-react";
 
 const creditoOfertas = [
@@ -92,8 +97,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco";
 type ComparacaoVariant = "anos" | "meses";
 
 const comparacaoDataAnos = {
