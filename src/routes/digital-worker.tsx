@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { resolveChatRoute } from "@/lib/chat-routing";
 import { useState } from "react";
 import {
   Inbox,
