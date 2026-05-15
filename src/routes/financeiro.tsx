@@ -498,6 +498,9 @@ function Index() {
   const [processingTarget, setProcessingTarget] = useState<ProcessingTarget>(initialTarget);
   const [comparacaoVariant, setComparacaoVariant] = useState<ComparacaoVariant>(initialVariant);
   const [expandedBoleto, setExpandedBoleto] = useState<string | null>(null);
+  const [selectedCliente, setSelectedCliente] = useState<
+    null | (typeof carteiraRisco.clientes)[number]
+  >(null);
   const comparacaoData =
     comparacaoVariant === "meses" ? comparacaoDataMeses : comparacaoDataAnos;
   const [selectedComprovante, setSelectedComprovante] = useState<
