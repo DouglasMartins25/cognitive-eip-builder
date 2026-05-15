@@ -976,6 +976,8 @@ function Index() {
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
                 {processingTarget === "fluxocaixa"
                   ? "Consolidando entradas, saídas e projeções para montar o seu fluxo de caixa..."
+                  : processingTarget === "fluxocaixa-credito"
+                  ? "Recalculando o fluxo de caixa com o crédito recém-contratado..."
                   : processingTarget === "analise"
                   ? "Realizando análise financeira e consolidando receitas, despesas e projeções..."
                   : processingTarget === "credito"
