@@ -215,6 +215,31 @@ function Home() {
       "titulos a receber",
       "title a receber",
     ];
+    const boletosTerms = [
+      "emitir novos boletos",
+      "emitir boletos",
+      "novos boletos",
+      "gerar boletos",
+      "gerar novos boletos",
+      "emitir boleto",
+      "novo boleto",
+      "boletos de cobrança",
+      "boletos de cobranca",
+      "realizar cobrança",
+      "realizar cobranca",
+      "fazer cobrança",
+      "fazer cobranca",
+      "iniciar cobrança",
+      "iniciar cobranca",
+      "ativar régua de cobrança",
+      "ativar regua de cobranca",
+      "régua de cobrança",
+      "regua de cobranca",
+      "disparar cobrança",
+      "disparar cobranca",
+      "cobrar clientes",
+      "cobrar os clientes",
+    ];
     let start:
       | "analise"
       | "vencendo"
@@ -222,8 +247,10 @@ function Home() {
       | "credito"
       | "comparacao"
       | "vencidos"
+      | "boletos"
       | undefined;
-    if (vencidosReceberTerms.some((t) => lower.includes(t))) start = "vencidos";
+    if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";
+    else if (vencidosReceberTerms.some((t) => lower.includes(t))) start = "vencidos";
     else if (comparacaoTerms.some((t) => lower.includes(t))) start = "comparacao";
     else if (creditoTerms.some((t) => lower.includes(t))) start = "credito";
     else if (pagamentoTerms.some((t) => lower.includes(t))) start = "pagamento";
