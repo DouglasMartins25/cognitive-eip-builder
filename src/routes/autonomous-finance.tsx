@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { resolveChatRoute } from "@/lib/chat-routing";
+import { useState } from "react";
 import {
   Inbox,
   Crop,
@@ -12,6 +14,7 @@ import {
   User,
   FileText,
   ArrowLeft,
+  ArrowRight,
   Bot,
   AlertCircle,
   CheckCircle2,
@@ -20,6 +23,7 @@ import {
   FileWarning,
   Scale,
   Receipt,
+  Maximize2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/autonomous-finance")({
