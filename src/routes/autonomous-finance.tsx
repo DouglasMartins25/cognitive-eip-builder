@@ -141,13 +141,17 @@ const atividades = [
   { hora: "07:03", agente: "A1", desc: "Recebimento atrasado Cliente Vértice escalado ao gestor" },
 ];
 
-const anomalias = [
-  { tipo: "Pagamento duplicado", qtd: 3, sev: "critico" },
-  { tipo: "Valor fora do histórico", qtd: 6, sev: "atencao" },
-  { tipo: "Recebimento em atraso", qtd: 4, sev: "atencao" },
-  { tipo: "Concentração anômala", qtd: 2, sev: "info" },
-  { tipo: "Risco de liquidez D+9", qtd: 2, sev: "critico" },
-];
+const ebitdaBenchmark = {
+  setor: 15.1,
+  empresa: 12.3,
+  gap: -2.8,
+  drivers: [
+    { label: "Produtos", valor: "+1,4 pp", tone: "positivo" as const, desc: "acima da mediana setorial" },
+    { label: "Serviços", valor: "−3,9 pp", tone: "negativo" as const, desc: "puxa margem para baixo" },
+    { label: "SG&A", valor: "+0,7 pp", tone: "negativo" as const, desc: "vs benchmark do setor" },
+  ],
+};
+
 
 const projecaoFluxo: { label: string; valor: string; tone: "positivo" | "negativo" | "neutro" }[] = [
   { label: "Saldo atual", valor: "R$ 4,82 M", tone: "neutro" },
