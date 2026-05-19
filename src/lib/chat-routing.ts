@@ -8,7 +8,8 @@ export type ChatStart =
   | "boletos"
   | "risco"
   | "fluxocaixa"
-  | "dda";
+  | "dda"
+  | "icms";
 
 export type ChatRouteResult = {
   start: ChatStart;
@@ -94,10 +95,18 @@ const ddaTerms = [
   "títulos de recebimento","titulos de recebimento","título de recebimento","titulo de recebimento",
 ];
 
+const icmsTerms = [
+  "icms","diagnóstico fiscal","diagnostico fiscal","diagnóstico de icms","diagnostico de icms",
+  "auditoria icms","auditoria de icms","auditoria do icms","apuração de icms","apuracao de icms",
+  "apurações de icms","apuracoes de icms","como está as apurações","como esta as apuracoes",
+  "divergências icms","divergencias icms","alíquota icms","aliquota icms",
+];
+
 export function resolveChatRoute(text: string): ChatRouteResult | undefined {
   const lower = text.toLowerCase();
   let start: ChatStart | undefined;
-  if (ddaTerms.some((t) => lower.includes(t))) start = "dda";
+  if (icmsTerms.some((t) => lower.includes(t))) start = "icms";
+  else if (ddaTerms.some((t) => lower.includes(t))) start = "dda";
   else if (fluxoCaixaTerms.some((t) => lower.includes(t))) start = "fluxocaixa";
   else if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
   else if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";

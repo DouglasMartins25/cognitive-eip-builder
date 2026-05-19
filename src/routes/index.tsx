@@ -93,9 +93,13 @@ function Home() {
     if (!text) return;
     const route = resolveChatRoute(text);
     if (route) {
-      const searchParams: { start: string; variant?: string } = { start: route.start };
-      if (route.variant) searchParams.variant = route.variant;
-      navigate({ to: "/financeiro", search: searchParams });
+      if (route.start === "icms") {
+        navigate({ to: "/icms-diagnostico" });
+      } else {
+        const searchParams: { start: string; variant?: string } = { start: route.start };
+        if (route.variant) searchParams.variant = route.variant;
+        navigate({ to: "/financeiro", search: searchParams });
+      }
     }
     setInput("");
   };
