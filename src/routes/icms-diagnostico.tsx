@@ -767,9 +767,9 @@ function IcmsDiagnostico() {
           <div className="rounded-xl border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <div className="text-sm font-medium text-foreground">
-                Auditorias <span className="text-muted-foreground">· NFe 110507</span>
+                Auditorias <span className="text-muted-foreground">· NFe {currentDoc?.nfe ?? "—"}</span>
               </div>
-              <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">2</span>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{auditorias.length}</span>
             </div>
             <ul>
               {auditorias.map((a) => {
