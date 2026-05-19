@@ -104,24 +104,238 @@ const entradas: Doc[] = [
   { id: "d5", nfe: "412355", data: "25/08/2025", cliente: "Ind. Becker Ltda", valor: "R$ 18.300", rota: "SC→MG", status: "alerta", statusLabel: "1 alerta" },
 ];
 
-const auditorias = [
-  {
-    id: "a1",
-    titulo: "ICMS · Alíquota — Rejeição",
-    desc: "Alíquota diverge da tabela interestadual",
-    detalhe: "4% → 12% · R$80 crédito",
-    asis: "RN 1549 · 2129",
-    progresso: 91,
-  },
-  {
-    id: "a2",
-    titulo: "Indpres x Finnfe",
-    desc: "Indicador de presença diverge",
-    detalhe: "",
-    asis: "RN 3913",
-    progresso: 0,
-  },
-];
+type Diagnostico = {
+  tipo: "Entrada" | "Saída";
+  alertTitle: string;
+  alertSub: string;
+  regraLabel: string;
+  regraValor: string;
+  campo: string;
+  de: string;
+  para: string;
+  impactoTitulo: string;
+  linha1Label: string;
+  linha1Valor: string;
+  linha2Label: string;
+  linha2Valor: string;
+  totalLabel: string;
+  totalValor: string;
+  actionLabel: string;
+  pendentes: string;
+};
+
+type Audit = {
+  id: string;
+  titulo: string;
+  desc: string;
+  detalhe: string;
+  asis: string;
+  progresso: number;
+  diagnostico: Diagnostico;
+};
+
+const docAuditorias: Record<string, Audit[]> = {
+  d1: [
+    {
+      id: "a1",
+      titulo: "ICMS · Alíquota — Rejeição",
+      desc: "Alíquota diverge da tabela interestadual",
+      detalhe: "4% → 12% · R$80 crédito",
+      asis: "RN 1549 · 2129",
+      progresso: 91,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Documento de entrada — alteração bloqueada",
+        alertSub: "Notifique o fornecedor para correção e reemissão.",
+        regraLabel: "Regra",
+        regraValor: "RN 1549 · Alíquotas Interestaduais",
+        campo: "Alíquota aplicada",
+        de: "4,00%",
+        para: "12,00%",
+        impactoTitulo: "Impacto no crédito",
+        linha1Label: "Crédito escriturado (4%)",
+        linha1Valor: "R$ 40,00",
+        linha2Label: "Crédito correto (12%)",
+        linha2Valor: "R$ 120,00",
+        totalLabel: "A recuperar",
+        totalValor: "R$ 80,00",
+        actionLabel: "Notificar fornecedor",
+        pendentes: "28 pendentes",
+      },
+    },
+    {
+      id: "a2",
+      titulo: "Indpres x Finnfe",
+      desc: "Indicador de presença diverge",
+      detalhe: "",
+      asis: "RN 3913",
+      progresso: 0,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Indicador de presença inconsistente",
+        alertSub: "Reclassifique conforme a operação real do destinatário.",
+        regraLabel: "Regra",
+        regraValor: "RN 3913 · Indpres × FinNFe",
+        campo: "Indicador de presença",
+        de: "1 — Presencial",
+        para: "9 — Não presencial, outros",
+        impactoTitulo: "Impacto fiscal",
+        linha1Label: "Operações reclassificadas",
+        linha1Valor: "12 NF-e",
+        linha2Label: "Risco de glosa",
+        linha2Valor: "Médio",
+        totalLabel: "Ajuste recomendado",
+        totalValor: "Reemissão",
+        actionLabel: "Abrir chamado",
+        pendentes: "12 pendentes",
+      },
+    },
+  ],
+  d2: [
+    {
+      id: "a1",
+      titulo: "ICMS-ST · Base de cálculo",
+      desc: "MVA aplicada abaixo do protocolo",
+      detalhe: "38% → 45,8%",
+      asis: "RN 2207",
+      progresso: 64,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Base de ICMS-ST insuficiente",
+        alertSub: "Recalcular MVA conforme protocolo SP-MG vigente.",
+        regraLabel: "Protocolo",
+        regraValor: "Protocolo ICMS 41/08 · MVA SP-MG",
+        campo: "MVA aplicada",
+        de: "38,00%",
+        para: "45,80%",
+        impactoTitulo: "Impacto no ST",
+        linha1Label: "ST recolhido",
+        linha1Valor: "R$ 1.176,00",
+        linha2Label: "ST devido",
+        linha2Valor: "R$ 1.418,40",
+        totalLabel: "Diferença a recolher",
+        totalValor: "R$ 242,40",
+        actionLabel: "Gerar GNRE complementar",
+        pendentes: "5 pendentes",
+      },
+    },
+  ],
+  d3: [
+    {
+      id: "a1",
+      titulo: "CFOP × CST — Inconsistência",
+      desc: "CFOP de revenda com CST de industrialização",
+      detalhe: "5102 ↔ CST 00",
+      asis: "RN 4421",
+      progresso: 40,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "CFOP incompatível com CST informado",
+        alertSub: "Verifique a natureza da operação e ajuste o XML.",
+        regraLabel: "Regra",
+        regraValor: "RN 4421 · CFOP × CST",
+        campo: "CFOP / CST",
+        de: "5102 / 00",
+        para: "5101 / 00",
+        impactoTitulo: "Impacto operacional",
+        linha1Label: "NF-e impactadas",
+        linha1Valor: "3",
+        linha2Label: "Valor envolvido",
+        linha2Valor: "R$ 33.600,00",
+        totalLabel: "Status",
+        totalValor: "Aguarda reemissão",
+        actionLabel: "Solicitar correção",
+        pendentes: "7 pendentes",
+      },
+    },
+  ],
+  d4: [
+    {
+      id: "a1",
+      titulo: "Crédito · NCM divergente",
+      desc: "NCM declarada incompatível com produto",
+      detalhe: "7318.15 → 8482.10",
+      asis: "RN 5012",
+      progresso: 25,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "NCM divergente — crédito em risco",
+        alertSub: "Validar NCM correta junto ao cadastro de produtos.",
+        regraLabel: "Regra",
+        regraValor: "RN 5012 · NCM × Cadastro",
+        campo: "NCM",
+        de: "7318.15.00",
+        para: "8482.10.10",
+        impactoTitulo: "Impacto no crédito",
+        linha1Label: "Crédito tomado",
+        linha1Valor: "R$ 540,00",
+        linha2Label: "Crédito reconhecido",
+        linha2Valor: "R$ 405,00",
+        totalLabel: "Glosa potencial",
+        totalValor: "R$ 135,00",
+        actionLabel: "Notificar fornecedor",
+        pendentes: "9 pendentes",
+      },
+    },
+    {
+      id: "a2",
+      titulo: "PIS/COFINS · CST 06",
+      desc: "CST 06 sem amparo legal informado",
+      detalhe: "",
+      asis: "RN 5290",
+      progresso: 0,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Alíquota zero sem fundamento",
+        alertSub: "Solicitar enquadramento legal ao fornecedor.",
+        regraLabel: "Regra",
+        regraValor: "RN 5290 · CST PIS/COFINS",
+        campo: "CST",
+        de: "06",
+        para: "01",
+        impactoTitulo: "Impacto",
+        linha1Label: "Crédito presumido",
+        linha1Valor: "R$ 0,00",
+        linha2Label: "Crédito correto",
+        linha2Valor: "R$ 416,25",
+        totalLabel: "A recuperar",
+        totalValor: "R$ 416,25",
+        actionLabel: "Notificar fornecedor",
+        pendentes: "4 pendentes",
+      },
+    },
+  ],
+  d5: [
+    {
+      id: "a1",
+      titulo: "ICMS · Diferimento parcial",
+      desc: "Diferimento aplicado fora do regime estadual",
+      detalhe: "Diferido → Tributado",
+      asis: "RN 6101",
+      progresso: 78,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Diferimento indevido na operação",
+        alertSub: "Regime não se aplica para SC → MG nesta NCM.",
+        regraLabel: "Regra",
+        regraValor: "RN 6101 · Diferimento Interestadual",
+        campo: "Tratamento",
+        de: "Diferido (0%)",
+        para: "Tributado (12%)",
+        impactoTitulo: "Impacto tributário",
+        linha1Label: "ICMS declarado",
+        linha1Valor: "R$ 0,00",
+        linha2Label: "ICMS devido",
+        linha2Valor: "R$ 2.196,00",
+        totalLabel: "A recolher",
+        totalValor: "R$ 2.196,00",
+        actionLabel: "Abrir ajuste de apuração",
+        pendentes: "3 pendentes",
+      },
+    },
+  ],
+};
+
 
 function Bar({ items, color }: { items: { nome: string; valor: number }[]; color: string }) {
   const max = Math.max(...items.map((i) => i.valor));
@@ -320,7 +534,11 @@ function DetalhamentoDocumentos() {
 function IcmsDiagnostico() {
   const [tab, setTab] = useState<"resumo" | "detalhamento" | "historico">("resumo");
   const [selectedDoc, setSelectedDoc] = useState<string>("d1");
+  const auditorias = docAuditorias[selectedDoc] ?? [];
   const [selectedAuditoria, setSelectedAuditoria] = useState<string>("a1");
+  const currentAudit = auditorias.find((a) => a.id === selectedAuditoria) ?? auditorias[0];
+  const currentDoc = entradas.find((d) => d.id === selectedDoc);
+  const diag = currentAudit?.diagnostico;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: 1, from: "user", text: "Como está as apurações de ICMS?" },
@@ -512,7 +730,11 @@ function IcmsDiagnostico() {
                 return (
                   <li
                     key={d.id}
-                    onClick={() => setSelectedDoc(d.id)}
+                    onClick={() => {
+                      setSelectedDoc(d.id);
+                      const first = docAuditorias[d.id]?.[0]?.id;
+                      if (first) setSelectedAuditoria(first);
+                    }}
                     className={`cursor-pointer border-b border-border px-4 py-3 text-xs transition-colors ${
                       active ? "bg-accent/60" : "hover:bg-muted/60"
                     }`}
@@ -545,9 +767,9 @@ function IcmsDiagnostico() {
           <div className="rounded-xl border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <div className="text-sm font-medium text-foreground">
-                Auditorias <span className="text-muted-foreground">· NFe 110507</span>
+                Auditorias <span className="text-muted-foreground">· NFe {currentDoc?.nfe ?? "—"}</span>
               </div>
-              <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">2</span>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{auditorias.length}</span>
             </div>
             <ul>
               {auditorias.map((a) => {
@@ -591,77 +813,77 @@ function IcmsDiagnostico() {
           <div className="rounded-xl border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <div className="text-sm font-medium text-foreground">
-                Diagnóstico <span className="text-muted-foreground">· ICMS Alíquota</span>
+                Diagnóstico <span className="text-muted-foreground">· {currentAudit?.titulo.split("—")[0].trim() ?? "—"}</span>
               </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
-                <ArrowDown className="h-3 w-3" /> Entrada
-              </span>
-            </div>
-
-            <div className="space-y-4 p-4">
-              <div className="rounded-lg border border-[oklch(0.85_0.1_85)] bg-[oklch(0.97_0.04_85)] p-3">
-                <div className="flex items-start gap-2">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.6_0.18_60)]" />
-                  <div>
-                    <div className="text-sm font-medium text-foreground">
-                      Documento de entrada — alteração bloqueada
-                    </div>
-                    <div className="mt-0.5 text-xs text-muted-foreground">
-                      Notifique o fornecedor para correção e reemissão.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Diagnóstico Asis
-                </div>
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Regra</span>
-                    <span className="text-foreground">RN 1549 · Alíquotas Interestaduais</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Alíquota aplicada</span>
-                    <span>
-                      <span className="text-[oklch(0.55_0.2_25)] line-through">4,00%</span>{" "}
-                      <span className="text-muted-foreground">→</span>{" "}
-                      <span className="font-medium text-primary">12,00%</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Impacto no crédito
-                </div>
-                <div className="space-y-2 rounded-lg border border-primary/20 bg-accent/40 p-3 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-foreground">Crédito escriturado (4%)</span>
-                    <span className="tabular-nums text-[oklch(0.55_0.2_25)]">R$ 40,00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-foreground">Crédito correto (12%)</span>
-                    <span className="tabular-nums text-foreground">R$ 120,00</span>
-                  </div>
-                  <div className="flex justify-between border-t border-primary/20 pt-2">
-                    <span className="font-medium text-foreground">A recuperar</span>
-                    <span className="tabular-nums font-semibold text-primary">R$ 80,00</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-border pt-3">
-                <button className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90">
-                  <Send className="h-3.5 w-3.5" /> Notificar fornecedor
-                </button>
-                <span className="inline-flex items-center gap-1 text-xs text-[oklch(0.55_0.2_25)]">
-                  <AlertTriangle className="h-3 w-3" /> 28 pendentes
+              {diag && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
+                  {diag.tipo === "Entrada" ? <ArrowDown className="h-3 w-3" /> : <ArrowUp className="h-3 w-3" />} {diag.tipo}
                 </span>
-              </div>
+              )}
             </div>
+
+            {diag && (
+              <div className="space-y-4 p-4">
+                <div className="rounded-lg border border-[oklch(0.85_0.1_85)] bg-[oklch(0.97_0.04_85)] p-3">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.6_0.18_60)]" />
+                    <div>
+                      <div className="text-sm font-medium text-foreground">{diag.alertTitle}</div>
+                      <div className="mt-0.5 text-xs text-muted-foreground">{diag.alertSub}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Diagnóstico Asis
+                  </div>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between gap-3">
+                      <span className="text-muted-foreground">{diag.regraLabel}</span>
+                      <span className="text-right text-foreground">{diag.regraValor}</span>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <span className="text-muted-foreground">{diag.campo}</span>
+                      <span className="text-right">
+                        <span className="text-[oklch(0.55_0.2_25)] line-through">{diag.de}</span>{" "}
+                        <span className="text-muted-foreground">→</span>{" "}
+                        <span className="font-medium text-primary">{diag.para}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {diag.impactoTitulo}
+                  </div>
+                  <div className="space-y-2 rounded-lg border border-primary/20 bg-accent/40 p-3 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-foreground">{diag.linha1Label}</span>
+                      <span className="tabular-nums text-[oklch(0.55_0.2_25)]">{diag.linha1Valor}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-foreground">{diag.linha2Label}</span>
+                      <span className="tabular-nums text-foreground">{diag.linha2Valor}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-primary/20 pt-2">
+                      <span className="font-medium text-foreground">{diag.totalLabel}</span>
+                      <span className="tabular-nums font-semibold text-primary">{diag.totalValor}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border pt-3">
+                  <button className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90">
+                    <Send className="h-3.5 w-3.5" /> {diag.actionLabel}
+                  </button>
+                  <span className="inline-flex items-center gap-1 text-xs text-[oklch(0.55_0.2_25)]">
+                    <AlertTriangle className="h-3 w-3" /> {diag.pendentes}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
           </>
