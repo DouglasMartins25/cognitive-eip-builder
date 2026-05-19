@@ -349,11 +349,15 @@ function IcmsDiagnostico() {
                 <div className="space-y-2 rounded-lg border border-primary/20 bg-accent/40 p-3 text-xs">
                   <div className="flex justify-between">
                     <span className="text-foreground">Crédito escriturado (4%)</span>
-                    <span className="tabular-nums text-foreground">R$ 40,00</span>
+                    <span className="tabular-nums text-[oklch(0.55_0.2_25)]">R$ 40,00</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-foreground">Crédito correto (12%)</span>
-                    <span className="tabular-nums font-medium text-primary">R$ 120,00</span>
+                    <span className="tabular-nums text-foreground">R$ 120,00</span>
+                  </div>
+                  <div className="flex justify-between border-t border-primary/20 pt-2">
+                    <span className="font-medium text-foreground">A recuperar</span>
+                    <span className="tabular-nums font-semibold text-primary">R$ 80,00</span>
                   </div>
                 </div>
               </div>
