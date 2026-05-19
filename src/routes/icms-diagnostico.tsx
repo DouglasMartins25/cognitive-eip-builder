@@ -19,6 +19,9 @@ import {
   FileText,
   Maximize2,
   ArrowRight,
+  Bot,
+  CheckCircle2,
+  Sparkle,
 } from "lucide-react";
 
 export const Route = createFileRoute("/icms-diagnostico")({
@@ -815,8 +818,37 @@ function IcmsDiagnostico() {
 
         {tab === "resumo" && (
           <>
+        {/* Tax Digital Workers banner */}
+        <div className="mt-5 flex items-center gap-4 rounded-2xl border border-primary/20 bg-card p-4">
+          <div className="relative">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+              <Bot className="h-6 w-6" />
+            </div>
+            <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-card bg-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-base font-semibold text-foreground">Tax Digital Workers</h2>
+              <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs text-primary">
+                <CheckCircle2 className="h-3 w-3" /> 2 agentes ativos
+              </span>
+            </div>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              Tenho a segurança de ajustar <span className="font-medium text-foreground">90% das regras</span>. Posso ajustar?
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-medium text-foreground hover:bg-muted">
+              Validar
+            </button>
+            <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90">
+              <Sparkle className="h-3.5 w-3.5" /> Ajustar
+            </button>
+          </div>
+        </div>
+
         {/* KPIs */}
-        <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-5">
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-5">
 
           {kpis.map((k) => (
             <div
