@@ -36,6 +36,7 @@ import {
   ChevronDown,
   ChevronUp,
   Receipt,
+  Paperclip,
   Mail,
   Phone,
   MessageSquare,
