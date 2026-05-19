@@ -500,7 +500,18 @@ function IcmsDiagnostico() {
             </div>
           </div>
         </div>
+          </>
+        )}
+
+        {tab === "detalhamento" && <DetalhamentoDocumentos />}
+
+        {tab === "historico" && (
+          <div className="mt-6 rounded-xl border border-dashed border-border bg-card/40 p-10 text-center text-sm text-muted-foreground">
+            Histórico de aplicações será exibido aqui.
+          </div>
+        )}
         </div>
+
       </main>
 
       {/* Right icon sidebar */}
