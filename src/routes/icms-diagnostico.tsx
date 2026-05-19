@@ -6,11 +6,42 @@ import {
   Send,
   ArrowDown,
   ArrowUp,
+  Inbox,
+  Crop,
+  Bell,
+  Tag,
+  RefreshCw,
+  Briefcase,
+  Contact,
+  Sparkles,
+  ShoppingBag,
+  User,
+  FileText,
+  Maximize2,
+  ArrowRight,
 } from "lucide-react";
 
 export const Route = createFileRoute("/icms-diagnostico")({
   component: IcmsDiagnostico,
 });
+
+function SideIcon({
+  icon: Icon,
+  active = false,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  active?: boolean;
+}) {
+  return (
+    <button
+      className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+        active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
+      }`}
+    >
+      <Icon className="h-5 w-5" />
+    </button>
+  );
+}
 
 const kpis = [
   { value: "R$ 18,4k", label: "Impacto estimado", sub: "todas as divergências", tone: "primary" },
