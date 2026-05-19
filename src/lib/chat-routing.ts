@@ -8,7 +8,8 @@ export type ChatStart =
   | "boletos"
   | "risco"
   | "fluxocaixa"
-  | "dda";
+  | "dda"
+  | "icms";
 
 export type ChatRouteResult = {
   start: ChatStart;
