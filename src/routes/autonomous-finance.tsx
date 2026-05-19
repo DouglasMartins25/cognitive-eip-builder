@@ -21,6 +21,8 @@ import {
   ShieldCheck,
   Activity,
   FileWarning,
+  BarChart3,
+  TrendingDown,
   Scale,
   Receipt,
   Maximize2,
