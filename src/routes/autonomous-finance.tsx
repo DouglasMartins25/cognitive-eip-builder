@@ -382,28 +382,45 @@ function AutonomousFinance() {
             <div className="space-y-4">
               <div className="rounded-xl border border-border bg-card p-5">
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 text-[oklch(0.55_0.2_25)]" />
+                  <BarChart3 className="h-4 w-4 text-primary" />
                   <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
-                    ANOMALIAS POR TIPO — A1
+                    EBITDA — SEU vs SETOR
                   </p>
                 </div>
-                <ul className="mt-4 space-y-2.5">
-                  {anomalias.map((a) => {
-                    const color =
-                      a.sev === "critico"
-                        ? "bg-[oklch(0.55_0.2_25)]"
-                        : a.sev === "atencao"
-                        ? "bg-[oklch(0.6_0.16_60)]"
-                        : "bg-[oklch(0.5_0.18_260)]";
+                <div className="mt-4 flex items-end justify-between">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Sua margem</p>
+                    <p className="text-2xl font-semibold text-foreground">{ebitdaBenchmark.empresa.toString().replace(".", ",")}%</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Mediana setorial</p>
+                    <p className="text-2xl font-semibold text-foreground">{ebitdaBenchmark.setor.toString().replace(".", ",")}%</p>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-[oklch(0.95_0.04_25)] px-3 py-2">
+                  <TrendingDown className="h-4 w-4 text-[oklch(0.55_0.2_25)]" />
+                  <p className="text-xs text-[oklch(0.45_0.18_25)]">
+                    <span className="font-semibold">{ebitdaBenchmark.gap.toString().replace(".", ",")} pp</span> abaixo da mediana setorial
+                  </p>
+                </div>
+                <p className="mt-4 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  Drivers da variação
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {ebitdaBenchmark.drivers.map((d) => {
+                    const color = d.tone === "positivo" ? "text-[oklch(0.55_0.18_150)]" : "text-[oklch(0.55_0.2_25)]";
                     return (
-                      <li key={a.tipo} className="flex items-center gap-3 text-xs">
-                        <span className={`h-2 w-2 rounded-full ${color}`} />
-                        <span className="flex-1 text-foreground">{a.tipo}</span>
-                        <span className="font-mono font-semibold text-foreground">{a.qtd}</span>
+                      <li key={d.label} className="flex items-center justify-between text-xs">
+                        <div>
+                          <span className="text-foreground">{d.label}</span>
+                          <span className="ml-2 text-[11px] text-muted-foreground">{d.desc}</span>
+                        </div>
+                        <span className={`font-mono font-semibold ${color}`}>{d.valor}</span>
                       </li>
                     );
                   })}
                 </ul>
+
               </div>
 
               <div className="rounded-xl border border-border bg-card p-5">
