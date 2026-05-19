@@ -996,7 +996,9 @@ function IcmsDiagnostico() {
                 Diagnóstico <span className="text-muted-foreground">· {currentAudit?.titulo.split("—")[0].trim() ?? "—"}</span>
               </div>
               {diag && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
+                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
+                  diag.tipo === "Entrada" ? "bg-accent text-accent-foreground" : "bg-[oklch(0.95_0.05_140)] text-[oklch(0.45_0.13_160)]"
+                }`}>
                   {diag.tipo === "Entrada" ? <ArrowDown className="h-3 w-3" /> : <ArrowUp className="h-3 w-3" />} {diag.tipo}
                 </span>
               )}
