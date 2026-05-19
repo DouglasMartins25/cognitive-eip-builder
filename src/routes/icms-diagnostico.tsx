@@ -863,11 +863,37 @@ function IcmsDiagnostico() {
               <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">47</span>
             </div>
             <div className="flex gap-2 border-b border-border px-3 py-2 text-xs">
-              <button className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 font-medium text-foreground">
+              <button
+                onClick={() => {
+                  setDocTab("entradas");
+                  const firstDoc = entradas[0];
+                  if (firstDoc) {
+                    setSelectedDoc(firstDoc.id);
+                    const firstA = docAuditorias[firstDoc.id]?.[0]?.id;
+                    if (firstA) setSelectedAuditoria(firstA);
+                  }
+                }}
+                className={`flex items-center gap-1 rounded-md px-2 py-1 ${
+                  docTab === "entradas" ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-muted"
+                }`}
+              >
                 <ArrowDown className="h-3 w-3" /> Entradas <span className="text-muted-foreground">28</span>
               </button>
-              <button className="flex items-center gap-1 rounded-md px-2 py-1 text-muted-foreground hover:bg-muted">
-                <ArrowUp className="h-3 w-3" /> Saídas <span>19</span>
+              <button
+                onClick={() => {
+                  setDocTab("saidas");
+                  const firstDoc = saidas[0];
+                  if (firstDoc) {
+                    setSelectedDoc(firstDoc.id);
+                    const firstA = saidasAuditorias[firstDoc.id]?.[0]?.id;
+                    if (firstA) setSelectedAuditoria(firstA);
+                  }
+                }}
+                className={`flex items-center gap-1 rounded-md px-2 py-1 ${
+                  docTab === "saidas" ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                <ArrowUp className="h-3 w-3" /> Saídas <span className="text-muted-foreground">19</span>
               </button>
             </div>
             <div className="flex gap-2 border-b border-border px-3 py-2">
@@ -879,14 +905,14 @@ function IcmsDiagnostico() {
               </select>
             </div>
             <ul className="max-h-[420px] overflow-auto">
-              {entradas.map((d) => {
-                const active = selectedDoc === d.id;
+              {docsList.map((d) => {
+                const active = activeDocId === d.id;
                 return (
                   <li
                     key={d.id}
                     onClick={() => {
                       setSelectedDoc(d.id);
-                      const first = docAuditorias[d.id]?.[0]?.id;
+                      const first = auditMap[d.id]?.[0]?.id;
                       if (first) setSelectedAuditoria(first);
                     }}
                     className={`cursor-pointer border-b border-border px-4 py-3 text-xs transition-colors ${
