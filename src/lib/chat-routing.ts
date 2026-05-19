@@ -105,7 +105,8 @@ const icmsTerms = [
 export function resolveChatRoute(text: string): ChatRouteResult | undefined {
   const lower = text.toLowerCase();
   let start: ChatStart | undefined;
-  if (ddaTerms.some((t) => lower.includes(t))) start = "dda";
+  if (icmsTerms.some((t) => lower.includes(t))) start = "icms";
+  else if (ddaTerms.some((t) => lower.includes(t))) start = "dda";
   else if (fluxoCaixaTerms.some((t) => lower.includes(t))) start = "fluxocaixa";
   else if (riscoTerms.some((t) => lower.includes(t))) start = "risco";
   else if (boletosTerms.some((t) => lower.includes(t))) start = "boletos";
