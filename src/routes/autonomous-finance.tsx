@@ -143,12 +143,18 @@ const anomalias = [
   { tipo: "Risco de liquidez D+9", qtd: 2, sev: "critico" },
 ];
 
-const compliance = [
-  { regra: "CFOP × operação", cobertura: 100, status: "ok" },
-  { regra: "CST atualizado IBS/CBS", cobertura: 87, status: "alert" },
-  { regra: "NCM × alíquota oficial", cobertura: 96, status: "warn" },
-  { regra: "Regimes especiais", cobertura: 100, status: "ok" },
-  { regra: "Créditos fiscais", cobertura: 92, status: "warn" },
+const projecaoFluxo: { label: string; valor: string; tone: "positivo" | "negativo" | "neutro" }[] = [
+  { label: "Saldo atual", valor: "R$ 4,82 M", tone: "neutro" },
+  { label: "Entradas previstas (30d)", valor: "+ R$ 3,14 M", tone: "positivo" },
+  { label: "Saídas previstas (30d)", valor: "− R$ 2,47 M", tone: "negativo" },
+  { label: "Saldo projetado D+30", valor: "R$ 5,49 M", tone: "positivo" },
+  { label: "Risco de liquidez D+45", valor: "Baixo · 8%", tone: "neutro" },
+];
+
+const acoesProjecao = [
+  { acao: "Antecipar recebíveis Cliente Vértice", impacto: "+ R$ 420k em D+7" },
+  { acao: "Reprogramar pagamento Metais Gerais para D+12", impacto: "Reduz pico de saída em 18%" },
+  { acao: "Aplicar excedente em CDB liquidez diária", impacto: "+ R$ 11,2k/mês em rendimento" },
 ];
 
 function AutonomousFinance() {
