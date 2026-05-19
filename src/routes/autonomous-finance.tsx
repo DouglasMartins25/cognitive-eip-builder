@@ -62,7 +62,7 @@ const kpis = [
   { label: "Transações monitoradas hoje", valor: "8.421", delta: "↑ 1.204 vs ontem", up: true },
   { label: "Anomalias detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
   { label: "Cobertura Reforma Tributária", valor: "100%", delta: "847 regras vigentes monitoradas", up: true },
-  { label: "Contingências evitadas", valor: "R$ 1,8M", delta: "↑ R$ 312k esta semana", up: true },
+  { label: "Automação bancária", valor: "1.284 / 1.310", delta: "Pagamentos realizados · 426 cobranças enviadas", up: true },
 ];
 
 const alertas: {
