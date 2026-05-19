@@ -145,6 +145,178 @@ function Bar({ items, color }: { items: { nome: string; valor: number }[]; color
 
 type ChatMessage = { id: number; from: "user" | "agent"; text: string };
 
+type DetRow = {
+  tipo: "entrada" | "saida";
+  nfe: string;
+  chave: string;
+  data: string;
+  parceiro: string;
+  cnpj: string;
+  uf: string;
+  valor: string;
+  auditoria: string;
+  status: "notificado" | "pendente" | "aplicada" | "rejeitada";
+};
+
+const detRows: DetRow[] = [
+  { tipo: "entrada", nfe: "110507", chave: "532509263140620007…", data: "03/09/2025", parceiro: "EMPRESA JR DF", cnpj: "26.314.062/0007-57", uf: "DF→MG", valor: "R$ 1.000,00", auditoria: "1549 · Alíquota ICMS", status: "notificado" },
+  { tipo: "entrada", nfe: "412346", chave: "352508151234000001…", data: "15/08/2025", parceiro: "Componentes Sul S/A", cnpj: "12.345.678/0001-90", uf: "SP→MG", valor: "R$ 9.800,00", auditoria: "3852 · ICMS-ST", status: "pendente" },
+  { tipo: "entrada", nfe: "412348", chave: "352508209876000003…", data: "20/08/2025", parceiro: "Eletro Norte Ltda", cnpj: "98.765.432/0001-10", uf: "RS→MG", valor: "R$ 11.200,00", auditoria: "3873 · PIS/COFINS", status: "pendente" },
+  { tipo: "saida",   nfe: "412347", chave: "312508183331000004…", data: "18/08/2025", parceiro: "Metalúrgica Dias ME", cnpj: "33.310.000/0001-45", uf: "MG→SP", valor: "R$ 3.200,00", auditoria: "1549 · Alíquota ICMS", status: "aplicada" },
+  { tipo: "saida",   nfe: "412349", chave: "312508254444000007…", data: "25/08/2025", parceiro: "Ind. Becker Ltda", cnpj: "44.400.000/0001-78", uf: "MG→RS", valor: "R$ 7.650,00", auditoria: "3852 · ICMS-ST", status: "rejeitada" },
+  { tipo: "saida",   nfe: "412354", chave: "312509015555000000…", data: "01/09/2025", parceiro: "Comp. Sul S/A", cnpj: "55.500.000/0001-23", uf: "MG→SP", valor: "R$ 8.900,00", auditoria: "1549 · Alíquota ICMS", status: "aplicada" },
+];
+
+const statusStyles: Record<DetRow["status"], string> = {
+  notificado: "bg-accent text-accent-foreground",
+  pendente: "bg-[oklch(0.95_0.05_85)] text-[oklch(0.55_0.18_60)]",
+  aplicada: "bg-accent text-primary",
+  rejeitada: "bg-[oklch(0.95_0.05_25)] text-[oklch(0.55_0.2_25)]",
+};
+const statusIcon: Record<DetRow["status"], string> = {
+  notificado: "✉",
+  pendente: "⏳",
+  aplicada: "✔",
+  rejeitada: "✕",
+};
+const statusLabel: Record<DetRow["status"], string> = {
+  notificado: "Notificado",
+  pendente: "Pendente",
+  aplicada: "Aplicada",
+  rejeitada: "Rejeitada",
+};
+
+function DetalhamentoDocumentos() {
+  const counts = {
+    entradas: detRows.filter((r) => r.tipo === "entrada").length,
+    saidas: detRows.filter((r) => r.tipo === "saida").length,
+    pendentes: detRows.filter((r) => r.status === "pendente").length,
+    aplicadas: detRows.filter((r) => r.status === "aplicada").length,
+    rejeitadas: detRows.filter((r) => r.status === "rejeitada").length,
+  };
+
+  return (
+    <div className="mt-4 space-y-4">
+      {/* Filters */}
+      <div className="rounded-xl border border-border bg-card p-4">
+        <div className="flex flex-wrap items-end gap-3">
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Tipo</label>
+            <select className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground">
+              <option>Entrada e Saída</option>
+              <option>Entrada</option>
+              <option>Saída</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Data — de</label>
+            <input type="date" defaultValue="2025-08-01" className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Data — até</label>
+            <input type="date" defaultValue="2025-09-30" className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground" />
+          </div>
+          <div className="flex flex-1 min-w-[200px] flex-col gap-1">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Número / chave</label>
+            <input placeholder="Buscar NF ou chave…" className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Status</label>
+            <select className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground">
+              <option>Todos</option>
+              <option>Notificado</option>
+              <option>Pendente</option>
+              <option>Aplicada</option>
+              <option>Rejeitada</option>
+            </select>
+          </div>
+          <div className="ml-auto flex gap-2">
+            <button className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90">Filtrar</button>
+            <button className="rounded-full border border-border bg-background px-4 py-1.5 text-xs text-foreground hover:bg-muted">Limpar</button>
+            <button className="rounded-full border border-primary/30 bg-card px-4 py-1.5 text-xs text-primary hover:bg-accent">↗ Exportar</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Counters */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-1 text-xs">
+        <span className="text-muted-foreground">Exibindo {detRows.length} NF-es</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-accent px-2.5 py-0.5 text-accent-foreground">↓ {counts.entradas} Entradas</span>
+          <span className="rounded-full bg-[oklch(0.95_0.05_140)] px-2.5 py-0.5 text-[oklch(0.45_0.13_160)]">↑ {counts.saidas} Saídas</span>
+          <span className="rounded-full px-2.5 py-0.5 text-[oklch(0.55_0.18_60)]">{counts.pendentes} Pendentes</span>
+          <span className="rounded-full px-2.5 py-0.5 text-primary">{counts.aplicadas} Aplicadas</span>
+          <span className="rounded-full px-2.5 py-0.5 text-[oklch(0.55_0.2_25)]">{counts.rejeitadas} Rejeitada</span>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-border text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 text-left">Tipo</th>
+                <th className="px-4 py-3 text-left">NF-e</th>
+                <th className="px-4 py-3 text-left">Número único (chave)</th>
+                <th className="px-4 py-3 text-left">Data emissão</th>
+                <th className="px-4 py-3 text-left">Parceiro</th>
+                <th className="px-4 py-3 text-left">UF</th>
+                <th className="px-4 py-3 text-right">Valor total</th>
+                <th className="px-4 py-3 text-left">Auditoria</th>
+                <th className="px-4 py-3 text-left">Status</th>
+                <th className="px-4 py-3" />
+              </tr>
+            </thead>
+            <tbody>
+              {detRows.map((r) => (
+                <tr key={r.nfe} className="border-b border-border last:border-0 hover:bg-muted/40">
+                  <td className="px-4 py-3">
+                    {r.tipo === "entrada" ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-accent-foreground">↓ Entrada</span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.95_0.05_140)] px-2 py-0.5 text-[oklch(0.45_0.13_160)]">↑ Saída</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-foreground">{r.nfe}</td>
+                  <td className="px-4 py-3 font-mono text-muted-foreground">{r.chave}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{r.data}</td>
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-foreground">{r.parceiro}</div>
+                    <div className="font-mono text-[10px] text-muted-foreground">{r.cnpj}</div>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">{r.uf}</td>
+                  <td className="px-4 py-3 text-right font-medium text-foreground tabular-nums">{r.valor}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{r.auditoria}</td>
+                  <td className="px-4 py-3">
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 ${statusStyles[r.status]}`}>
+                      {statusIcon[r.status]} {statusLabel[r.status]}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button className="flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-muted hover:text-foreground">
+                      ↗
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex items-center justify-between border-t border-border px-4 py-3 text-xs text-muted-foreground">
+          <span>Exibindo 1–{detRows.length} de {detRows.length}</span>
+          <div className="flex items-center gap-1">
+            <button className="flex h-7 w-7 items-center justify-center rounded-md border border-border hover:bg-muted">‹</button>
+            <button className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">1</button>
+            <button className="flex h-7 w-7 items-center justify-center rounded-md border border-border hover:bg-muted">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function IcmsDiagnostico() {
   const [tab, setTab] = useState<"resumo" | "detalhamento" | "historico">("resumo");
   const [selectedDoc, setSelectedDoc] = useState<string>("d1");
