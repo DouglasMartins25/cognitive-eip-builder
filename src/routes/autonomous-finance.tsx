@@ -62,7 +62,17 @@ const kpis = [
   { label: "Transações monitoradas hoje", valor: "8.421", delta: "↑ 1.204 vs ontem", up: true },
   { label: "Anomalias detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
   { label: "Cobertura Reforma Tributária", valor: "100%", delta: "847 regras vigentes monitoradas", up: true },
-  { label: "Automação bancária", valor: "1.284 / 1.310", delta: "Pagamentos realizados · 426 cobranças enviadas", up: true },
+  {
+    label: "Automação bancária",
+    valor: "",
+    delta: "",
+    up: true,
+    detalhes: [
+      { label: "Pagamentos previstos", valor: "1.310" },
+      { label: "Pagamentos Realizados", valor: "1.284" },
+      { label: "Cobranças enviadas", valor: "426" },
+    ],
+  },
 ];
 
 const alertas: {
@@ -278,10 +288,23 @@ function AutonomousFinance() {
                 <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                   {k.label}
                 </p>
-                <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
-                <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
-                  {k.delta}
-                </p>
+                {"detalhes" in k && k.detalhes ? (
+                  <div className="mt-3 space-y-2">
+                    {k.detalhes.map((d) => (
+                      <div key={d.label} className="flex items-baseline justify-between">
+                        <span className="text-xs text-muted-foreground">{d.label}:</span>
+                        <span className="text-sm font-semibold text-foreground">{d.valor}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
+                    <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
+                      {k.delta}
+                    </p>
+                  </>
+                )}
               </div>
             ))}
           </div>
