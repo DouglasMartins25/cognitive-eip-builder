@@ -104,24 +104,238 @@ const entradas: Doc[] = [
   { id: "d5", nfe: "412355", data: "25/08/2025", cliente: "Ind. Becker Ltda", valor: "R$ 18.300", rota: "SC→MG", status: "alerta", statusLabel: "1 alerta" },
 ];
 
-const auditorias = [
-  {
-    id: "a1",
-    titulo: "ICMS · Alíquota — Rejeição",
-    desc: "Alíquota diverge da tabela interestadual",
-    detalhe: "4% → 12% · R$80 crédito",
-    asis: "RN 1549 · 2129",
-    progresso: 91,
-  },
-  {
-    id: "a2",
-    titulo: "Indpres x Finnfe",
-    desc: "Indicador de presença diverge",
-    detalhe: "",
-    asis: "RN 3913",
-    progresso: 0,
-  },
-];
+type Diagnostico = {
+  tipo: "Entrada" | "Saída";
+  alertTitle: string;
+  alertSub: string;
+  regraLabel: string;
+  regraValor: string;
+  campo: string;
+  de: string;
+  para: string;
+  impactoTitulo: string;
+  linha1Label: string;
+  linha1Valor: string;
+  linha2Label: string;
+  linha2Valor: string;
+  totalLabel: string;
+  totalValor: string;
+  actionLabel: string;
+  pendentes: string;
+};
+
+type Audit = {
+  id: string;
+  titulo: string;
+  desc: string;
+  detalhe: string;
+  asis: string;
+  progresso: number;
+  diagnostico: Diagnostico;
+};
+
+const docAuditorias: Record<string, Audit[]> = {
+  d1: [
+    {
+      id: "a1",
+      titulo: "ICMS · Alíquota — Rejeição",
+      desc: "Alíquota diverge da tabela interestadual",
+      detalhe: "4% → 12% · R$80 crédito",
+      asis: "RN 1549 · 2129",
+      progresso: 91,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Documento de entrada — alteração bloqueada",
+        alertSub: "Notifique o fornecedor para correção e reemissão.",
+        regraLabel: "Regra",
+        regraValor: "RN 1549 · Alíquotas Interestaduais",
+        campo: "Alíquota aplicada",
+        de: "4,00%",
+        para: "12,00%",
+        impactoTitulo: "Impacto no crédito",
+        linha1Label: "Crédito escriturado (4%)",
+        linha1Valor: "R$ 40,00",
+        linha2Label: "Crédito correto (12%)",
+        linha2Valor: "R$ 120,00",
+        totalLabel: "A recuperar",
+        totalValor: "R$ 80,00",
+        actionLabel: "Notificar fornecedor",
+        pendentes: "28 pendentes",
+      },
+    },
+    {
+      id: "a2",
+      titulo: "Indpres x Finnfe",
+      desc: "Indicador de presença diverge",
+      detalhe: "",
+      asis: "RN 3913",
+      progresso: 0,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Indicador de presença inconsistente",
+        alertSub: "Reclassifique conforme a operação real do destinatário.",
+        regraLabel: "Regra",
+        regraValor: "RN 3913 · Indpres × FinNFe",
+        campo: "Indicador de presença",
+        de: "1 — Presencial",
+        para: "9 — Não presencial, outros",
+        impactoTitulo: "Impacto fiscal",
+        linha1Label: "Operações reclassificadas",
+        linha1Valor: "12 NF-e",
+        linha2Label: "Risco de glosa",
+        linha2Valor: "Médio",
+        totalLabel: "Ajuste recomendado",
+        totalValor: "Reemissão",
+        actionLabel: "Abrir chamado",
+        pendentes: "12 pendentes",
+      },
+    },
+  ],
+  d2: [
+    {
+      id: "a1",
+      titulo: "ICMS-ST · Base de cálculo",
+      desc: "MVA aplicada abaixo do protocolo",
+      detalhe: "38% → 45,8%",
+      asis: "RN 2207",
+      progresso: 64,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Base de ICMS-ST insuficiente",
+        alertSub: "Recalcular MVA conforme protocolo SP-MG vigente.",
+        regraLabel: "Protocolo",
+        regraValor: "Protocolo ICMS 41/08 · MVA SP-MG",
+        campo: "MVA aplicada",
+        de: "38,00%",
+        para: "45,80%",
+        impactoTitulo: "Impacto no ST",
+        linha1Label: "ST recolhido",
+        linha1Valor: "R$ 1.176,00",
+        linha2Label: "ST devido",
+        linha2Valor: "R$ 1.418,40",
+        totalLabel: "Diferença a recolher",
+        totalValor: "R$ 242,40",
+        actionLabel: "Gerar GNRE complementar",
+        pendentes: "5 pendentes",
+      },
+    },
+  ],
+  d3: [
+    {
+      id: "a1",
+      titulo: "CFOP × CST — Inconsistência",
+      desc: "CFOP de revenda com CST de industrialização",
+      detalhe: "5102 ↔ CST 00",
+      asis: "RN 4421",
+      progresso: 40,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "CFOP incompatível com CST informado",
+        alertSub: "Verifique a natureza da operação e ajuste o XML.",
+        regraLabel: "Regra",
+        regraValor: "RN 4421 · CFOP × CST",
+        campo: "CFOP / CST",
+        de: "5102 / 00",
+        para: "5101 / 00",
+        impactoTitulo: "Impacto operacional",
+        linha1Label: "NF-e impactadas",
+        linha1Valor: "3",
+        linha2Label: "Valor envolvido",
+        linha2Valor: "R$ 33.600,00",
+        totalLabel: "Status",
+        totalValor: "Aguarda reemissão",
+        actionLabel: "Solicitar correção",
+        pendentes: "7 pendentes",
+      },
+    },
+  ],
+  d4: [
+    {
+      id: "a1",
+      titulo: "Crédito · NCM divergente",
+      desc: "NCM declarada incompatível com produto",
+      detalhe: "7318.15 → 8482.10",
+      asis: "RN 5012",
+      progresso: 25,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "NCM divergente — crédito em risco",
+        alertSub: "Validar NCM correta junto ao cadastro de produtos.",
+        regraLabel: "Regra",
+        regraValor: "RN 5012 · NCM × Cadastro",
+        campo: "NCM",
+        de: "7318.15.00",
+        para: "8482.10.10",
+        impactoTitulo: "Impacto no crédito",
+        linha1Label: "Crédito tomado",
+        linha1Valor: "R$ 540,00",
+        linha2Label: "Crédito reconhecido",
+        linha2Valor: "R$ 405,00",
+        totalLabel: "Glosa potencial",
+        totalValor: "R$ 135,00",
+        actionLabel: "Notificar fornecedor",
+        pendentes: "9 pendentes",
+      },
+    },
+    {
+      id: "a2",
+      titulo: "PIS/COFINS · CST 06",
+      desc: "CST 06 sem amparo legal informado",
+      detalhe: "",
+      asis: "RN 5290",
+      progresso: 0,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Alíquota zero sem fundamento",
+        alertSub: "Solicitar enquadramento legal ao fornecedor.",
+        regraLabel: "Regra",
+        regraValor: "RN 5290 · CST PIS/COFINS",
+        campo: "CST",
+        de: "06",
+        para: "01",
+        impactoTitulo: "Impacto",
+        linha1Label: "Crédito presumido",
+        linha1Valor: "R$ 0,00",
+        linha2Label: "Crédito correto",
+        linha2Valor: "R$ 416,25",
+        totalLabel: "A recuperar",
+        totalValor: "R$ 416,25",
+        actionLabel: "Notificar fornecedor",
+        pendentes: "4 pendentes",
+      },
+    },
+  ],
+  d5: [
+    {
+      id: "a1",
+      titulo: "ICMS · Diferimento parcial",
+      desc: "Diferimento aplicado fora do regime estadual",
+      detalhe: "Diferido → Tributado",
+      asis: "RN 6101",
+      progresso: 78,
+      diagnostico: {
+        tipo: "Entrada",
+        alertTitle: "Diferimento indevido na operação",
+        alertSub: "Regime não se aplica para SC → MG nesta NCM.",
+        regraLabel: "Regra",
+        regraValor: "RN 6101 · Diferimento Interestadual",
+        campo: "Tratamento",
+        de: "Diferido (0%)",
+        para: "Tributado (12%)",
+        impactoTitulo: "Impacto tributário",
+        linha1Label: "ICMS declarado",
+        linha1Valor: "R$ 0,00",
+        linha2Label: "ICMS devido",
+        linha2Valor: "R$ 2.196,00",
+        totalLabel: "A recolher",
+        totalValor: "R$ 2.196,00",
+        actionLabel: "Abrir ajuste de apuração",
+        pendentes: "3 pendentes",
+      },
+    },
+  ],
+};
+
 
 function Bar({ items, color }: { items: { nome: string; valor: number }[]; color: string }) {
   const max = Math.max(...items.map((i) => i.valor));
