@@ -691,6 +691,7 @@ function IcmsDiagnostico() {
   const auditorias = auditMap[activeDocId] ?? [];
   const [selectedAuditoria, setSelectedAuditoria] = useState<string>("a1");
   const currentDoc = docsList.find((d) => d.id === activeDocId);
+  const currentAudit = auditorias.find((a) => a.id === selectedAuditoria) ?? auditorias[0];
   const diag = currentAudit?.diagnostico;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
