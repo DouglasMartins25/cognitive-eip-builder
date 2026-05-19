@@ -497,7 +497,16 @@ function IcmsDiagnostico() {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </main>
+
+      {/* Right icon sidebar */}
+      <aside className="flex w-14 flex-col items-center gap-4 border-l border-border bg-card py-5 text-sidebar-foreground">
+        <button className="hover:text-foreground"><ShoppingBag className="h-5 w-5" /></button>
+        <button className="hover:text-foreground"><User className="h-5 w-5" /></button>
+        <button className="hover:text-foreground"><FileText className="h-5 w-5" /></button>
+      </aside>
     </div>
   );
 }
+
