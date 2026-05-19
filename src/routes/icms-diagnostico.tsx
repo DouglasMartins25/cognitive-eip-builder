@@ -730,7 +730,11 @@ function IcmsDiagnostico() {
                 return (
                   <li
                     key={d.id}
-                    onClick={() => setSelectedDoc(d.id)}
+                    onClick={() => {
+                      setSelectedDoc(d.id);
+                      const first = docAuditorias[d.id]?.[0]?.id;
+                      if (first) setSelectedAuditoria(first);
+                    }}
                     className={`cursor-pointer border-b border-border px-4 py-3 text-xs transition-colors ${
                       active ? "bg-accent/60" : "hover:bg-muted/60"
                     }`}
