@@ -534,7 +534,11 @@ function DetalhamentoDocumentos() {
 function IcmsDiagnostico() {
   const [tab, setTab] = useState<"resumo" | "detalhamento" | "historico">("resumo");
   const [selectedDoc, setSelectedDoc] = useState<string>("d1");
+  const auditorias = docAuditorias[selectedDoc] ?? [];
   const [selectedAuditoria, setSelectedAuditoria] = useState<string>("a1");
+  const currentAudit = auditorias.find((a) => a.id === selectedAuditoria) ?? auditorias[0];
+  const currentDoc = entradas.find((d) => d.id === selectedDoc);
+  const diag = currentAudit?.diagnostico;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: 1, from: "user", text: "Como está as apurações de ICMS?" },
