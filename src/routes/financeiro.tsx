@@ -36,6 +36,7 @@ import {
   ChevronDown,
   ChevronUp,
   Receipt,
+  Paperclip,
   Mail,
   Phone,
   MessageSquare,
@@ -286,11 +287,11 @@ const chartData = [
 ];
 
 const titulosVencendoHoje = [
-  { id: "TIT-001", cliente: "Mercado Vista Alegre", documento: "NF 12345", valor: "R$ 4.250,00", status: "A receber", tipo: "receita" },
-  { id: "TIT-002", cliente: "Distribuidora Norte Sul", documento: "NF 12346", valor: "R$ 12.800,00", status: "A receber", tipo: "receita" },
-  { id: "TIT-003", cliente: "Energia Brasil S/A", documento: "Boleto 88291", valor: "R$ 2.140,00", status: "A pagar", tipo: "despesa" },
-  { id: "TIT-004", cliente: "Padaria Central", documento: "NF 12347", valor: "R$ 980,00", status: "A receber", tipo: "receita" },
-  { id: "TIT-005", cliente: "Aluguel Sede", documento: "Contrato 0021", valor: "R$ 8.500,00", status: "A pagar", tipo: "despesa" },
+  { id: "TIT-001", origem: "Sankhya", cliente: "Mercado Vista Alegre", documento: "NF 12345", emissao: "01/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 4.250,00", juros: "—", multas: "—", descontos: "—", valor: "R$ 4.250,00", status: "Aberto", statusKind: "aberto", tipo: "receita" },
+  { id: "TIT-002", origem: "Sankhya", cliente: "Distribuidora Norte Sul", documento: "NF 12346", emissao: "10/04/2026", vencimento: "19/05/2026", valorOriginal: "R$ 12.500,00", juros: "R$ 220,00", multas: "R$ 80,00", descontos: "—", valor: "R$ 12.800,00", status: "Renegociado", statusKind: "renegociado", tipo: "receita" },
+  { id: "TIT-003", origem: "Lincros", cliente: "Energia Brasil S/A", documento: "Boleto 88291", emissao: "05/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 2.140,00", juros: "—", multas: "—", descontos: "—", valor: "R$ 2.140,00", status: "Aberto", statusKind: "aberto", tipo: "despesa" },
+  { id: "TIT-004", origem: "Sankhya", cliente: "Padaria Central", documento: "NF 12347", emissao: "01/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 1.000,00", juros: "—", multas: "—", descontos: "R$ 20,00", valor: "R$ 980,00", status: "Antecipado", statusKind: "antecipado", tipo: "receita" },
+  { id: "TIT-005", origem: "Lincros", cliente: "Aluguel Sede", documento: "Contrato 0021", emissao: "01/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 8.500,00", juros: "—", multas: "—", descontos: "—", valor: "R$ 8.500,00", status: "Aberto", statusKind: "aberto", tipo: "despesa" },
 ];
 
 const titulosVencidosReceber = [
@@ -2918,37 +2919,73 @@ function Index() {
                   </div>
                 </div>
 
-                <div className="mt-5 overflow-hidden rounded-2xl border border-border">
-                  <table className="w-full text-sm">
-                    <thead className="bg-muted text-xs uppercase text-muted-foreground">
+                <div className="mt-5 overflow-x-auto rounded-2xl border border-border">
+                  <table className="w-full min-w-[1100px] text-sm">
+                    <thead className="bg-muted text-[11px] uppercase tracking-wide text-muted-foreground">
                       <tr>
-                        <th className="px-4 py-3 text-left font-medium">Título</th>
-                        <th className="px-4 py-3 text-left font-medium">Cliente / Fornecedor</th>
-                        <th className="px-4 py-3 text-left font-medium">Documento</th>
-                        <th className="px-4 py-3 text-right font-medium">Valor</th>
-                        <th className="px-4 py-3 text-left font-medium">Status</th>
+                        <th className="px-3 py-3 text-left font-medium">Origem</th>
+                        <th className="px-3 py-3 text-left font-medium">Nº Título</th>
+                        <th className="px-3 py-3 text-left font-medium">Cliente / Fornecedor</th>
+                        <th className="px-3 py-3 text-left font-medium">Tipo</th>
+                        <th className="px-3 py-3 text-left font-medium">Emissão</th>
+                        <th className="px-3 py-3 text-left font-medium">Vencimento</th>
+                        <th className="px-3 py-3 text-right font-medium">Valor Original</th>
+                        <th className="px-3 py-3 text-right font-medium">Juros</th>
+                        <th className="px-3 py-3 text-right font-medium">Multas</th>
+                        <th className="px-3 py-3 text-right font-medium">Descontos</th>
+                        <th className="px-3 py-3 text-right font-medium">Valor Atualizado</th>
+                        <th className="px-3 py-3 text-left font-medium">Status</th>
+                        <th className="px-3 py-3 text-center font-medium">Anexo</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {titulosVencendoHoje.map((t) => (
-                        <tr key={t.id} className="border-t border-border">
-                          <td className="px-4 py-3 font-medium text-foreground">{t.id}</td>
-                          <td className="px-4 py-3 text-foreground">{t.cliente}</td>
-                          <td className="px-4 py-3 text-muted-foreground">{t.documento}</td>
-                          <td className="px-4 py-3 text-right font-medium text-foreground">{t.valor}</td>
-                          <td className="px-4 py-3">
-                            <span
-                              className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
-                                t.tipo === "receita"
-                                  ? "bg-accent text-accent-foreground"
-                                  : "bg-[oklch(0.95_0.04_25)] text-[oklch(0.45_0.15_25)]"
-                              }`}
-                            >
-                              {t.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
+                      {titulosVencendoHoje.map((t) => {
+                        const statusTone =
+                          t.statusKind === "aberto"
+                            ? "bg-[oklch(0.95_0.04_240)] text-[oklch(0.45_0.15_240)]"
+                            : t.statusKind === "renegociado"
+                              ? "bg-[oklch(0.95_0.05_300)] text-[oklch(0.45_0.16_300)]"
+                              : t.statusKind === "antecipado"
+                                ? "bg-accent text-accent-foreground"
+                                : "bg-muted text-muted-foreground";
+                        const tipoTone =
+                          t.tipo === "receita"
+                            ? "border-[oklch(0.78_0.13_160)] text-[oklch(0.45_0.15_160)]"
+                            : "border-[oklch(0.78_0.13_25)] text-[oklch(0.5_0.16_25)]";
+                        return (
+                          <tr key={t.id} className="border-t border-border">
+                            <td className="px-3 py-3">
+                              <span className="inline-flex items-center rounded-full border border-[oklch(0.78_0.13_45)] px-2.5 py-0.5 text-[11px] font-medium text-[oklch(0.5_0.16_45)]">
+                                {t.origem}
+                              </span>
+                            </td>
+                            <td className="px-3 py-3 font-medium text-foreground">{t.id}</td>
+                            <td className="px-3 py-3 text-foreground">{t.cliente}</td>
+                            <td className="px-3 py-3">
+                              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${tipoTone}`}>
+                                {t.tipo === "receita" ? "Receber" : "Pagar"}
+                              </span>
+                            </td>
+                            <td className="px-3 py-3 text-muted-foreground">{t.emissao}</td>
+                            <td className="px-3 py-3 text-muted-foreground">{t.vencimento}</td>
+                            <td className="px-3 py-3 text-right text-foreground">{t.valorOriginal}</td>
+                            <td className="px-3 py-3 text-right text-muted-foreground">{t.juros}</td>
+                            <td className="px-3 py-3 text-right text-muted-foreground">{t.multas}</td>
+                            <td className="px-3 py-3 text-right text-muted-foreground">{t.descontos}</td>
+                            <td className="px-3 py-3 text-right font-semibold text-foreground">{t.valor}</td>
+                            <td className="px-3 py-3">
+                              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${statusTone}`}>
+                                {t.status}
+                              </span>
+                            </td>
+                            <td className="px-3 py-3 text-center">
+                              <button className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-primary" aria-label="Anexo">
+                                <Paperclip className="h-3.5 w-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
