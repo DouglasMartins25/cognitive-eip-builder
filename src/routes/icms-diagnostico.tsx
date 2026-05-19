@@ -366,7 +366,7 @@ function IcmsDiagnostico() {
       </aside>
 
       {/* Chat column */}
-      <section className="flex w-[340px] flex-col border-r border-border bg-card">
+      <section className="flex w-[340px] flex-col bg-card">
         <header className="flex items-center justify-between px-6 py-5">
           <h1 className="text-base font-medium text-foreground">Diagnóstico fiscal</h1>
           <button className="text-muted-foreground hover:text-foreground">
@@ -412,7 +412,7 @@ function IcmsDiagnostico() {
       </section>
 
       {/* Main */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="ml-4 flex-1 overflow-y-auto">
         <div>
 
 
