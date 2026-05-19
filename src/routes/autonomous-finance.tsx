@@ -143,12 +143,18 @@ const anomalias = [
   { tipo: "Risco de liquidez D+9", qtd: 2, sev: "critico" },
 ];
 
-const compliance = [
-  { regra: "CFOP × operação", cobertura: 100, status: "ok" },
-  { regra: "CST atualizado IBS/CBS", cobertura: 87, status: "alert" },
-  { regra: "NCM × alíquota oficial", cobertura: 96, status: "warn" },
-  { regra: "Regimes especiais", cobertura: 100, status: "ok" },
-  { regra: "Créditos fiscais", cobertura: 92, status: "warn" },
+const projecaoFluxo: { label: string; valor: string; tone: "positivo" | "negativo" | "neutro" }[] = [
+  { label: "Saldo atual", valor: "R$ 4,82 M", tone: "neutro" },
+  { label: "Entradas previstas (30d)", valor: "+ R$ 3,14 M", tone: "positivo" },
+  { label: "Saídas previstas (30d)", valor: "− R$ 2,47 M", tone: "negativo" },
+  { label: "Saldo projetado D+30", valor: "R$ 5,49 M", tone: "positivo" },
+  { label: "Risco de liquidez D+45", valor: "Baixo · 8%", tone: "neutro" },
+];
+
+const acoesProjecao = [
+  { acao: "Antecipar recebíveis Cliente Vértice", impacto: "+ R$ 420k em D+7" },
+  { acao: "Reprogramar pagamento Metais Gerais para D+12", impacto: "Reduz pico de saída em 18%" },
+  { acao: "Aplicar excedente em CDB liquidez diária", impacto: "+ R$ 11,2k/mês em rendimento" },
 ];
 
 function AutonomousFinance() {
@@ -392,33 +398,40 @@ function AutonomousFinance() {
 
               <div className="rounded-xl border border-border bg-card p-5">
                 <div className="flex items-center gap-2">
-                  <Receipt className="h-4 w-4 text-primary" />
+                  <Activity className="h-4 w-4 text-primary" />
                   <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
-                    COMPLIANCE TRIBUTÁRIO — A2
+                    PROJEÇÃO DE FLUXO DE CAIXA — 30 DIAS
                   </p>
                 </div>
-                <ul className="mt-4 space-y-3">
-                  {compliance.map((c) => {
+                <ul className="mt-4 space-y-2.5">
+                  {projecaoFluxo.map((p) => {
                     const color =
-                      c.status === "ok"
-                        ? "bg-[oklch(0.65_0.15_150)]"
-                        : c.status === "warn"
-                        ? "bg-[oklch(0.7_0.14_70)]"
-                        : "bg-[oklch(0.7_0.15_25)]";
+                      p.tone === "positivo"
+                        ? "text-[oklch(0.55_0.18_150)]"
+                        : p.tone === "negativo"
+                        ? "text-[oklch(0.55_0.2_25)]"
+                        : "text-foreground";
                     return (
-                      <li key={c.regra} className="text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-foreground">{c.regra}</span>
-                          <span className="font-mono font-semibold text-foreground">{c.cobertura}%</span>
-                        </div>
-                        <div className="mt-1.5 h-1.5 w-full rounded bg-muted">
-                          <div className={`h-1.5 rounded ${color}`} style={{ width: `${c.cobertura}%` }} />
-                        </div>
+                      <li key={p.label} className="flex items-center justify-between text-xs">
+                        <span className="text-foreground">{p.label}</span>
+                        <span className={`font-mono font-semibold ${color}`}>{p.valor}</span>
                       </li>
                     );
                   })}
                 </ul>
+                <p className="mt-4 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  Ações sugeridas
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {acoesProjecao.map((a) => (
+                    <li key={a.acao} className="rounded-lg border border-border bg-background/40 p-2.5">
+                      <p className="text-xs font-medium text-foreground">{a.acao}</p>
+                      <p className="mt-0.5 text-[11px] text-[oklch(0.55_0.18_150)]">{a.impacto}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
+
             </div>
           </div>
 
