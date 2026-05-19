@@ -813,77 +813,77 @@ function IcmsDiagnostico() {
           <div className="rounded-xl border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <div className="text-sm font-medium text-foreground">
-                Diagnóstico <span className="text-muted-foreground">· ICMS Alíquota</span>
+                Diagnóstico <span className="text-muted-foreground">· {currentAudit?.titulo.split("—")[0].trim() ?? "—"}</span>
               </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
-                <ArrowDown className="h-3 w-3" /> Entrada
-              </span>
-            </div>
-
-            <div className="space-y-4 p-4">
-              <div className="rounded-lg border border-[oklch(0.85_0.1_85)] bg-[oklch(0.97_0.04_85)] p-3">
-                <div className="flex items-start gap-2">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.6_0.18_60)]" />
-                  <div>
-                    <div className="text-sm font-medium text-foreground">
-                      Documento de entrada — alteração bloqueada
-                    </div>
-                    <div className="mt-0.5 text-xs text-muted-foreground">
-                      Notifique o fornecedor para correção e reemissão.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Diagnóstico Asis
-                </div>
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Regra</span>
-                    <span className="text-foreground">RN 1549 · Alíquotas Interestaduais</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Alíquota aplicada</span>
-                    <span>
-                      <span className="text-[oklch(0.55_0.2_25)] line-through">4,00%</span>{" "}
-                      <span className="text-muted-foreground">→</span>{" "}
-                      <span className="font-medium text-primary">12,00%</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Impacto no crédito
-                </div>
-                <div className="space-y-2 rounded-lg border border-primary/20 bg-accent/40 p-3 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-foreground">Crédito escriturado (4%)</span>
-                    <span className="tabular-nums text-[oklch(0.55_0.2_25)]">R$ 40,00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-foreground">Crédito correto (12%)</span>
-                    <span className="tabular-nums text-foreground">R$ 120,00</span>
-                  </div>
-                  <div className="flex justify-between border-t border-primary/20 pt-2">
-                    <span className="font-medium text-foreground">A recuperar</span>
-                    <span className="tabular-nums font-semibold text-primary">R$ 80,00</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-border pt-3">
-                <button className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90">
-                  <Send className="h-3.5 w-3.5" /> Notificar fornecedor
-                </button>
-                <span className="inline-flex items-center gap-1 text-xs text-[oklch(0.55_0.2_25)]">
-                  <AlertTriangle className="h-3 w-3" /> 28 pendentes
+              {diag && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
+                  {diag.tipo === "Entrada" ? <ArrowDown className="h-3 w-3" /> : <ArrowUp className="h-3 w-3" />} {diag.tipo}
                 </span>
-              </div>
+              )}
             </div>
+
+            {diag && (
+              <div className="space-y-4 p-4">
+                <div className="rounded-lg border border-[oklch(0.85_0.1_85)] bg-[oklch(0.97_0.04_85)] p-3">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.6_0.18_60)]" />
+                    <div>
+                      <div className="text-sm font-medium text-foreground">{diag.alertTitle}</div>
+                      <div className="mt-0.5 text-xs text-muted-foreground">{diag.alertSub}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Diagnóstico Asis
+                  </div>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between gap-3">
+                      <span className="text-muted-foreground">{diag.regraLabel}</span>
+                      <span className="text-right text-foreground">{diag.regraValor}</span>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <span className="text-muted-foreground">{diag.campo}</span>
+                      <span className="text-right">
+                        <span className="text-[oklch(0.55_0.2_25)] line-through">{diag.de}</span>{" "}
+                        <span className="text-muted-foreground">→</span>{" "}
+                        <span className="font-medium text-primary">{diag.para}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {diag.impactoTitulo}
+                  </div>
+                  <div className="space-y-2 rounded-lg border border-primary/20 bg-accent/40 p-3 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-foreground">{diag.linha1Label}</span>
+                      <span className="tabular-nums text-[oklch(0.55_0.2_25)]">{diag.linha1Valor}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-foreground">{diag.linha2Label}</span>
+                      <span className="tabular-nums text-foreground">{diag.linha2Valor}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-primary/20 pt-2">
+                      <span className="font-medium text-foreground">{diag.totalLabel}</span>
+                      <span className="tabular-nums font-semibold text-primary">{diag.totalValor}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border pt-3">
+                  <button className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90">
+                    <Send className="h-3.5 w-3.5" /> {diag.actionLabel}
+                  </button>
+                  <span className="inline-flex items-center gap-1 text-xs text-[oklch(0.55_0.2_25)]">
+                    <AlertTriangle className="h-3 w-3" /> {diag.pendentes}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
           </>
