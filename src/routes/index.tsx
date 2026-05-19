@@ -94,7 +94,7 @@ function Home() {
     const route = resolveChatRoute(text);
     if (route) {
       if (route.start === "icms") {
-        navigate({ to: "/icms-diagnostico" });
+        navigate({ to: "/icms-transicao" });
       } else {
         const searchParams: { start: string; variant?: string } = { start: route.start };
         if (route.variant) searchParams.variant = route.variant;
