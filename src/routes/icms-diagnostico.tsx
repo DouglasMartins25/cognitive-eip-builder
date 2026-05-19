@@ -412,7 +412,7 @@ function IcmsDiagnostico() {
       </section>
 
       {/* Main */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="ml-4 flex-1 overflow-y-auto">
         <div>
 
 
