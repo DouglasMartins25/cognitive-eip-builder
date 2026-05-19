@@ -19,6 +19,9 @@ import {
   FileText,
   Maximize2,
   ArrowRight,
+  Bot,
+  CheckCircle2,
+  Sparkle,
 } from "lucide-react";
 
 export const Route = createFileRoute("/icms-diagnostico")({
