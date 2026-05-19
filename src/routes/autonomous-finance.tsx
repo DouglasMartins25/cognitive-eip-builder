@@ -127,9 +127,13 @@ const alertas: {
 
 const atividades = [
   { hora: "01:08", agente: "A1", desc: "8.421 lançamentos analisados — 17 anomalias sinalizadas" },
+  { hora: "02:14", agente: "A1", desc: "Busca DDA executada em 4 bancos · 312 boletos vinculados a títulos a pagar" },
   { hora: "02:42", agente: "A2", desc: "Cronograma da Reforma Tributária revalidado · 0 lacunas" },
+  { hora: "03:18", agente: "A1", desc: "Conciliação bancária automática · 6 contas · 2.847 movimentos · 99,4% de match" },
   { hora: "03:55", agente: "A1", desc: "Pagamento duplicado NF 48.291 bloqueado automaticamente" },
+  { hora: "04:32", agente: "A1", desc: "28 boletos DDA sem título correspondente encaminhados para análise" },
   { hora: "05:21", agente: "A2", desc: "847 regras CFOP/CST/NCM cruzadas com tabelas oficiais" },
+  { hora: "05:48", agente: "A1", desc: "17 divergências de conciliação resolvidas via regras aprendidas" },
   { hora: "06:14", agente: "A2", desc: "IN RFB nº 2.314/26 ingerida e mapeada para 14 parametrizações" },
   { hora: "06:47", agente: "A1", desc: "Modelo de série temporal retreinado com 90 dias de fluxo" },
   { hora: "07:03", agente: "A1", desc: "Recebimento atrasado Cliente Vértice escalado ao gestor" },
