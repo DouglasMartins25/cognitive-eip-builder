@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IcmsDiagnosticoRouteImport } from './routes/icms-diagnostico'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
 import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
 import { Route as IndexRouteImport } from './routes/index'
 
+const IcmsDiagnosticoRoute = IcmsDiagnosticoRouteImport.update({
+  id: '/icms-diagnostico',
+  path: '/icms-diagnostico',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FinanceiroRoute = FinanceiroRouteImport.update({
   id: '/financeiro',
   path: '/financeiro',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
+  '/icms-diagnostico': typeof IcmsDiagnosticoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
+  '/icms-diagnostico': typeof IcmsDiagnosticoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,18 +61,30 @@ export interface FileRoutesById {
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
+  '/icms-diagnostico': typeof IcmsDiagnosticoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/autonomous-finance' | '/digital-worker' | '/financeiro'
+  fullPaths:
+    | '/'
+    | '/autonomous-finance'
+    | '/digital-worker'
+    | '/financeiro'
+    | '/icms-diagnostico'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/autonomous-finance' | '/digital-worker' | '/financeiro'
+  to:
+    | '/'
+    | '/autonomous-finance'
+    | '/digital-worker'
+    | '/financeiro'
+    | '/icms-diagnostico'
   id:
     | '__root__'
     | '/'
     | '/autonomous-finance'
     | '/digital-worker'
     | '/financeiro'
+    | '/icms-diagnostico'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -72,10 +92,18 @@ export interface RootRouteChildren {
   AutonomousFinanceRoute: typeof AutonomousFinanceRoute
   DigitalWorkerRoute: typeof DigitalWorkerRoute
   FinanceiroRoute: typeof FinanceiroRoute
+  IcmsDiagnosticoRoute: typeof IcmsDiagnosticoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/icms-diagnostico': {
+      id: '/icms-diagnostico'
+      path: '/icms-diagnostico'
+      fullPath: '/icms-diagnostico'
+      preLoaderRoute: typeof IcmsDiagnosticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/financeiro': {
       id: '/financeiro'
       path: '/financeiro'
@@ -112,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   AutonomousFinanceRoute: AutonomousFinanceRoute,
   DigitalWorkerRoute: DigitalWorkerRoute,
   FinanceiroRoute: FinanceiroRoute,
+  IcmsDiagnosticoRoute: IcmsDiagnosticoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
