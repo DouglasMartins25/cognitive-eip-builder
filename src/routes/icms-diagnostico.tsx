@@ -104,6 +104,12 @@ const entradas: Doc[] = [
   { id: "d5", nfe: "412355", data: "25/08/2025", cliente: "Ind. Becker Ltda", valor: "R$ 18.300", rota: "SC→MG", status: "alerta", statusLabel: "1 alerta" },
 ];
 
+const saidas: Doc[] = [
+  { id: "s1", nfe: "412347", data: "18/08/2025", cliente: "Metalúrgica Dias ME", valor: "R$ 3.200", rota: "MG→SP", status: "erros", statusLabel: "1 erro" },
+  { id: "s2", nfe: "412349", data: "25/08/2025", cliente: "Ind. Becker Ltda", valor: "R$ 7.650", rota: "MG→RS", status: "erros", statusLabel: "3 erros" },
+  { id: "s3", nfe: "412354", data: "01/09/2025", cliente: "Comp. Sul S/A", valor: "R$ 8.900", rota: "MG→SP", status: "erros", statusLabel: "1 erro" },
+];
+
 type Diagnostico = {
   tipo: "Entrada" | "Saída";
   alertTitle: string;
@@ -336,6 +342,150 @@ const docAuditorias: Record<string, Audit[]> = {
   ],
 };
 
+const saidasAuditorias: Record<string, Audit[]> = {
+  s1: [
+    {
+      id: "a1",
+      titulo: "ICMS · Alíquota — Rejeição",
+      desc: "Alíquota diverge da legislação MG→SP",
+      detalhe: "12% → 7% · ▼ R$ 1.225",
+      asis: "RN-ICMS-047",
+      progresso: 91,
+      diagnostico: {
+        tipo: "Saída",
+        alertTitle: "Sugestão de regra · ICMS Alíquota",
+        alertSub: "Ajuste a alíquota de saída conforme protocolo MG→SP vigente.",
+        regraLabel: "Regra",
+        regraValor: "RN-ICMS-047 · DIFAL MG→SP",
+        campo: "CFOP / CST",
+        de: "6.102 · CST 000",
+        para: "6.102 · CST 000",
+        impactoTitulo: "Ajuste sugerido na TOP",
+        linha1Label: "TOP afetada",
+        linha1Valor: "1.01 · Venda de mercadoria",
+        linha2Label: "Valor",
+        linha2Valor: "12,00% → 7,00%",
+        totalLabel: "Simulação · sem valor fiscal",
+        totalValor: "▼ R$ 1.225,00",
+        actionLabel: "Aplicar regra",
+        pendentes: "19 pendentes",
+      },
+    },
+  ],
+  s2: [
+    {
+      id: "a1",
+      titulo: "ICMS-ST · Base divergente",
+      desc: "MVA aplicada acima do protocolo MG→RS",
+      detalhe: "45,8% → 38%",
+      asis: "RN-ICMS-2207",
+      progresso: 72,
+      diagnostico: {
+        tipo: "Saída",
+        alertTitle: "Sugestão de regra · ICMS-ST",
+        alertSub: "Recalcular MVA conforme protocolo MG-RS vigente.",
+        regraLabel: "Protocolo",
+        regraValor: "Protocolo ICMS 41/08 · MG-RS",
+        campo: "MVA aplicada",
+        de: "45,80%",
+        para: "38,00%",
+        impactoTitulo: "Ajuste sugerido na TOP",
+        linha1Label: "TOP afetada",
+        linha1Valor: "1.04 · Venda c/ ST",
+        linha2Label: "ST recolhido",
+        linha2Valor: "R$ 1.418,40 → R$ 1.176,00",
+        totalLabel: "Diferença simulada",
+        totalValor: "▼ R$ 242,40",
+        actionLabel: "Aplicar regra",
+        pendentes: "5 pendentes",
+      },
+    },
+    {
+      id: "a2",
+      titulo: "CFOP × CST — Inconsistência",
+      desc: "CFOP de saída interestadual com CST incompatível",
+      detalhe: "6.102 ↔ CST 60",
+      asis: "RN-ICMS-4421",
+      progresso: 35,
+      diagnostico: {
+        tipo: "Saída",
+        alertTitle: "Sugestão de regra · CFOP/CST",
+        alertSub: "Realinhar CFOP/CST conforme natureza da operação.",
+        regraLabel: "Regra",
+        regraValor: "RN-ICMS-4421 · CFOP × CST",
+        campo: "CFOP / CST",
+        de: "6.102 / 60",
+        para: "6.102 / 00",
+        impactoTitulo: "Ajuste sugerido na TOP",
+        linha1Label: "TOP afetada",
+        linha1Valor: "1.02 · Venda interestadual",
+        linha2Label: "Operações reclassificadas",
+        linha2Valor: "3 NF-e",
+        totalLabel: "Status",
+        totalValor: "Aguarda aplicação",
+        actionLabel: "Aplicar regra",
+        pendentes: "7 pendentes",
+      },
+    },
+    {
+      id: "a3",
+      titulo: "PIS/COFINS · CST 06",
+      desc: "Alíquota zero sem fundamento legal",
+      detalhe: "",
+      asis: "RN-ICMS-5290",
+      progresso: 0,
+      diagnostico: {
+        tipo: "Saída",
+        alertTitle: "Sugestão de regra · PIS/COFINS",
+        alertSub: "Aplicar enquadramento legal correto para CST 06.",
+        regraLabel: "Regra",
+        regraValor: "RN-ICMS-5290 · CST PIS/COFINS",
+        campo: "CST",
+        de: "06",
+        para: "01",
+        impactoTitulo: "Ajuste sugerido",
+        linha1Label: "TOP afetada",
+        linha1Valor: "1.01 · Venda padrão",
+        linha2Label: "Receita afetada",
+        linha2Valor: "R$ 7.650,00",
+        totalLabel: "Simulação",
+        totalValor: "▼ R$ 416,25",
+        actionLabel: "Aplicar regra",
+        pendentes: "4 pendentes",
+      },
+    },
+  ],
+  s3: [
+    {
+      id: "a1",
+      titulo: "ICMS · Alíquota — Rejeição",
+      desc: "Alíquota diverge da legislação MG→SP",
+      detalhe: "12% → 7% · ▼ R$ 1.068",
+      asis: "RN-ICMS-047",
+      progresso: 88,
+      diagnostico: {
+        tipo: "Saída",
+        alertTitle: "Sugestão de regra · ICMS Alíquota",
+        alertSub: "Ajuste a alíquota de saída conforme protocolo MG→SP vigente.",
+        regraLabel: "Regra",
+        regraValor: "RN-ICMS-047 · DIFAL MG→SP",
+        campo: "CFOP / CST",
+        de: "6.102 · CST 000",
+        para: "6.102 · CST 000",
+        impactoTitulo: "Ajuste sugerido na TOP",
+        linha1Label: "TOP afetada",
+        linha1Valor: "1.01 · Venda de mercadoria",
+        linha2Label: "Valor",
+        linha2Valor: "12,00% → 7,00%",
+        totalLabel: "Simulação · sem valor fiscal",
+        totalValor: "▼ R$ 1.068,00",
+        actionLabel: "Aplicar regra",
+        pendentes: "19 pendentes",
+      },
+    },
+  ],
+};
+
 
 function Bar({ items, color }: { items: { nome: string; valor: number }[]; color: string }) {
   const max = Math.max(...items.map((i) => i.valor));
@@ -533,11 +683,15 @@ function DetalhamentoDocumentos() {
 
 function IcmsDiagnostico() {
   const [tab, setTab] = useState<"resumo" | "detalhamento" | "historico">("resumo");
+  const [docTab, setDocTab] = useState<"entradas" | "saidas">("entradas");
+  const docsList = docTab === "entradas" ? entradas : saidas;
+  const auditMap = docTab === "entradas" ? docAuditorias : saidasAuditorias;
   const [selectedDoc, setSelectedDoc] = useState<string>("d1");
-  const auditorias = docAuditorias[selectedDoc] ?? [];
+  const activeDocId = docsList.some((d) => d.id === selectedDoc) ? selectedDoc : docsList[0]?.id ?? "";
+  const auditorias = auditMap[activeDocId] ?? [];
   const [selectedAuditoria, setSelectedAuditoria] = useState<string>("a1");
+  const currentDoc = docsList.find((d) => d.id === activeDocId);
   const currentAudit = auditorias.find((a) => a.id === selectedAuditoria) ?? auditorias[0];
-  const currentDoc = entradas.find((d) => d.id === selectedDoc);
   const diag = currentAudit?.diagnostico;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -709,11 +863,37 @@ function IcmsDiagnostico() {
               <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">47</span>
             </div>
             <div className="flex gap-2 border-b border-border px-3 py-2 text-xs">
-              <button className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 font-medium text-foreground">
+              <button
+                onClick={() => {
+                  setDocTab("entradas");
+                  const firstDoc = entradas[0];
+                  if (firstDoc) {
+                    setSelectedDoc(firstDoc.id);
+                    const firstA = docAuditorias[firstDoc.id]?.[0]?.id;
+                    if (firstA) setSelectedAuditoria(firstA);
+                  }
+                }}
+                className={`flex items-center gap-1 rounded-md px-2 py-1 ${
+                  docTab === "entradas" ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-muted"
+                }`}
+              >
                 <ArrowDown className="h-3 w-3" /> Entradas <span className="text-muted-foreground">28</span>
               </button>
-              <button className="flex items-center gap-1 rounded-md px-2 py-1 text-muted-foreground hover:bg-muted">
-                <ArrowUp className="h-3 w-3" /> Saídas <span>19</span>
+              <button
+                onClick={() => {
+                  setDocTab("saidas");
+                  const firstDoc = saidas[0];
+                  if (firstDoc) {
+                    setSelectedDoc(firstDoc.id);
+                    const firstA = saidasAuditorias[firstDoc.id]?.[0]?.id;
+                    if (firstA) setSelectedAuditoria(firstA);
+                  }
+                }}
+                className={`flex items-center gap-1 rounded-md px-2 py-1 ${
+                  docTab === "saidas" ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                <ArrowUp className="h-3 w-3" /> Saídas <span className="text-muted-foreground">19</span>
               </button>
             </div>
             <div className="flex gap-2 border-b border-border px-3 py-2">
@@ -725,14 +905,14 @@ function IcmsDiagnostico() {
               </select>
             </div>
             <ul className="max-h-[420px] overflow-auto">
-              {entradas.map((d) => {
-                const active = selectedDoc === d.id;
+              {docsList.map((d) => {
+                const active = activeDocId === d.id;
                 return (
                   <li
                     key={d.id}
                     onClick={() => {
                       setSelectedDoc(d.id);
-                      const first = docAuditorias[d.id]?.[0]?.id;
+                      const first = auditMap[d.id]?.[0]?.id;
                       if (first) setSelectedAuditoria(first);
                     }}
                     className={`cursor-pointer border-b border-border px-4 py-3 text-xs transition-colors ${
@@ -816,7 +996,9 @@ function IcmsDiagnostico() {
                 Diagnóstico <span className="text-muted-foreground">· {currentAudit?.titulo.split("—")[0].trim() ?? "—"}</span>
               </div>
               {diag && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
+                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
+                  diag.tipo === "Entrada" ? "bg-accent text-accent-foreground" : "bg-[oklch(0.95_0.05_140)] text-[oklch(0.45_0.13_160)]"
+                }`}>
                   {diag.tipo === "Entrada" ? <ArrowDown className="h-3 w-3" /> : <ArrowUp className="h-3 w-3" />} {diag.tipo}
                 </span>
               )}
