@@ -60,8 +60,6 @@ const agentes = [
 
 const kpis = [
   { label: "Transações monitoradas hoje", valor: "8.421", delta: "↑ 1.204 vs ontem", up: true },
-  { label: "Anomalias detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
-  { label: "Cobertura Reforma Tributária", valor: "100%", delta: "847 regras vigentes monitoradas", up: true },
   {
     label: "Automação bancária",
     valor: "",
@@ -73,6 +71,8 @@ const kpis = [
       { label: "Cobranças enviadas", valor: "426" },
     ],
   },
+  { label: "Anomalias detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
+  { label: "Cobertura Reforma Tributária", valor: "100%", delta: "847 regras vigentes monitoradas", up: true },
 ];
 
 const alertas: {
