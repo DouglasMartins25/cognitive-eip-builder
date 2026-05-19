@@ -277,8 +277,11 @@ function IcmsDiagnostico() {
           ))}
         </div>
 
+        {tab === "resumo" && (
+          <>
         {/* KPIs */}
         <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-5">
+
           {kpis.map((k) => (
             <div
               key={k.label}
