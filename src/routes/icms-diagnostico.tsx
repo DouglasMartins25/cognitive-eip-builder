@@ -241,14 +241,8 @@ function IcmsDiagnostico() {
 
       {/* Main */}
       <main className="flex-1 overflow-y-auto">
-        <div className="px-6 py-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <Link
-            to="/"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
+        <div>
+
 
         {/* Header */}
         <div className="flex items-center gap-3">
