@@ -104,6 +104,12 @@ const entradas: Doc[] = [
   { id: "d5", nfe: "412355", data: "25/08/2025", cliente: "Ind. Becker Ltda", valor: "R$ 18.300", rota: "SC→MG", status: "alerta", statusLabel: "1 alerta" },
 ];
 
+const saidas: Doc[] = [
+  { id: "s1", nfe: "412347", data: "18/08/2025", cliente: "Metalúrgica Dias ME", valor: "R$ 3.200", rota: "MG→SP", status: "erros", statusLabel: "1 erro" },
+  { id: "s2", nfe: "412349", data: "25/08/2025", cliente: "Ind. Becker Ltda", valor: "R$ 7.650", rota: "MG→RS", status: "erros", statusLabel: "3 erros" },
+  { id: "s3", nfe: "412354", data: "01/09/2025", cliente: "Comp. Sul S/A", valor: "R$ 8.900", rota: "MG→SP", status: "erros", statusLabel: "1 erro" },
+];
+
 type Diagnostico = {
   tipo: "Entrada" | "Saída";
   alertTitle: string;
