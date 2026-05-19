@@ -683,11 +683,14 @@ function DetalhamentoDocumentos() {
 
 function IcmsDiagnostico() {
   const [tab, setTab] = useState<"resumo" | "detalhamento" | "historico">("resumo");
+  const [docTab, setDocTab] = useState<"entradas" | "saidas">("entradas");
+  const docsList = docTab === "entradas" ? entradas : saidas;
+  const auditMap = docTab === "entradas" ? docAuditorias : saidasAuditorias;
   const [selectedDoc, setSelectedDoc] = useState<string>("d1");
-  const auditorias = docAuditorias[selectedDoc] ?? [];
+  const activeDocId = docsList.some((d) => d.id === selectedDoc) ? selectedDoc : docsList[0]?.id ?? "";
+  const auditorias = auditMap[activeDocId] ?? [];
   const [selectedAuditoria, setSelectedAuditoria] = useState<string>("a1");
-  const currentAudit = auditorias.find((a) => a.id === selectedAuditoria) ?? auditorias[0];
-  const currentDoc = entradas.find((d) => d.id === selectedDoc);
+  const currentDoc = docsList.find((d) => d.id === activeDocId);
   const diag = currentAudit?.diagnostico;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
