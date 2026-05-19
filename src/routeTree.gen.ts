@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IcmsTransicaoRouteImport } from './routes/icms-transicao'
 import { Route as IcmsDiagnosticoRouteImport } from './routes/icms-diagnostico'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
 import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
 import { Route as IndexRouteImport } from './routes/index'
 
+const IcmsTransicaoRoute = IcmsTransicaoRouteImport.update({
+  id: '/icms-transicao',
+  path: '/icms-transicao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IcmsDiagnosticoRoute = IcmsDiagnosticoRouteImport.update({
   id: '/icms-diagnostico',
   path: '/icms-diagnostico',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
+  '/icms-transicao': typeof IcmsTransicaoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
+  '/icms-transicao': typeof IcmsTransicaoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,6 +70,7 @@ export interface FileRoutesById {
   '/digital-worker': typeof DigitalWorkerRoute
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
+  '/icms-transicao': typeof IcmsTransicaoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,6 +80,7 @@ export interface FileRouteTypes {
     | '/digital-worker'
     | '/financeiro'
     | '/icms-diagnostico'
+    | '/icms-transicao'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -78,6 +88,7 @@ export interface FileRouteTypes {
     | '/digital-worker'
     | '/financeiro'
     | '/icms-diagnostico'
+    | '/icms-transicao'
   id:
     | '__root__'
     | '/'
@@ -85,6 +96,7 @@ export interface FileRouteTypes {
     | '/digital-worker'
     | '/financeiro'
     | '/icms-diagnostico'
+    | '/icms-transicao'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -93,10 +105,18 @@ export interface RootRouteChildren {
   DigitalWorkerRoute: typeof DigitalWorkerRoute
   FinanceiroRoute: typeof FinanceiroRoute
   IcmsDiagnosticoRoute: typeof IcmsDiagnosticoRoute
+  IcmsTransicaoRoute: typeof IcmsTransicaoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/icms-transicao': {
+      id: '/icms-transicao'
+      path: '/icms-transicao'
+      fullPath: '/icms-transicao'
+      preLoaderRoute: typeof IcmsTransicaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/icms-diagnostico': {
       id: '/icms-diagnostico'
       path: '/icms-diagnostico'
@@ -141,7 +161,18 @@ const rootRouteChildren: RootRouteChildren = {
   DigitalWorkerRoute: DigitalWorkerRoute,
   FinanceiroRoute: FinanceiroRoute,
   IcmsDiagnosticoRoute: IcmsDiagnosticoRoute,
+  IcmsTransicaoRoute: IcmsTransicaoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
