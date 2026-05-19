@@ -286,11 +286,11 @@ const chartData = [
 ];
 
 const titulosVencendoHoje = [
-  { id: "TIT-001", cliente: "Mercado Vista Alegre", documento: "NF 12345", valor: "R$ 4.250,00", status: "A receber", tipo: "receita" },
-  { id: "TIT-002", cliente: "Distribuidora Norte Sul", documento: "NF 12346", valor: "R$ 12.800,00", status: "A receber", tipo: "receita" },
-  { id: "TIT-003", cliente: "Energia Brasil S/A", documento: "Boleto 88291", valor: "R$ 2.140,00", status: "A pagar", tipo: "despesa" },
-  { id: "TIT-004", cliente: "Padaria Central", documento: "NF 12347", valor: "R$ 980,00", status: "A receber", tipo: "receita" },
-  { id: "TIT-005", cliente: "Aluguel Sede", documento: "Contrato 0021", valor: "R$ 8.500,00", status: "A pagar", tipo: "despesa" },
+  { id: "TIT-001", origem: "Sankhya", cliente: "Mercado Vista Alegre", documento: "NF 12345", emissao: "01/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 4.250,00", juros: "—", multas: "—", descontos: "—", valor: "R$ 4.250,00", status: "Aberto", statusKind: "aberto", tipo: "receita" },
+  { id: "TIT-002", origem: "Sankhya", cliente: "Distribuidora Norte Sul", documento: "NF 12346", emissao: "10/04/2026", vencimento: "19/05/2026", valorOriginal: "R$ 12.500,00", juros: "R$ 220,00", multas: "R$ 80,00", descontos: "—", valor: "R$ 12.800,00", status: "Renegociado", statusKind: "renegociado", tipo: "receita" },
+  { id: "TIT-003", origem: "Lincros", cliente: "Energia Brasil S/A", documento: "Boleto 88291", emissao: "05/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 2.140,00", juros: "—", multas: "—", descontos: "—", valor: "R$ 2.140,00", status: "Aberto", statusKind: "aberto", tipo: "despesa" },
+  { id: "TIT-004", origem: "Sankhya", cliente: "Padaria Central", documento: "NF 12347", emissao: "01/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 1.000,00", juros: "—", multas: "—", descontos: "R$ 20,00", valor: "R$ 980,00", status: "Antecipado", statusKind: "antecipado", tipo: "receita" },
+  { id: "TIT-005", origem: "Lincros", cliente: "Aluguel Sede", documento: "Contrato 0021", emissao: "01/05/2026", vencimento: "19/05/2026", valorOriginal: "R$ 8.500,00", juros: "—", multas: "—", descontos: "—", valor: "R$ 8.500,00", status: "Aberto", statusKind: "aberto", tipo: "despesa" },
 ];
 
 const titulosVencidosReceber = [
