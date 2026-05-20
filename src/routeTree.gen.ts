@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IcmsTransicaoRouteImport } from './routes/icms-transicao'
 import { Route as IcmsDiagnosticoRouteImport } from './routes/icms-diagnostico'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
+import { Route as FinanceTransicaoRouteImport } from './routes/finance-transicao'
 import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const IcmsDiagnosticoRoute = IcmsDiagnosticoRouteImport.update({
 const FinanceiroRoute = FinanceiroRouteImport.update({
   id: '/financeiro',
   path: '/financeiro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanceTransicaoRoute = FinanceTransicaoRouteImport.update({
+  id: '/finance-transicao',
+  path: '/finance-transicao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DigitalWorkerRoute = DigitalWorkerRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
+  '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
+  '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/digital-worker': typeof DigitalWorkerRoute
+  '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/autonomous-finance'
     | '/digital-worker'
+    | '/finance-transicao'
     | '/financeiro'
     | '/icms-diagnostico'
     | '/icms-transicao'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/autonomous-finance'
     | '/digital-worker'
+    | '/finance-transicao'
     | '/financeiro'
     | '/icms-diagnostico'
     | '/icms-transicao'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/autonomous-finance'
     | '/digital-worker'
+    | '/finance-transicao'
     | '/financeiro'
     | '/icms-diagnostico'
     | '/icms-transicao'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AutonomousFinanceRoute: typeof AutonomousFinanceRoute
   DigitalWorkerRoute: typeof DigitalWorkerRoute
+  FinanceTransicaoRoute: typeof FinanceTransicaoRoute
   FinanceiroRoute: typeof FinanceiroRoute
   IcmsDiagnosticoRoute: typeof IcmsDiagnosticoRoute
   IcmsTransicaoRoute: typeof IcmsTransicaoRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/financeiro'
       fullPath: '/financeiro'
       preLoaderRoute: typeof FinanceiroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finance-transicao': {
+      id: '/finance-transicao'
+      path: '/finance-transicao'
+      fullPath: '/finance-transicao'
+      preLoaderRoute: typeof FinanceTransicaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/digital-worker': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AutonomousFinanceRoute: AutonomousFinanceRoute,
   DigitalWorkerRoute: DigitalWorkerRoute,
+  FinanceTransicaoRoute: FinanceTransicaoRoute,
   FinanceiroRoute: FinanceiroRoute,
   IcmsDiagnosticoRoute: IcmsDiagnosticoRoute,
   IcmsTransicaoRoute: IcmsTransicaoRoute,
@@ -166,3 +187,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
