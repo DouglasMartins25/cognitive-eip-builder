@@ -263,7 +263,7 @@ function Home() {
                   </span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  Monitoramento de obrigações fiscais, tributárias e contábeis · conformidade contínua e alertas preventivos
+                  Adequações das obrigações fiscais, financeiras, contábeis e Reforma tributária. · conformidade contínua e alertas preventivos
                 </p>
               </div>
               <Sparkles className="h-4 w-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
