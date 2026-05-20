@@ -195,7 +195,7 @@ function Home() {
             </div>
 
             <Link
-              to="/autonomous-finance"
+              to="/finance-transicao"
               className="group mt-6 flex items-center gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-4 transition-all hover:border-primary/60 hover:shadow-lg"
             >
               <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
