@@ -232,7 +232,7 @@ function Home() {
               </div>
               <div className="flex-1 text-left">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-foreground">Tax Digital Workers</p>
+                  <p className="text-sm font-semibold text-foreground">Sankhya Tax Digital Workers</p>
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                     <CheckCircle2 className="h-2.5 w-2.5" /> 3 agentes ativos
                   </span>
@@ -257,13 +257,13 @@ function Home() {
               </div>
               <div className="flex-1 text-left">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-foreground">Reforma Tributária Digital Workers</p>
+                  <p className="text-sm font-semibold text-foreground">Compliance Digital Workers</p>
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                     <CheckCircle2 className="h-2.5 w-2.5" /> 2 agentes ativos
                   </span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  Transição para CBS/IBS, simulação de impactos e adequação de cadastros · pronto para 2026
+                  Monitoramento de obrigações fiscais, tributárias e contábeis · conformidade contínua e alertas preventivos
                 </p>
               </div>
               <Sparkles className="h-4 w-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
