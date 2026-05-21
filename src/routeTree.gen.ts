@@ -17,6 +17,8 @@ import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as ComplianceTransicaoRouteImport } from './routes/compliance-transicao'
 import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
+import { Route as ApuracaoTransicaoRouteImport } from './routes/apuracao-transicao'
+import { Route as ApuracaoSimulacaoRouteImport } from './routes/apuracao-simulacao'
 import { Route as IndexRouteImport } from './routes/index'
 
 const IcmsTransicaoRoute = IcmsTransicaoRouteImport.update({
@@ -59,6 +61,16 @@ const AutonomousFinanceRoute = AutonomousFinanceRouteImport.update({
   path: '/autonomous-finance',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApuracaoTransicaoRoute = ApuracaoTransicaoRouteImport.update({
+  id: '/apuracao-transicao',
+  path: '/apuracao-transicao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApuracaoSimulacaoRoute = ApuracaoSimulacaoRouteImport.update({
+  id: '/apuracao-simulacao',
+  path: '/apuracao-simulacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -67,6 +79,8 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/apuracao-simulacao': typeof ApuracaoSimulacaoRoute
+  '/apuracao-transicao': typeof ApuracaoTransicaoRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
@@ -78,6 +92,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/apuracao-simulacao': typeof ApuracaoSimulacaoRoute
+  '/apuracao-transicao': typeof ApuracaoTransicaoRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
@@ -90,6 +106,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/apuracao-simulacao': typeof ApuracaoSimulacaoRoute
+  '/apuracao-transicao': typeof ApuracaoTransicaoRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
@@ -103,6 +121,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/apuracao-simulacao'
+    | '/apuracao-transicao'
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
@@ -114,6 +134,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/apuracao-simulacao'
+    | '/apuracao-transicao'
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
@@ -125,6 +147,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/apuracao-simulacao'
+    | '/apuracao-transicao'
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
@@ -137,6 +161,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApuracaoSimulacaoRoute: typeof ApuracaoSimulacaoRoute
+  ApuracaoTransicaoRoute: typeof ApuracaoTransicaoRoute
   AutonomousFinanceRoute: typeof AutonomousFinanceRoute
   ComplianceRoute: typeof ComplianceRoute
   ComplianceTransicaoRoute: typeof ComplianceTransicaoRoute
@@ -205,6 +231,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AutonomousFinanceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apuracao-transicao': {
+      id: '/apuracao-transicao'
+      path: '/apuracao-transicao'
+      fullPath: '/apuracao-transicao'
+      preLoaderRoute: typeof ApuracaoTransicaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apuracao-simulacao': {
+      id: '/apuracao-simulacao'
+      path: '/apuracao-simulacao'
+      fullPath: '/apuracao-simulacao'
+      preLoaderRoute: typeof ApuracaoSimulacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -217,6 +257,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApuracaoSimulacaoRoute: ApuracaoSimulacaoRoute,
+  ApuracaoTransicaoRoute: ApuracaoTransicaoRoute,
   AutonomousFinanceRoute: AutonomousFinanceRoute,
   ComplianceRoute: ComplianceRoute,
   ComplianceTransicaoRoute: ComplianceTransicaoRoute,
