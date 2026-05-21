@@ -17,6 +17,7 @@ import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as ComplianceTransicaoRouteImport } from './routes/compliance-transicao'
 import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
+import { Route as ApuracaoTransicaoRouteImport } from './routes/apuracao-transicao'
 import { Route as IndexRouteImport } from './routes/index'
 
 const IcmsTransicaoRoute = IcmsTransicaoRouteImport.update({
@@ -59,6 +60,11 @@ const AutonomousFinanceRoute = AutonomousFinanceRouteImport.update({
   path: '/autonomous-finance',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApuracaoTransicaoRoute = ApuracaoTransicaoRouteImport.update({
+  id: '/apuracao-transicao',
+  path: '/apuracao-transicao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -67,6 +73,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/apuracao-transicao': typeof ApuracaoTransicaoRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/apuracao-transicao': typeof ApuracaoTransicaoRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/apuracao-transicao': typeof ApuracaoTransicaoRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/apuracao-transicao'
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/apuracao-transicao'
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/apuracao-transicao'
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApuracaoTransicaoRoute: typeof ApuracaoTransicaoRoute
   AutonomousFinanceRoute: typeof AutonomousFinanceRoute
   ComplianceRoute: typeof ComplianceRoute
   ComplianceTransicaoRoute: typeof ComplianceTransicaoRoute
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AutonomousFinanceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apuracao-transicao': {
+      id: '/apuracao-transicao'
+      path: '/apuracao-transicao'
+      fullPath: '/apuracao-transicao'
+      preLoaderRoute: typeof ApuracaoTransicaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApuracaoTransicaoRoute: ApuracaoTransicaoRoute,
   AutonomousFinanceRoute: AutonomousFinanceRoute,
   ComplianceRoute: ComplianceRoute,
   ComplianceTransicaoRoute: ComplianceTransicaoRoute,
@@ -229,3 +250,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
