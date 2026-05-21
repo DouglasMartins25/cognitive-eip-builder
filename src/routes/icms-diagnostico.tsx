@@ -842,18 +842,19 @@ function IcmsDiagnostico() {
         </div>
 
         {/* KPIs */}
-        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-5">
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
 
           {kpis.map((k) => (
             <div
               key={k.label}
-              className={`rounded-xl border border-border bg-card p-4 border-l-4 ${toneBar[k.tone]}`}
+              className="rounded-xl border border-border bg-card p-4"
             >
-              <div className={`text-2xl font-semibold ${toneText[k.tone]}`}>{k.value}</div>
-              <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <div className="text-xl leading-none">{k.icon}</div>
+              <div className="mt-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                 {k.label}
               </div>
-              <div className="mt-0.5 text-xs text-muted-foreground">{k.sub}</div>
+              <div className="mt-1 text-2xl font-semibold text-foreground">{k.value}</div>
+              <div className={`mt-1 text-xs ${toneSub[k.tone]}`}>{k.sub}</div>
             </div>
           ))}
         </div>
