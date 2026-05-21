@@ -68,7 +68,7 @@ const kpis = [
     valor: "",
     delta: "",
     up: true,
-    gauge: { value: 960, max: 1000, status: "Conformidade Alta", deltaPts: 18, sparkline: [890, 905, 898, 915, 928, 940, 952, 948, 955, 960] },
+    gauge: { value: 96, max: 100, status: "Conformidade Alta", deltaPts: 1.8, sparkline: [89, 91, 90, 92, 93, 94, 95, 95, 96, 96] },
   },
   {
     label: "Auditoria",
