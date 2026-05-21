@@ -63,7 +63,13 @@ const agentes = [
 ] as const;
 
 const kpis = [
-  { label: "Índice de conformidade", valor: "96%", delta: "↑ 4 p.p. vs mês anterior", up: true },
+  {
+    label: "Índice de conformidade",
+    valor: "",
+    delta: "",
+    up: true,
+    gauge: { value: 960, max: 1000, status: "Conformidade Alta", deltaPts: 18, sparkline: [890, 905, 898, 915, 928, 940, 952, 948, 955, 960] },
+  },
   {
     label: "Auditoria",
     valor: "",
