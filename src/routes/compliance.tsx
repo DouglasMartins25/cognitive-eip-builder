@@ -266,7 +266,7 @@ function CompliancePage() {
       </section>
 
       <main className="flex flex-1 flex-col overflow-y-auto">
-        <div className="mx-auto w-full max-w-5xl px-8 py-8">
+        <div className="w-full px-4 py-6">
           <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" /> Voltar
           </Link>
