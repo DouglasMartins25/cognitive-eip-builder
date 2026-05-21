@@ -15,6 +15,7 @@ import { Route as FinanceiroRouteImport } from './routes/financeiro'
 import { Route as FinanceTransicaoRouteImport } from './routes/finance-transicao'
 import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as ComplianceTransicaoRouteImport } from './routes/compliance-transicao'
+import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -48,6 +49,11 @@ const ComplianceTransicaoRoute = ComplianceTransicaoRouteImport.update({
   path: '/compliance-transicao',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComplianceRoute = ComplianceRouteImport.update({
+  id: '/compliance',
+  path: '/compliance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AutonomousFinanceRoute = AutonomousFinanceRouteImport.update({
   id: '/autonomous-finance',
   path: '/autonomous-finance',
@@ -62,6 +68,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
+  '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
+  '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/autonomous-finance': typeof AutonomousFinanceRoute
+  '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/autonomous-finance'
+    | '/compliance'
     | '/compliance-transicao'
     | '/digital-worker'
     | '/finance-transicao'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/autonomous-finance'
+    | '/compliance'
     | '/compliance-transicao'
     | '/digital-worker'
     | '/finance-transicao'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/autonomous-finance'
+    | '/compliance'
     | '/compliance-transicao'
     | '/digital-worker'
     | '/finance-transicao'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AutonomousFinanceRoute: typeof AutonomousFinanceRoute
+  ComplianceRoute: typeof ComplianceRoute
   ComplianceTransicaoRoute: typeof ComplianceTransicaoRoute
   DigitalWorkerRoute: typeof DigitalWorkerRoute
   FinanceTransicaoRoute: typeof FinanceTransicaoRoute
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComplianceTransicaoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compliance': {
+      id: '/compliance'
+      path: '/compliance'
+      fullPath: '/compliance'
+      preLoaderRoute: typeof ComplianceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/autonomous-finance': {
       id: '/autonomous-finance'
       path: '/autonomous-finance'
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AutonomousFinanceRoute: AutonomousFinanceRoute,
+  ComplianceRoute: ComplianceRoute,
   ComplianceTransicaoRoute: ComplianceTransicaoRoute,
   DigitalWorkerRoute: DigitalWorkerRoute,
   FinanceTransicaoRoute: FinanceTransicaoRoute,
