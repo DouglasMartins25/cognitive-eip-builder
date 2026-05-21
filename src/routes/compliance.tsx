@@ -311,7 +311,9 @@ function CompliancePage() {
                 <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                   {k.label}
                 </p>
-                {"detalhes" in k && k.detalhes ? (
+                {"gauge" in k && k.gauge ? (
+                  <Gauge {...k.gauge} />
+                ) : "detalhes" in k && k.detalhes ? (
                   <div className="mt-3 space-y-2">
                     {k.detalhes.map((d) => (
                       <div key={d.label} className="flex items-baseline justify-between">
