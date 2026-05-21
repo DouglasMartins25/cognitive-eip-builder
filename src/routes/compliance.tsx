@@ -65,17 +65,27 @@ const agentes = [
 const kpis = [
   { label: "Índice de conformidade", valor: "96%", delta: "↑ 4 p.p. vs mês anterior", up: true },
   {
-    label: "Obrigações monitoradas",
+    label: "Auditoria",
     valor: "",
     delta: "",
     up: true,
     detalhes: [
-      { label: "Próximos 30 dias", valor: "12" },
-      { label: "Entregues no prazo", valor: "184" },
-      { label: "Em preparação", valor: "7" },
+      { label: "Total de documentos auditados", valor: "100" },
+      { label: "Total de documentos com divergência", valor: "56" },
+      { label: "Risco autuações", valor: "18,4K" },
     ],
   },
-  { label: "Alertas preventivos", valor: "7", delta: "2 críticos · 5 informativos", up: true },
+  {
+    label: "Diagnóstico Contábil",
+    valor: "",
+    delta: "",
+    up: true,
+    detalhes: [
+      { label: "Lançamentos Contábeis Analisados", valor: "1000" },
+      { label: "Lançamentos Contábeis Não Conciliados", valor: "20" },
+      { label: "Lançamentos Contábeis fora do Padrão", valor: "14" },
+    ],
+  },
   { label: "Impacto Reforma Tributária", valor: "R$ 2,4M", delta: "Estimativa anual CBS/IBS", up: true },
 ];
 
