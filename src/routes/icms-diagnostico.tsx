@@ -849,8 +849,7 @@ function IcmsDiagnostico() {
               key={k.label}
               className="rounded-xl border border-border bg-card p-4"
             >
-              <div className="text-xl leading-none">{k.icon}</div>
-              <div className="mt-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                 {k.label}
               </div>
               <div className="mt-1 text-2xl font-semibold text-foreground">{k.value}</div>
