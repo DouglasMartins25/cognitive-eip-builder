@@ -47,21 +47,15 @@ function SideIcon({
 }
 
 const kpis = [
-  { value: "R$ 18,4k", label: "Impacto estimado", sub: "todas as divergências", tone: "primary" },
-  { value: "28", label: "Entradas c/ divergência", sub: "notificação ao fornecedor", tone: "info" },
-  { value: "19", label: "Saídas c/ divergência", sub: "ajuste de regra disponível", tone: "warning" },
-  { value: "23", label: "Ações pendentes", sub: "entre entrada e saída", tone: "danger" },
-  { value: "8", label: "Resolvidas", sub: "esta sessão", tone: "success" },
+  { icon: "💰", value: "R$18,4k", label: "Impacto estimado", sub: "divergências ativas", tone: "primary" },
+  { icon: "📥", value: "28", label: "Entradas c/ diverg.", sub: "notif. ao fornecedor", tone: "info" },
+  { icon: "📤", value: "19", label: "Saídas c/ diverg.", sub: "ajuste disponível", tone: "warning" },
+  { icon: "⏳", value: "23", label: "Ações pendentes", sub: "entrada e saída", tone: "danger" },
+  { icon: "✅", value: "8", label: "Resolvidas", sub: "esta sessão", tone: "success" },
+  { icon: "📍", value: "MG", label: "UF mais recorrente", sub: "18 ocorrências", tone: "success" },
 ] as const;
 
-const toneBar: Record<string, string> = {
-  primary: "border-l-primary",
-  info: "border-l-[oklch(0.55_0.16_250)]",
-  warning: "border-l-[oklch(0.7_0.15_60)]",
-  danger: "border-l-[oklch(0.6_0.2_25)]",
-  success: "border-l-primary/70",
-};
-const toneText: Record<string, string> = {
+const toneSub: Record<string, string> = {
   primary: "text-primary",
   info: "text-[oklch(0.55_0.16_250)]",
   warning: "text-[oklch(0.65_0.18_60)]",
