@@ -184,6 +184,59 @@ const acoesReforma = [
   { acao: "Expandir piloto de Split Payment para mais 5 operações", impacto: "+ R$ 38k em crédito antecipado/mês" },
 ];
 
+function Gauge({ value, max, status, deltaPts, sparkline }: { value: number; max: number; status: string; deltaPts: number; sparkline: number[] }) {
+  const pct = Math.min(1, Math.max(0, value / max));
+  const angle = -90 + pct * 180; // -90 (left) to 90 (right)
+  const cx = 90, cy = 80, r = 64;
+  const arc = (startA: number, endA: number) => {
+    const toXY = (a: number) => [cx + r * Math.cos((a * Math.PI) / 180), cy + r * Math.sin((a * Math.PI) / 180)];
+    const [x1, y1] = toXY(startA);
+    const [x2, y2] = toXY(endA);
+    const large = endA - startA > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
+  };
+  const needle = (() => {
+    const a = (angle * Math.PI) / 180;
+    return [cx + (r - 4) * Math.cos(a), cy + (r - 4) * Math.sin(a)];
+  })();
+  const min = Math.min(...sparkline), maxS = Math.max(...sparkline);
+  const range = maxS - min || 1;
+  const points = sparkline.map((v, i) => `${(i / (sparkline.length - 1)) * 100},${20 - ((v - min) / range) * 18}`).join(" ");
+  return (
+    <div className="mt-2">
+      <div className="flex justify-center">
+        <svg viewBox="0 0 180 110" className="h-[120px] w-full">
+          <defs>
+            <linearGradient id="gaugeGrad" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stopColor="oklch(0.6 0.22 25)" />
+              <stop offset="50%" stopColor="oklch(0.78 0.18 75)" />
+              <stop offset="100%" stopColor="oklch(0.65 0.2 150)" />
+            </linearGradient>
+          </defs>
+          <path d={arc(180, 360)} stroke="url(#gaugeGrad)" strokeWidth="14" fill="none" strokeLinecap="round" />
+          <line x1={cx} y1={cy} x2={needle[0]} y2={needle[1]} stroke="oklch(0.25 0.02 240)" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx={cx} cy={cy} r="4" fill="oklch(0.25 0.02 240)" />
+          <text x={cx - r} y={cy + 18} textAnchor="middle" fontSize="9" fill="currentColor" className="text-muted-foreground">0</text>
+          <text x={cx + r} y={cy + 18} textAnchor="middle" fontSize="9" fill="currentColor" className="text-muted-foreground">{max}</text>
+        </svg>
+      </div>
+      <div className="text-center">
+        <p className="text-2xl font-bold text-foreground leading-none">{value}</p>
+        <p className="mt-1 text-xs font-medium text-[oklch(0.6_0.18_75)]">{status}</p>
+      </div>
+      <div className="mt-3 rounded-md border border-border p-2">
+        <div className="flex items-center justify-between text-[10px]">
+          <span className="font-semibold text-[oklch(0.55_0.18_150)]">↗ {deltaPts} pontos</span>
+          <span className="text-muted-foreground">vs mês anterior</span>
+        </div>
+        <svg viewBox="0 0 100 22" preserveAspectRatio="none" className="mt-1 h-5 w-full">
+          <polyline points={points} fill="none" stroke="oklch(0.55 0.18 150)" strokeWidth="1.2" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 function CompliancePage() {
   const acoesPendentes = alertas.length;
   const [input, setInput] = useState("");
