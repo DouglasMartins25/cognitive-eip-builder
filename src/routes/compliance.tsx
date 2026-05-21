@@ -359,32 +359,47 @@ function CompliancePage() {
 
           {/* KPIs */}
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {kpis.map((k) => (
-              <div key={k.label} className="rounded-xl border border-border bg-card p-4">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                  {k.label}
-                </p>
-                {"gauge" in k && k.gauge ? (
-                  <Gauge {...k.gauge} />
-                ) : "detalhes" in k && k.detalhes ? (
-                  <div className="mt-3 space-y-2">
-                    {k.detalhes.map((d) => (
-                      <div key={d.label} className="flex items-baseline justify-between">
-                        <span className="text-xs text-muted-foreground">{d.label}:</span>
-                        <span className="text-sm font-semibold text-foreground">{d.valor}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <>
-                    <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
-                    <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
-                      {k.delta}
-                    </p>
-                  </>
-                )}
-              </div>
-            ))}
+            {kpis.map((k) => {
+              const isGauge = "gauge" in k && k.gauge;
+              const cardClass = `rounded-xl border border-border bg-card p-4 ${
+                isGauge ? "cursor-pointer transition-shadow hover:shadow-md hover:border-primary/40" : ""
+              }`;
+              const inner = (
+                <>
+                  <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                    {k.label}
+                  </p>
+                  {isGauge ? (
+                    <Gauge {...k.gauge!} />
+                  ) : "detalhes" in k && k.detalhes ? (
+                    <div className="mt-3 space-y-2">
+                      {k.detalhes.map((d) => (
+                        <div key={d.label} className="flex items-baseline justify-between">
+                          <span className="text-xs text-muted-foreground">{d.label}:</span>
+                          <span className="text-sm font-semibold text-foreground">{d.valor}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <>
+                      <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
+                      <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
+                        {k.delta}
+                      </p>
+                    </>
+                  )}
+                </>
+              );
+              return isGauge ? (
+                <Link key={k.label} to="/apuracao-transicao" className={cardClass}>
+                  {inner}
+                </Link>
+              ) : (
+                <div key={k.label} className={cardClass}>
+                  {inner}
+                </div>
+              );
+            })}
           </div>
 
           {/* Alertas */}
