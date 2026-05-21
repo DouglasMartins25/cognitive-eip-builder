@@ -1,26 +1,30 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-  ArrowLeft,
-  ShieldCheck,
-  Scale,
-  FileCheck2,
-  AlertTriangle,
-  CalendarClock,
-  TrendingUp,
-  BookOpen,
-  Sparkles,
-  CheckCircle2,
-  Clock,
-  Bell,
   Inbox,
   Crop,
+  Bell,
   Tag,
   RefreshCw,
   Briefcase,
   Contact,
-  Maximize2,
+  Sparkles,
+  ShoppingBag,
+  User,
+  FileText,
+  ArrowLeft,
   ArrowRight,
+  Bot,
+  AlertCircle,
+  CheckCircle2,
+  ShieldCheck,
+  Activity,
+  FileWarning,
+  BarChart3,
+  Scale,
+  Maximize2,
+  BookOpen,
+  CalendarClock,
 } from "lucide-react";
 
 export const Route = createFileRoute("/compliance")({
@@ -29,92 +33,160 @@ export const Route = createFileRoute("/compliance")({
 
 function SideIcon({
   icon: Icon,
+  to,
   active = false,
 }: {
   icon: React.ComponentType<{ className?: string }>;
+  to?: string;
   active?: boolean;
 }) {
+  const cls = `flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+    active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
+  }`;
+  if (to) {
+    return (
+      <Link to={to} className={cls}>
+        <Icon className="h-5 w-5" />
+      </Link>
+    );
+  }
   return (
-    <button
-      className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-        active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
-      }`}
-    >
+    <button className={cls}>
       <Icon className="h-5 w-5" />
     </button>
   );
 }
 
-type ChatMessage = { id: number; from: "user" | "agent"; text: string };
+const agentes = [
+  { id: "C1", nome: "Obrigações Fiscais", status: "alert" },
+  { id: "C2", nome: "Reforma Tributária", status: "alert" },
+] as const;
 
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  hint,
-  tone = "default",
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-  hint: string;
-  tone?: "default" | "warning" | "success";
-}) {
-  const toneCls =
-    tone === "warning"
-      ? "text-amber-600"
-      : tone === "success"
-      ? "text-emerald-600"
-      : "text-primary";
-  return (
-    <div className="rounded-2xl border border-border bg-card p-5">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-muted-foreground">{label}</span>
-        <Icon className={`h-4 w-4 ${toneCls}`} />
-      </div>
-      <div className="mt-3 text-2xl font-semibold text-foreground">{value}</div>
-      <div className="mt-1 text-xs text-muted-foreground">{hint}</div>
-    </div>
-  );
-}
+const kpis = [
+  { label: "Índice de conformidade", valor: "96%", delta: "↑ 4 p.p. vs mês anterior", up: true },
+  {
+    label: "Obrigações monitoradas",
+    valor: "",
+    delta: "",
+    up: true,
+    detalhes: [
+      { label: "Próximos 30 dias", valor: "12" },
+      { label: "Entregues no prazo", valor: "184" },
+      { label: "Em preparação", valor: "7" },
+    ],
+  },
+  { label: "Alertas preventivos", valor: "7", delta: "2 críticos · 5 informativos", up: true },
+  { label: "Impacto Reforma Tributária", valor: "R$ 2,4M", delta: "Estimativa anual CBS/IBS", up: true },
+];
+
+const alertas: {
+  tipo: "critico" | "atencao" | "info";
+  icon: typeof AlertCircle;
+  agente: string;
+  titulo: string;
+  descricao: string;
+  acao: string;
+}[] = [
+  {
+    tipo: "critico",
+    icon: FileWarning,
+    agente: "C2",
+    titulo: "CST divergente da nova legislação IBS/CBS",
+    descricao: "342 itens com CST desatualizado · Risco de autuação estimado: R$ 412k · Sugestão de reparametrização pronta",
+    acao: "Aplicar correção",
+  },
+  {
+    tipo: "critico",
+    icon: AlertCircle,
+    agente: "C1",
+    titulo: "DCTFWeb com pendência de transmissão",
+    descricao: "Competência 04/2026 · 3 estabelecimentos · vencimento em 15/06 · risco de multa por atraso",
+    acao: "Revisar",
+  },
+  {
+    tipo: "atencao",
+    icon: Scale,
+    agente: "C2",
+    titulo: "Alíquota IBS aplicada incorretamente",
+    descricao: "NCM 8471.30 · 28 operações últimos 7 dias · Crédito fiscal subaproveitado R$ 64.200",
+    acao: "Recalcular",
+  },
+  {
+    tipo: "atencao",
+    icon: CalendarClock,
+    agente: "C1",
+    titulo: "DIRBI — benefícios fiscais com atenção",
+    descricao: "Vencimento em 20/06 · 4 benefícios pendentes de documentação comprobatória",
+    acao: "Preparar entrega",
+  },
+  {
+    tipo: "info",
+    icon: ShieldCheck,
+    agente: "C2",
+    titulo: "Nova IN RFB nº 2.314/26 publicada",
+    descricao: "Impacto analisado: 14 parametrizações afetadas · Plano de adequação pronto para revisão",
+    acao: "Ver plano",
+  },
+];
+
+const atividades = [
+  { hora: "01:08", agente: "C1", desc: "Calendário fiscal revalidado — 12 obrigações nos próximos 30 dias" },
+  { hora: "02:14", agente: "C2", desc: "847 regras CFOP/CST/NCM cruzadas com tabelas oficiais" },
+  { hora: "02:42", agente: "C2", desc: "Cronograma da Reforma Tributária revalidado · 0 lacunas" },
+  { hora: "03:18", agente: "C1", desc: "SPED Fiscal pré-validado · 6 estabelecimentos · 0 erros estruturais" },
+  { hora: "03:55", agente: "C1", desc: "EFD Contribuições conciliada com escrituração contábil · 99,7% de match" },
+  { hora: "04:32", agente: "C2", desc: "Simulação de Split Payment em 3 operações piloto concluída" },
+  { hora: "05:21", agente: "C1", desc: "ECF — 184 lançamentos contábeis classificados automaticamente" },
+  { hora: "05:48", agente: "C2", desc: "Mapeamento CBS/IBS atualizado para 1.284 SKUs" },
+  { hora: "06:14", agente: "C2", desc: "IN RFB nº 2.314/26 ingerida e mapeada para 14 parametrizações" },
+  { hora: "06:47", agente: "C1", desc: "DCTFWeb — 3 pendências de transmissão sinalizadas ao gestor" },
+  { hora: "07:03", agente: "C2", desc: "Radar de Imposto Seletivo atualizado · 18 NCMs em monitoramento" },
+];
+
+const conformidadeBenchmark = {
+  setor: 88.0,
+  empresa: 96.0,
+  gap: 8.0,
+  drivers: [
+    { label: "Obrigações principais", valor: "+6 pp", tone: "positivo" as const, desc: "acima da mediana setorial" },
+    { label: "Obrigações acessórias", valor: "+3 pp", tone: "positivo" as const, desc: "rotina automatizada" },
+    { label: "Reforma Tributária", valor: "−1 pp", tone: "negativo" as const, desc: "adequações em andamento" },
+  ],
+};
+
+const radarReforma: { label: string; valor: string; tone: "positivo" | "negativo" | "neutro" }[] = [
+  { label: "CBS — cobertura de regras", valor: "100%", tone: "positivo" },
+  { label: "IBS — SKUs mapeados", valor: "1.284 / 1.310", tone: "neutro" },
+  { label: "Imposto Seletivo — NCMs", valor: "18 monitorados", tone: "neutro" },
+  { label: "Split Payment — pilotos", valor: "3 operações", tone: "positivo" },
+  { label: "Risco residual estimado", valor: "Baixo · 6%", tone: "neutro" },
+];
+
+const acoesReforma = [
+  { acao: "Reparametrizar CST de 342 itens para matriz IBS/CBS", impacto: "Reduz risco de autuação em R$ 412k" },
+  { acao: "Concluir mapeamento dos 26 SKUs restantes para IBS", impacto: "Eleva cobertura para 100%" },
+  { acao: "Expandir piloto de Split Payment para mais 5 operações", impacto: "+ R$ 38k em crédito antecipado/mês" },
+];
 
 function CompliancePage() {
+  const acoesPendentes = alertas.length;
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: 1, from: "user", text: "Como está o compliance fiscal e a Reforma Tributária?" },
-    {
-      id: 2,
-      from: "agent",
-      text:
-        "Índice de conformidade em 96%. Há 12 obrigações nos próximos 30 dias e 7 alertas preventivos. O radar da Reforma Tributária aponta R$ 2,4M de impacto anual estimado em CBS/IBS — veja o detalhamento ao lado.",
-    },
+  const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o Compliance Digital Workers. Os 2 workers analisaram 184 obrigações e 847 regras fiscais — 5 ações aguardam sua decisão." },
   ]);
-
   const handleSend = () => {
     const text = input.trim();
     if (!text) return;
-    setMessages((prev) => [...prev, { id: Date.now(), from: "user", text }]);
+    setMessages((m) => [
+      ...m,
+      { id: m.length + 1, from: "user", text },
+      { id: m.length + 2, from: "bot", text: "Estou correlacionando os sinais dos workers de Obrigações Fiscais e Reforma Tributária e em instantes trarei o resultado." },
+    ]);
     setInput("");
   };
 
-  const obrigacoes = [
-    { nome: "SPED Fiscal (EFD ICMS/IPI)", categoria: "Fiscal", prazo: "25/05/2026", status: "Em dia", tone: "success" as const },
-    { nome: "EFD Contribuições (PIS/COFINS)", categoria: "Fiscal", prazo: "28/05/2026", status: "Em dia", tone: "success" as const },
-    { nome: "DCTFWeb", categoria: "Trabalhista", prazo: "15/06/2026", status: "Pendente", tone: "warning" as const },
-    { nome: "ECF — Escrituração Contábil Fiscal", categoria: "Contábil", prazo: "31/07/2026", status: "Em preparação", tone: "default" as const },
-    { nome: "DIRBI — Benefícios Fiscais", categoria: "Fiscal", prazo: "20/06/2026", status: "Atenção", tone: "warning" as const },
-  ];
-
-  const reforma = [
-    { titulo: "CBS — Contribuição sobre Bens e Serviços", descricao: "Substitui PIS/COFINS. Período de transição inicia em 2026 com alíquota teste de 0,9%.", impacto: "Alto" },
-    { titulo: "IBS — Imposto sobre Bens e Serviços", descricao: "Substitui ICMS e ISS. Implementação gradual de 2026 a 2033, com partilha entre estados e municípios.", impacto: "Alto" },
-    { titulo: "Imposto Seletivo", descricao: "Incide sobre produtos prejudiciais à saúde e ao meio ambiente. Regulamentação em andamento.", impacto: "Médio" },
-    { titulo: "Split Payment", descricao: "Recolhimento automático do tributo no momento da liquidação financeira da operação.", impacto: "Operacional" },
-  ];
-
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      {/* Left icon sidebar */}
       <aside className="flex w-16 flex-col items-center justify-between border-r border-border bg-sidebar py-5">
         <div className="flex flex-col items-center gap-5">
           <Link to="/" className="text-primary">
@@ -138,10 +210,9 @@ function CompliancePage() {
         </button>
       </aside>
 
-      {/* Chat column */}
-      <section className="flex w-[340px] flex-col bg-card">
+      <section className="flex w-[340px] flex-col border-r border-border bg-card">
         <header className="flex items-center justify-between px-6 py-5">
-          <h1 className="text-base font-medium text-foreground">Compliance</h1>
+          <h1 className="text-base font-medium text-foreground">Compliance Digital Workers</h1>
           <button className="text-muted-foreground hover:text-foreground">
             <Maximize2 className="h-4 w-4" />
           </button>
@@ -170,7 +241,7 @@ function CompliancePage() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSend();
               }}
-              placeholder="Pergunte ao compliance..."
+              placeholder="Pergunte ao Compliance Digital Workers..."
               className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
@@ -184,189 +255,214 @@ function CompliancePage() {
         </div>
       </section>
 
-      {/* Main */}
-      <main className="ml-4 flex-1 overflow-y-auto">
-        <header className="border-b border-border bg-card">
-          <div className="flex items-center justify-between px-6 py-4">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4" /> Voltar
-            </Link>
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
-              <Sparkles className="h-3 w-3" /> Compliance Digital Workers
-            </span>
-          </div>
-        </header>
+      <main className="flex flex-1 flex-col overflow-y-auto">
+        <div className="mx-auto w-full max-w-5xl px-8 py-8">
+          <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Voltar
+          </Link>
 
-        <div className="px-6 py-8">
-          <div className="flex items-start justify-between gap-6">
-            <div>
-              <h1 className="text-3xl font-semibold text-foreground">
-                Compliance fiscal, contábil e Reforma Tributária
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-                Acompanhe obrigações em tempo real, antecipe riscos e prepare a
-                operação para a nova arquitetura tributária brasileira (CBS, IBS
-                e Imposto Seletivo).
-              </p>
-            </div>
-            <button className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90">
-              <Bell className="h-4 w-4" /> Configurar alertas
-            </button>
-          </div>
-
-          {/* Stats */}
-          <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <StatCard icon={ShieldCheck} label="Índice de conformidade" value="96%" hint="+4 p.p. vs. mês anterior" tone="success" />
-            <StatCard icon={CalendarClock} label="Obrigações nos próximos 30 dias" value="12" hint="3 com risco de atraso" tone="warning" />
-            <StatCard icon={AlertTriangle} label="Alertas preventivos" value="7" hint="2 críticos · 5 informativos" tone="warning" />
-            <StatCard icon={TrendingUp} label="Impacto Reforma Tributária" value="R$ 2,4M" hint="Estimativa anual em CBS/IBS" />
-          </section>
-
-          {/* Obrigações */}
-          <section className="mt-10">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-foreground">
-                  Obrigações fiscais, financeiras e contábeis
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Calendário monitorado de forma autônoma pelo Digital Worker.
-                </p>
-              </div>
-              <button className="text-sm text-primary hover:underline">
-                Ver calendário completo
-              </button>
-            </div>
-
-            <div className="overflow-hidden rounded-2xl border border-border bg-card">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50 text-xs uppercase tracking-wider text-muted-foreground">
-                  <tr>
-                    <th className="px-5 py-3 text-left font-medium">Obrigação</th>
-                    <th className="px-5 py-3 text-left font-medium">Categoria</th>
-                    <th className="px-5 py-3 text-left font-medium">Prazo</th>
-                    <th className="px-5 py-3 text-left font-medium">Status</th>
-                    <th className="px-5 py-3"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {obrigacoes.map((o) => (
-                    <tr key={o.nome} className="border-t border-border">
-                      <td className="px-5 py-4 font-medium text-foreground">{o.nome}</td>
-                      <td className="px-5 py-4 text-muted-foreground">{o.categoria}</td>
-                      <td className="px-5 py-4 text-muted-foreground">
-                        <span className="inline-flex items-center gap-1.5">
-                          <Clock className="h-3.5 w-3.5" /> {o.prazo}
-                        </span>
-                      </td>
-                      <td className="px-5 py-4">
-                        <span
-                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                            o.tone === "success"
-                              ? "bg-emerald-100 text-emerald-700"
-                              : o.tone === "warning"
-                              ? "bg-amber-100 text-amber-700"
-                              : "bg-muted text-foreground"
-                          }`}
-                        >
-                          {o.tone === "success" ? (
-                            <CheckCircle2 className="h-3 w-3" />
-                          ) : (
-                            <AlertTriangle className="h-3 w-3" />
-                          )}
-                          {o.status}
-                        </span>
-                      </td>
-                      <td className="px-5 py-4 text-right">
-                        <button className="text-xs font-medium text-primary hover:underline">
-                          Revisar
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Reforma Tributária */}
-          <section className="mt-10">
-            <div className="mb-4 flex items-center gap-2">
-              <Scale className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Reforma Tributária — radar de impacto
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {reforma.map((r) => (
-                <div key={r.titulo} className="rounded-2xl border border-border bg-card p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-primary">
-                        <BookOpen className="h-4 w-4" />
-                      </div>
-                      <h3 className="text-sm font-semibold text-foreground">{r.titulo}</h3>
-                    </div>
-                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                      Impacto {r.impacto}
-                    </span>
-                  </div>
-                  <p className="mt-3 text-sm text-muted-foreground">{r.descricao}</p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <button className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted">
-                      Simular impacto
-                    </button>
-                    <button className="rounded-lg px-3 py-1.5 text-xs font-medium text-primary hover:bg-accent">
-                      Ver checklist
-                    </button>
-                  </div>
-                </div>
+          {/* Hero */}
+          <div className="rounded-2xl bg-[oklch(0.2_0.04_240)] p-6 text-white">
+            <p className="text-[11px] font-semibold tracking-widest text-white/60">
+              SEXTA-FEIRA, 15 DE MAIO DE 2026 · 07:24 · COMPLIANCE DIGITAL WORKERS
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold leading-tight">
+              Bom dia, João Silva.{" "}
+              <span className="text-[oklch(0.78_0.18_150)]">{acoesPendentes} ações</span>{" "}
+              dos workers aguardam decisão.
+            </h1>
+            <p className="mt-2 text-sm text-white/60">
+              Os 2 workers analisaram 184 obrigações fiscais, contábeis e trabalhistas e 847 regras tributárias nesta noite.
+              7 alertas preventivos detectados — 2 críticos relacionados à Reforma Tributária.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {agentes.map((a) => (
+                <span
+                  key={a.id}
+                  className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.55_0.18_260)]/60 bg-[oklch(0.3_0.1_260)]/40 px-3 py-1 text-xs text-white"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.7_0.18_260)]" />
+                  <span className="font-semibold">{a.id}</span> {a.nome}
+                </span>
               ))}
             </div>
-          </section>
+          </div>
 
-          {/* Ações sugeridas */}
-          <section className="mt-10 mb-10 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-6">
-            <div className="flex items-center gap-2">
-              <FileCheck2 className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Ações sugeridas pelo Digital Worker
-              </h2>
+          {/* KPIs */}
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {kpis.map((k) => (
+              <div key={k.label} className="rounded-xl border border-border bg-card p-4">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  {k.label}
+                </p>
+                {"detalhes" in k && k.detalhes ? (
+                  <div className="mt-3 space-y-2">
+                    {k.detalhes.map((d) => (
+                      <div key={d.label} className="flex items-baseline justify-between">
+                        <span className="text-xs text-muted-foreground">{d.label}:</span>
+                        <span className="text-sm font-semibold text-foreground">{d.valor}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
+                    <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
+                      {k.delta}
+                    </p>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Alertas */}
+          <p className="mt-8 text-[11px] font-semibold tracking-widest text-muted-foreground">
+            ALERTAS GERADOS PELOS WORKERS — REQUEREM SUA ATENÇÃO
+          </p>
+          <div className="mt-3 space-y-3">
+            {alertas.map((a, i) => {
+              const styles =
+                a.tipo === "critico"
+                  ? { bg: "bg-[oklch(0.95_0.04_25)]", border: "border-[oklch(0.7_0.15_25)]/40", icon: "bg-[oklch(0.55_0.2_25)] text-white", text: "text-[oklch(0.45_0.18_25)]", btn: "border-[oklch(0.55_0.2_25)] text-[oklch(0.45_0.18_25)]" }
+                  : a.tipo === "atencao"
+                  ? { bg: "bg-[oklch(0.96_0.05_85)]", border: "border-[oklch(0.7_0.14_70)]/40", icon: "bg-[oklch(0.6_0.16_60)] text-white", text: "text-[oklch(0.45_0.14_60)]", btn: "border-[oklch(0.6_0.16_60)] text-[oklch(0.45_0.14_60)]" }
+                  : { bg: "bg-[oklch(0.95_0.04_260)]", border: "border-[oklch(0.65_0.15_260)]/40", icon: "bg-[oklch(0.5_0.18_260)] text-white", text: "text-[oklch(0.4_0.18_260)]", btn: "border-[oklch(0.5_0.18_260)] text-[oklch(0.4_0.18_260)]" };
+              const Icon = a.icon;
+              return (
+                <div key={i} className={`flex items-center gap-4 rounded-xl border ${styles.border} ${styles.bg} p-4`}>
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${styles.icon}`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <p className={`text-sm font-semibold ${styles.text}`}>
+                      {a.titulo} <span className="text-xs font-normal opacity-70">— {a.agente}</span>
+                    </p>
+                    <p className="mt-0.5 text-xs text-foreground/70">{a.descricao}</p>
+                  </div>
+                  <button className={`rounded-lg border bg-card px-4 py-2 text-xs font-medium ${styles.btn} hover:opacity-80`}>
+                    {a.acao}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Two columns */}
+          <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div className="rounded-xl border border-border bg-card p-5">
+              <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
+                ATIVIDADE AUTÔNOMA ESTA NOITE
+              </p>
+              <ul className="mt-4 space-y-3">
+                {atividades.map((at, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="mt-0.5 w-12 shrink-0 text-xs font-mono text-muted-foreground">{at.hora}</span>
+                    <span className="mt-0.5 inline-flex h-5 shrink-0 items-center rounded bg-muted px-1.5 text-[10px] font-semibold text-foreground/80">
+                      {at.agente}
+                    </span>
+                    <span className="flex-1 text-xs text-foreground">{at.desc}</span>
+                    <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                      <CheckCircle2 className="h-3 w-3" /> AUTO
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="mt-4 space-y-3 text-sm">
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                <span className="text-foreground">
-                  Revisar parametrização de PIS/COFINS para 32 produtos antes do fechamento de maio.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-                <span className="text-foreground">
-                  Atualizar cadastro de CST para alinhamento com a nova matriz CBS/IBS — 18 itens pendentes.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Scale className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-foreground">
-                  Simular split payment em 3 operações piloto para validar fluxo financeiro e contábil.
-                </span>
-              </li>
-            </ul>
-            <div className="mt-5 flex gap-3">
-              <button className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
-                Executar ações
-              </button>
-              <button className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted">
-                Exportar relatório
-              </button>
+
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                  <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
+                    CONFORMIDADE — SUA vs SETOR
+                  </p>
+                </div>
+                <div className="mt-4 flex items-end justify-between">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Sua conformidade</p>
+                    <p className="text-2xl font-semibold text-foreground">{conformidadeBenchmark.empresa.toString().replace(".", ",")}%</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Mediana setorial</p>
+                    <p className="text-2xl font-semibold text-foreground">{conformidadeBenchmark.setor.toString().replace(".", ",")}%</p>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-[oklch(0.95_0.06_150)] px-3 py-2">
+                  <ShieldCheck className="h-4 w-4 text-[oklch(0.55_0.18_150)]" />
+                  <p className="text-xs text-[oklch(0.4_0.16_150)]">
+                    <span className="font-semibold">+{conformidadeBenchmark.gap.toString().replace(".", ",")} pp</span> acima da mediana setorial
+                  </p>
+                </div>
+                <p className="mt-4 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  Drivers da conformidade
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {conformidadeBenchmark.drivers.map((d) => {
+                    const color = d.tone === "positivo" ? "text-[oklch(0.55_0.18_150)]" : "text-[oklch(0.55_0.2_25)]";
+                    return (
+                      <li key={d.label} className="flex items-center justify-between text-xs">
+                        <div>
+                          <span className="text-foreground">{d.label}</span>
+                          <span className="ml-2 text-[11px] text-muted-foreground">{d.desc}</span>
+                        </div>
+                        <span className={`font-mono font-semibold ${color}`}>{d.valor}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4 text-primary" />
+                  <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">
+                    REFORMA TRIBUTÁRIA — RADAR DE IMPACTO
+                  </p>
+                </div>
+                <ul className="mt-4 space-y-2.5">
+                  {radarReforma.map((p) => {
+                    const color =
+                      p.tone === "positivo"
+                        ? "text-[oklch(0.55_0.18_150)]"
+                        : p.tone === "negativo"
+                        ? "text-[oklch(0.55_0.2_25)]"
+                        : "text-foreground";
+                    return (
+                      <li key={p.label} className="flex items-center justify-between text-xs">
+                        <span className="text-foreground">{p.label}</span>
+                        <span className={`font-mono font-semibold ${color}`}>{p.valor}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <p className="mt-4 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  Ações sugeridas
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {acoesReforma.map((a) => (
+                    <li key={a.acao} className="rounded-lg border border-border bg-background/40 p-2.5">
+                      <p className="text-xs font-medium text-foreground">{a.acao}</p>
+                      <p className="mt-0.5 text-[11px] text-[oklch(0.55_0.18_150)]">{a.impacto}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </section>
+          </div>
+
+          <div className="mt-6 flex items-center gap-2 text-[11px] text-muted-foreground">
+            <Bot className="h-3.5 w-3.5" />
+            Compliance Digital Workers · 2 workers ativos · última sincronização há 1 min
+          </div>
         </div>
       </main>
+
+      <aside className="flex w-14 flex-col items-center gap-4 border-l border-border bg-card py-5 text-sidebar-foreground">
+        <button className="hover:text-foreground"><ShoppingBag className="h-5 w-5" /></button>
+        <button className="hover:text-foreground"><User className="h-5 w-5" /></button>
+        <button className="hover:text-foreground"><FileText className="h-5 w-5" /></button>
+      </aside>
     </div>
   );
 }
