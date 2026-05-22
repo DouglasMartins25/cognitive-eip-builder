@@ -187,7 +187,7 @@ function AutonomousFinance() {
     setMessages((m) => [
       ...m,
       { id: m.length + 1, from: "user", text },
-      { id: m.length + 2, from: "bot", text: "Estou correlacionando os sinais dos workers de Anomalia Financeira e Compliance Tributário e em instantes trarei o resultado." },
+      { id: m.length + 2, from: "bot", text: "Estou correlacionando os sinais de automações bancárias e análise financeira e em instantes trarei o resultado." },
     ]);
     setInput("");
   };
