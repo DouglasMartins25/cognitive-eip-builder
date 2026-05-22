@@ -56,7 +56,8 @@ function SideIcon({
 }
 
 const agentes = [
-  { id: "A1", nome: "Automações e Análise financeiras - execução 24/7", status: "alert" },
+  { id: "A1", nome: "Automação Bancária — execução 24/7", status: "alert" },
+  { id: "A2", nome: "Análise Financeira — execução 24/7", status: "alert" },
 ] as const;
 
 const kpis = [
