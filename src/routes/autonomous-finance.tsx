@@ -56,8 +56,7 @@ function SideIcon({
 }
 
 const agentes = [
-  { id: "A1", nome: "Anomalia Financeira", status: "alert" },
-  { id: "A2", nome: "Compliance Tributário", status: "alert" },
+  { id: "A1", nome: "Automações e Análise financeiras - execução 24/7", status: "alert" },
 ] as const;
 
 const kpis = [
@@ -69,12 +68,12 @@ const kpis = [
     up: true,
     detalhes: [
       { label: "Pagamentos previstos", valor: "1.310" },
-      { label: "Pagamentos Realizados", valor: "1.284" },
+      { label: "Pagamentos realizados", valor: "1.284" },
       { label: "Cobranças enviadas", valor: "426" },
     ],
   },
-  { label: "Anomalias detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
-  { label: "Cobertura Reforma Tributária", valor: "100%", delta: "847 regras vigentes monitoradas", up: true },
+  { label: "Conciliação bancária automática", valor: "99,4%", delta: "2.847 movimentos · 6 contas", up: true },
+  { label: "Anomalias financeiras detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
 ];
 
 const alertas: {
@@ -96,10 +95,10 @@ const alertas: {
   {
     tipo: "critico",
     icon: FileWarning,
-    agente: "A2",
-    titulo: "CST divergente da nova legislação IBS/CBS",
-    descricao: "342 itens com CST desatualizado · Risco de autuação estimado: R$ 412k · Sugestão de reparametrização pronta",
-    acao: "Aplicar correção",
+    agente: "A1",
+    titulo: "Pagamento duplicado bloqueado automaticamente",
+    descricao: "NF 48.291 · R$ 87.450 · Mesmo título identificado em 2 lotes de remessa CNAB · Liberação aguarda aprovação",
+    acao: "Liberar/Cancelar",
   },
   {
     tipo: "atencao",
@@ -112,31 +111,31 @@ const alertas: {
   {
     tipo: "atencao",
     icon: Scale,
-    agente: "A2",
-    titulo: "Alíquota IBS aplicada incorretamente",
-    descricao: "NCM 8471.30 · 28 operações últimos 7 dias · Crédito fiscal subaproveitado R$ 64.200",
-    acao: "Recalcular",
+    agente: "A1",
+    titulo: "Recebimento atrasado — Cliente Vértice",
+    descricao: "Título R$ 184.300 · 12 dias em atraso · Régua de cobrança automática iniciada · Aguarda decisão de protesto",
+    acao: "Decidir",
   },
   {
     tipo: "info",
     icon: ShieldCheck,
-    agente: "A2",
-    titulo: "Nova IN RFB nº 2.314/26 publicada",
-    descricao: "Impacto analisado: 14 parametrizações afetadas · Plano de adequação pronto para revisão",
-    acao: "Ver plano",
+    agente: "A1",
+    titulo: "28 boletos DDA sem título correspondente",
+    descricao: "Busca DDA em 4 bancos · Valor total R$ 132.480 · Sugestão de vínculo automático pronta para revisão",
+    acao: "Ver sugestões",
   },
 ];
 
 const atividades = [
-  { hora: "01:08", agente: "A1", desc: "8.421 lançamentos analisados — 17 anomalias sinalizadas" },
+  { hora: "01:08", agente: "A1", desc: "8.421 lançamentos analisados — 17 anomalias financeiras sinalizadas" },
   { hora: "02:14", agente: "A1", desc: "Busca DDA executada em 4 bancos · 312 boletos vinculados a títulos a pagar" },
-  { hora: "02:42", agente: "A2", desc: "Cronograma da Reforma Tributária revalidado · 0 lacunas" },
+  { hora: "02:42", agente: "A1", desc: "Remessa CNAB gerada · 1.284 pagamentos enviados para 3 bancos" },
   { hora: "03:18", agente: "A1", desc: "Conciliação bancária automática · 6 contas · 2.847 movimentos · 99,4% de match" },
   { hora: "03:55", agente: "A1", desc: "Pagamento duplicado NF 48.291 bloqueado automaticamente" },
   { hora: "04:32", agente: "A1", desc: "28 boletos DDA sem título correspondente encaminhados para análise" },
-  { hora: "05:21", agente: "A2", desc: "847 regras CFOP/CST/NCM cruzadas com tabelas oficiais" },
+  { hora: "05:21", agente: "A1", desc: "426 cobranças enviadas via régua automática · 18 quitações registradas" },
   { hora: "05:48", agente: "A1", desc: "17 divergências de conciliação resolvidas via regras aprendidas" },
-  { hora: "06:14", agente: "A2", desc: "IN RFB nº 2.314/26 ingerida e mapeada para 14 parametrizações" },
+  { hora: "06:14", agente: "A1", desc: "Aplicação automática de R$ 1,2M em CDB liquidez diária" },
   { hora: "06:47", agente: "A1", desc: "Modelo de série temporal retreinado com 90 dias de fluxo" },
   { hora: "07:03", agente: "A1", desc: "Recebimento atrasado Cliente Vértice escalado ao gestor" },
 ];
@@ -172,7 +171,7 @@ function AutonomousFinance() {
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
-    { id: 1, from: "bot", text: "Bom dia, João. Sou o Finance Digital Workers. Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais — 5 ações aguardam sua decisão." },
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o Finance Digital Workers. Analisei 8.421 lançamentos financeiros e 2.847 movimentos bancários nesta noite — 5 ações aguardam sua decisão." },
   ]);
   const handleSend = () => {
     const text = input.trim();
@@ -188,7 +187,7 @@ function AutonomousFinance() {
     setMessages((m) => [
       ...m,
       { id: m.length + 1, from: "user", text },
-      { id: m.length + 2, from: "bot", text: "Estou correlacionando os sinais dos workers de Anomalia Financeira e Compliance Tributário e em instantes trarei o resultado." },
+      { id: m.length + 2, from: "bot", text: "Estou correlacionando os sinais de automações bancárias e análise financeira e em instantes trarei o resultado." },
     ]);
     setInput("");
   };
@@ -281,7 +280,7 @@ function AutonomousFinance() {
               dos workers aguardam decisão.
             </h1>
             <p className="mt-2 text-sm text-white/60">
-              Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais nesta noite.
+              O worker analisou 8.421 lançamentos financeiros e 2.847 movimentos bancários nesta noite.
               17 anomalias detectadas — 12 resolvidas automaticamente.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -464,7 +463,7 @@ function AutonomousFinance() {
 
           <div className="mt-6 flex items-center gap-2 text-[11px] text-muted-foreground">
             <Bot className="h-3.5 w-3.5" />
-            Finance Digital Workers · 2 workers ativos · última sincronização há 1 min
+            Finance Digital Workers · worker ativo · última sincronização há 1 min
           </div>
         </div>
       </main>
