@@ -280,7 +280,7 @@ function AutonomousFinance() {
               dos workers aguardam decisão.
             </h1>
             <p className="mt-2 text-sm text-white/60">
-              Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais nesta noite.
+              O worker analisou 8.421 lançamentos financeiros e 2.847 movimentos bancários nesta noite.
               17 anomalias detectadas — 12 resolvidas automaticamente.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
