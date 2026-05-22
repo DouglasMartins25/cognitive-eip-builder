@@ -171,7 +171,7 @@ function AutonomousFinance() {
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
-    { id: 1, from: "bot", text: "Bom dia, João. Sou o Finance Digital Workers. Os 2 workers analisaram 8.421 lançamentos e 847 regras fiscais — 5 ações aguardam sua decisão." },
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o Finance Digital Workers. Analisei 8.421 lançamentos financeiros e 2.847 movimentos bancários nesta noite — 5 ações aguardam sua decisão." },
   ]);
   const handleSend = () => {
     const text = input.trim();
