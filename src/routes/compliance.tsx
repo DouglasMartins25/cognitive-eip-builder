@@ -370,11 +370,12 @@ function CompliancePage() {
           </div>
 
           {/* KPIs */}
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {kpis.map((k) => {
               const isGauge = "gauge" in k && k.gauge;
               const isAuditoria = k.label === "Auditoria";
-              const clickable = isGauge || isAuditoria;
+              const isApuracao = k.label === "Apuração Simulada";
+              const clickable = isGauge || isAuditoria || isApuracao;
               const cardClass = `rounded-xl border border-border bg-card p-4 ${
                 clickable ? "cursor-pointer transition-shadow hover:shadow-md hover:border-primary/40" : ""
               }`;
