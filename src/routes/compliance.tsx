@@ -361,8 +361,10 @@ function CompliancePage() {
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {kpis.map((k) => {
               const isGauge = "gauge" in k && k.gauge;
+              const isAuditoria = k.label === "Auditoria";
+              const clickable = isGauge || isAuditoria;
               const cardClass = `rounded-xl border border-border bg-card p-4 ${
-                isGauge ? "cursor-pointer transition-shadow hover:shadow-md hover:border-primary/40" : ""
+                clickable ? "cursor-pointer transition-shadow hover:shadow-md hover:border-primary/40" : ""
               }`;
               const inner = (
                 <>
@@ -390,11 +392,21 @@ function CompliancePage() {
                   )}
                 </>
               );
-              return isGauge ? (
-                <Link key={k.label} to="/apuracao-transicao" className={cardClass}>
-                  {inner}
-                </Link>
-              ) : (
+              if (isGauge) {
+                return (
+                  <Link key={k.label} to="/apuracao-transicao" className={cardClass}>
+                    {inner}
+                  </Link>
+                );
+              }
+              if (isAuditoria) {
+                return (
+                  <Link key={k.label} to="/icms-transicao" className={cardClass}>
+                    {inner}
+                  </Link>
+                );
+              }
+              return (
                 <div key={k.label} className={cardClass}>
                   {inner}
                 </div>
