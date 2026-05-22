@@ -213,7 +213,7 @@ function Home() {
                   </span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  Anomalia financeira e Compliance Tributário · execução autônoma 24/7
+                  Automações e Análise financeiras - execução 24/7
                 </p>
               </div>
               <Sparkles className="h-4 w-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
