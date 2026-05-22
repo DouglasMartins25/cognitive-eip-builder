@@ -93,6 +93,18 @@ const kpis = [
     ],
   },
   { label: "Impacto Reforma Tributária", valor: "R$ 2,4M", delta: "Estimativa anual CBS/IBS", up: true },
+  {
+    label: "Apuração Simulada",
+    valor: "",
+    delta: "",
+    up: true,
+    detalhes: [
+      { label: "Saldo IBS/CBS a recolher", valor: "R$ 2.240" },
+      { label: "Créditos não aproveitados", valor: "R$ 1.210" },
+      { label: "Divergências entre módulos", valor: "3" },
+      { label: "Ações sugeridas (ND/NCP)", valor: "2" },
+    ],
+  },
 ];
 
 const alertas: {
