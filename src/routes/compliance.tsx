@@ -93,6 +93,18 @@ const kpis = [
     ],
   },
   { label: "Impacto Reforma Tributária", valor: "R$ 2,4M", delta: "Estimativa anual CBS/IBS", up: true },
+  {
+    label: "Apuração Simulada",
+    valor: "",
+    delta: "",
+    up: true,
+    detalhes: [
+      { label: "Saldo IBS/CBS a recolher", valor: "R$ 2.240" },
+      { label: "Créditos não aproveitados", valor: "R$ 1.210" },
+      { label: "Divergências entre módulos", valor: "3" },
+      { label: "Ações sugeridas (ND/NCP)", valor: "2" },
+    ],
+  },
 ];
 
 const alertas: {
@@ -358,11 +370,12 @@ function CompliancePage() {
           </div>
 
           {/* KPIs */}
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {kpis.map((k) => {
               const isGauge = "gauge" in k && k.gauge;
               const isAuditoria = k.label === "Auditoria";
-              const clickable = isGauge || isAuditoria;
+              const isApuracao = k.label === "Apuração Simulada";
+              const clickable = isGauge || isAuditoria || isApuracao;
               const cardClass = `rounded-xl border border-border bg-card p-4 ${
                 clickable ? "cursor-pointer transition-shadow hover:shadow-md hover:border-primary/40" : ""
               }`;
@@ -402,6 +415,13 @@ function CompliancePage() {
               if (isAuditoria) {
                 return (
                   <Link key={k.label} to="/icms-transicao" className={cardClass}>
+                    {inner}
+                  </Link>
+                );
+              }
+              if (isApuracao) {
+                return (
+                  <Link key={k.label} to="/apuracao-transicao" className={cardClass}>
                     {inner}
                   </Link>
                 );
