@@ -419,6 +419,13 @@ function CompliancePage() {
                   </Link>
                 );
               }
+              if (isApuracao) {
+                return (
+                  <Link key={k.label} to="/apuracao-transicao" className={cardClass}>
+                    {inner}
+                  </Link>
+                );
+              }
               return (
                 <div key={k.label} className={cardClass}>
                   {inner}
