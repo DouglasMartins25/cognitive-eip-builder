@@ -88,7 +88,7 @@ const alertas: {
   {
     tipo: "critico",
     icon: AlertCircle,
-    agente: "A1",
+    agente: "A2",
     titulo: "Pagamento fora do padrão — revisão necessária",
     descricao: "NF 48.291 · Fornecedor Metais Gerais · R$ 87.450 · Acima da média de pagamentos e sem histórico para este fornecedor",
     acao: "Revisar",
@@ -104,7 +104,7 @@ const alertas: {
   {
     tipo: "atencao",
     icon: Activity,
-    agente: "A1",
+    agente: "A2",
     titulo: "Variação de valor 187% acima do histórico",
     descricao: "Fornecedor Tech Components · Pagamento R$ 248.900 vs média 12m R$ 86.700",
     acao: "Autorizar",
@@ -112,7 +112,7 @@ const alertas: {
   {
     tipo: "atencao",
     icon: Scale,
-    agente: "A1",
+    agente: "A2",
     titulo: "Recebimento atrasado — Cliente Vértice",
     descricao: "Título R$ 184.300 · 12 dias em atraso · Régua de cobrança automática iniciada · Aguarda decisão de protesto",
     acao: "Decidir",
@@ -128,7 +128,7 @@ const alertas: {
 ];
 
 const atividades = [
-  { hora: "01:08", agente: "A1", desc: "8.421 lançamentos analisados — 17 anomalias financeiras sinalizadas" },
+  { hora: "01:08", agente: "A2", desc: "8.421 lançamentos analisados — 17 anomalias financeiras sinalizadas" },
   { hora: "02:14", agente: "A1", desc: "Busca DDA executada em 4 bancos · 312 boletos vinculados a títulos a pagar" },
   { hora: "02:42", agente: "A1", desc: "Remessa CNAB gerada · 1.284 pagamentos enviados para 3 bancos" },
   { hora: "03:18", agente: "A1", desc: "Conciliação bancária automática · 6 contas · 2.847 movimentos · 99,4% de match" },
@@ -137,8 +137,8 @@ const atividades = [
   { hora: "05:21", agente: "A1", desc: "426 cobranças enviadas via régua automática · 18 quitações registradas" },
   { hora: "05:48", agente: "A1", desc: "17 divergências de conciliação resolvidas via regras aprendidas" },
   { hora: "06:14", agente: "A1", desc: "Aplicação automática de R$ 1,2M em CDB liquidez diária" },
-  { hora: "06:47", agente: "A1", desc: "Modelo de série temporal retreinado com 90 dias de fluxo" },
-  { hora: "07:03", agente: "A1", desc: "Recebimento atrasado Cliente Vértice escalado ao gestor" },
+  { hora: "06:47", agente: "A2", desc: "Modelo de série temporal retreinado com 90 dias de fluxo" },
+  { hora: "07:03", agente: "A2", desc: "Recebimento atrasado Cliente Vértice escalado ao gestor" },
 ];
 
 const ebitdaBenchmark = {
@@ -464,7 +464,7 @@ function AutonomousFinance() {
 
           <div className="mt-6 flex items-center gap-2 text-[11px] text-muted-foreground">
             <Bot className="h-3.5 w-3.5" />
-            Finance Digital Workers · worker ativo · última sincronização há 1 min
+            Finance Digital Workers · 2 workers ativos · última sincronização há 1 min
           </div>
         </div>
       </main>
