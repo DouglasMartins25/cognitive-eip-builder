@@ -463,7 +463,7 @@ function AutonomousFinance() {
 
           <div className="mt-6 flex items-center gap-2 text-[11px] text-muted-foreground">
             <Bot className="h-3.5 w-3.5" />
-            Finance Digital Workers · 2 workers ativos · última sincronização há 1 min
+            Finance Digital Workers · worker ativo · última sincronização há 1 min
           </div>
         </div>
       </main>
