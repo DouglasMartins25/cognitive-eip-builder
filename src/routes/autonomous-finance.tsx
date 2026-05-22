@@ -68,12 +68,12 @@ const kpis = [
     up: true,
     detalhes: [
       { label: "Pagamentos previstos", valor: "1.310" },
-      { label: "Pagamentos Realizados", valor: "1.284" },
+      { label: "Pagamentos realizados", valor: "1.284" },
       { label: "Cobranças enviadas", valor: "426" },
     ],
   },
-  { label: "Anomalias detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
-  { label: "Cobertura Reforma Tributária", valor: "100%", delta: "847 regras vigentes monitoradas", up: true },
+  { label: "Conciliação bancária automática", valor: "99,4%", delta: "2.847 movimentos · 6 contas", up: true },
+  { label: "Anomalias financeiras detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
 ];
 
 const alertas: {
@@ -95,10 +95,10 @@ const alertas: {
   {
     tipo: "critico",
     icon: FileWarning,
-    agente: "A2",
-    titulo: "CST divergente da nova legislação IBS/CBS",
-    descricao: "342 itens com CST desatualizado · Risco de autuação estimado: R$ 412k · Sugestão de reparametrização pronta",
-    acao: "Aplicar correção",
+    agente: "A1",
+    titulo: "Pagamento duplicado bloqueado automaticamente",
+    descricao: "NF 48.291 · R$ 87.450 · Mesmo título identificado em 2 lotes de remessa CNAB · Liberação aguarda aprovação",
+    acao: "Liberar/Cancelar",
   },
   {
     tipo: "atencao",
@@ -111,31 +111,31 @@ const alertas: {
   {
     tipo: "atencao",
     icon: Scale,
-    agente: "A2",
-    titulo: "Alíquota IBS aplicada incorretamente",
-    descricao: "NCM 8471.30 · 28 operações últimos 7 dias · Crédito fiscal subaproveitado R$ 64.200",
-    acao: "Recalcular",
+    agente: "A1",
+    titulo: "Recebimento atrasado — Cliente Vértice",
+    descricao: "Título R$ 184.300 · 12 dias em atraso · Régua de cobrança automática iniciada · Aguarda decisão de protesto",
+    acao: "Decidir",
   },
   {
     tipo: "info",
     icon: ShieldCheck,
-    agente: "A2",
-    titulo: "Nova IN RFB nº 2.314/26 publicada",
-    descricao: "Impacto analisado: 14 parametrizações afetadas · Plano de adequação pronto para revisão",
-    acao: "Ver plano",
+    agente: "A1",
+    titulo: "28 boletos DDA sem título correspondente",
+    descricao: "Busca DDA em 4 bancos · Valor total R$ 132.480 · Sugestão de vínculo automático pronta para revisão",
+    acao: "Ver sugestões",
   },
 ];
 
 const atividades = [
-  { hora: "01:08", agente: "A1", desc: "8.421 lançamentos analisados — 17 anomalias sinalizadas" },
+  { hora: "01:08", agente: "A1", desc: "8.421 lançamentos analisados — 17 anomalias financeiras sinalizadas" },
   { hora: "02:14", agente: "A1", desc: "Busca DDA executada em 4 bancos · 312 boletos vinculados a títulos a pagar" },
-  { hora: "02:42", agente: "A2", desc: "Cronograma da Reforma Tributária revalidado · 0 lacunas" },
+  { hora: "02:42", agente: "A1", desc: "Remessa CNAB gerada · 1.284 pagamentos enviados para 3 bancos" },
   { hora: "03:18", agente: "A1", desc: "Conciliação bancária automática · 6 contas · 2.847 movimentos · 99,4% de match" },
   { hora: "03:55", agente: "A1", desc: "Pagamento duplicado NF 48.291 bloqueado automaticamente" },
   { hora: "04:32", agente: "A1", desc: "28 boletos DDA sem título correspondente encaminhados para análise" },
-  { hora: "05:21", agente: "A2", desc: "847 regras CFOP/CST/NCM cruzadas com tabelas oficiais" },
+  { hora: "05:21", agente: "A1", desc: "426 cobranças enviadas via régua automática · 18 quitações registradas" },
   { hora: "05:48", agente: "A1", desc: "17 divergências de conciliação resolvidas via regras aprendidas" },
-  { hora: "06:14", agente: "A2", desc: "IN RFB nº 2.314/26 ingerida e mapeada para 14 parametrizações" },
+  { hora: "06:14", agente: "A1", desc: "Aplicação automática de R$ 1,2M em CDB liquidez diária" },
   { hora: "06:47", agente: "A1", desc: "Modelo de série temporal retreinado com 90 dias de fluxo" },
   { hora: "07:03", agente: "A1", desc: "Recebimento atrasado Cliente Vértice escalado ao gestor" },
 ];
