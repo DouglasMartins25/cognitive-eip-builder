@@ -21,6 +21,7 @@ import {
   Bot,
   CheckCircle2,
   Users,
+  Scale,
 } from "lucide-react";
 import { resolveChatRoute } from "@/lib/chat-routing";
 
