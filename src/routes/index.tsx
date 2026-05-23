@@ -189,8 +189,9 @@ function Home() {
               </button>
             </form>
 
-            <div className="mt-4 flex flex-nowrap items-center justify-between gap-3">
+            <div className="mt-4 flex flex-nowrap items-center gap-3">
               <QuickAction icon={LineChart} label="Análise financeira" to="/financeiro" search={{ start: "analise" }} />
+              <QuickAction icon={Scale} label="Reforma Tributária" to="/compliance-transicao" />
               <QuickAction icon={FileSpreadsheet} label="Criar pedido de venda" />
               <QuickAction icon={DollarSign} label="Consultar preços" />
               <QuickAction icon={UserPlus} label="Cadastrar cliente" />
