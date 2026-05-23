@@ -20,6 +20,7 @@ import {
   LineChart,
   Bot,
   CheckCircle2,
+  Users,
 } from "lucide-react";
 import { resolveChatRoute } from "@/lib/chat-routing";
 
@@ -194,9 +195,17 @@ function Home() {
               <QuickAction icon={UserPlus} label="Cadastrar cliente" />
             </div>
 
+            <div className="mt-8 flex items-center gap-2 text-sidebar-foreground">
+              <Users className="h-4 w-4" />
+              <span className="text-xs font-semibold tracking-wider">TEAM WORKERS</span>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Aqui estão suas equipes de Digital Workers
+            </p>
+
             <Link
               to="/finance-transicao"
-              className="group mt-6 flex items-center gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-4 transition-all hover:border-primary/60 hover:shadow-lg"
+              className="group mt-3 flex items-center gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-4 transition-all hover:border-primary/60 hover:shadow-lg"
             >
               <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                 <Bot className="h-6 w-6" />
@@ -207,7 +216,7 @@ function Home() {
               </div>
               <div className="flex-1 text-left">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-foreground">Finance Digital Workers</p>
+                  <p className="text-sm font-semibold text-foreground">Finance</p>
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                     <CheckCircle2 className="h-2.5 w-2.5" /> 2 agentes ativos
                   </span>
@@ -233,7 +242,7 @@ function Home() {
               </div>
               <div className="flex-1 text-left">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-foreground">Compliance Digital Workers</p>
+                  <p className="text-sm font-semibold text-foreground">Compliance</p>
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                     <CheckCircle2 className="h-2.5 w-2.5" /> 2 agentes ativos
                   </span>
