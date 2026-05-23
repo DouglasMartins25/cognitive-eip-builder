@@ -14,6 +14,8 @@ import { Route as IcmsDiagnosticoRouteImport } from './routes/icms-diagnostico'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
 import { Route as FinanceTransicaoRouteImport } from './routes/finance-transicao'
 import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
+import { Route as ContabilTransicaoRouteImport } from './routes/contabil-transicao'
+import { Route as ContabilRouteImport } from './routes/contabil'
 import { Route as ComplianceTransicaoRouteImport } from './routes/compliance-transicao'
 import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as AutonomousFinanceRouteImport } from './routes/autonomous-finance'
@@ -44,6 +46,16 @@ const FinanceTransicaoRoute = FinanceTransicaoRouteImport.update({
 const DigitalWorkerRoute = DigitalWorkerRouteImport.update({
   id: '/digital-worker',
   path: '/digital-worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContabilTransicaoRoute = ContabilTransicaoRouteImport.update({
+  id: '/contabil-transicao',
+  path: '/contabil-transicao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContabilRoute = ContabilRouteImport.update({
+  id: '/contabil',
+  path: '/contabil',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComplianceTransicaoRoute = ComplianceTransicaoRouteImport.update({
@@ -84,6 +96,8 @@ export interface FileRoutesByFullPath {
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
+  '/contabil': typeof ContabilRoute
+  '/contabil-transicao': typeof ContabilTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
@@ -97,6 +111,8 @@ export interface FileRoutesByTo {
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
+  '/contabil': typeof ContabilRoute
+  '/contabil-transicao': typeof ContabilTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
@@ -111,6 +127,8 @@ export interface FileRoutesById {
   '/autonomous-finance': typeof AutonomousFinanceRoute
   '/compliance': typeof ComplianceRoute
   '/compliance-transicao': typeof ComplianceTransicaoRoute
+  '/contabil': typeof ContabilRoute
+  '/contabil-transicao': typeof ContabilTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
@@ -126,6 +144,8 @@ export interface FileRouteTypes {
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
+    | '/contabil'
+    | '/contabil-transicao'
     | '/digital-worker'
     | '/finance-transicao'
     | '/financeiro'
@@ -139,6 +159,8 @@ export interface FileRouteTypes {
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
+    | '/contabil'
+    | '/contabil-transicao'
     | '/digital-worker'
     | '/finance-transicao'
     | '/financeiro'
@@ -152,6 +174,8 @@ export interface FileRouteTypes {
     | '/autonomous-finance'
     | '/compliance'
     | '/compliance-transicao'
+    | '/contabil'
+    | '/contabil-transicao'
     | '/digital-worker'
     | '/finance-transicao'
     | '/financeiro'
@@ -166,6 +190,8 @@ export interface RootRouteChildren {
   AutonomousFinanceRoute: typeof AutonomousFinanceRoute
   ComplianceRoute: typeof ComplianceRoute
   ComplianceTransicaoRoute: typeof ComplianceTransicaoRoute
+  ContabilRoute: typeof ContabilRoute
+  ContabilTransicaoRoute: typeof ContabilTransicaoRoute
   DigitalWorkerRoute: typeof DigitalWorkerRoute
   FinanceTransicaoRoute: typeof FinanceTransicaoRoute
   FinanceiroRoute: typeof FinanceiroRoute
@@ -208,6 +234,20 @@ declare module '@tanstack/react-router' {
       path: '/digital-worker'
       fullPath: '/digital-worker'
       preLoaderRoute: typeof DigitalWorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contabil-transicao': {
+      id: '/contabil-transicao'
+      path: '/contabil-transicao'
+      fullPath: '/contabil-transicao'
+      preLoaderRoute: typeof ContabilTransicaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contabil': {
+      id: '/contabil'
+      path: '/contabil'
+      fullPath: '/contabil'
+      preLoaderRoute: typeof ContabilRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compliance-transicao': {
@@ -262,6 +302,8 @@ const rootRouteChildren: RootRouteChildren = {
   AutonomousFinanceRoute: AutonomousFinanceRoute,
   ComplianceRoute: ComplianceRoute,
   ComplianceTransicaoRoute: ComplianceTransicaoRoute,
+  ContabilRoute: ContabilRoute,
+  ContabilTransicaoRoute: ContabilTransicaoRoute,
   DigitalWorkerRoute: DigitalWorkerRoute,
   FinanceTransicaoRoute: FinanceTransicaoRoute,
   FinanceiroRoute: FinanceiroRoute,

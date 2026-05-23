@@ -254,8 +254,9 @@ function Home() {
               <Sparkles className="h-4 w-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
             </Link>
 
-            <div
-              className="group mt-3 flex items-center gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-4 transition-all hover:border-primary/60 hover:shadow-lg cursor-pointer"
+            <Link
+              to="/contabil-transicao"
+              className="group mt-3 flex items-center gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-4 transition-all hover:border-primary/60 hover:shadow-lg"
             >
               <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                 <Bot className="h-6 w-6" />
@@ -276,7 +277,7 @@ function Home() {
                 </p>
               </div>
               <Sparkles className="h-4 w-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
-            </div>
+            </Link>
           </div>
         </div>
 
