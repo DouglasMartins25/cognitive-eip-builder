@@ -256,30 +256,6 @@ function Home() {
               <Sparkles className="h-4 w-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
             </Link>
 
-            <Link
-              to="/contabil-transicao"
-              className="group mt-3 flex items-center gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/30 p-4 transition-all hover:border-primary/60 hover:shadow-lg"
-            >
-              <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                <Bot className="h-6 w-6" />
-                <span className="absolute -right-1 -top-1 flex h-3 w-3">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                  <span className="relative inline-flex h-3 w-3 rounded-full bg-primary ring-2 ring-card" />
-                </span>
-              </div>
-              <div className="flex-1 text-left">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-foreground">Contábil</p>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                    <CheckCircle2 className="h-2.5 w-2.5" /> 2 agentes ativos
-                  </span>
-                </div>
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  Conciliação contábil, classificação de lançamentos e fechamento mensal automatizado · balancetes e DRE sempre atualizados
-                </p>
-              </div>
-              <Sparkles className="h-4 w-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
-            </Link>
           </div>
         </div>
 
