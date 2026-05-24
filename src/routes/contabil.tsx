@@ -363,9 +363,10 @@ function ContabilPage() {
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {kpis.map((k) => {
               const isGauge = "gauge" in k && k.gauge;
-              const cardClass = `rounded-xl border border-border bg-card p-4`;
-              return (
-                <div key={k.label} className={cardClass}>
+              const isFechamento = k.label === "Saúde do fechamento";
+              const cardClass = `rounded-xl border border-border bg-card p-4 ${isFechamento ? "cursor-pointer transition-all hover:border-primary/60 hover:shadow-lg" : ""}`;
+              const inner = (
+                <>
                   <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                     {k.label}
                   </p>
@@ -388,6 +389,18 @@ function ContabilPage() {
                       </p>
                     </>
                   )}
+                </>
+              );
+              if (isFechamento) {
+                return (
+                  <Link key={k.label} to="/fechamento-transicao" className={cardClass}>
+                    {inner}
+                  </Link>
+                );
+              }
+              return (
+                <div key={k.label} className={cardClass}>
+                  {inner}
                 </div>
               );
             })}
