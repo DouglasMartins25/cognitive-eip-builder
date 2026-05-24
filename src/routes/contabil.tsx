@@ -333,77 +333,99 @@ function ContabilPage() {
           </Link>
 
           {/* Hero */}
-          <div className="rounded-2xl bg-[oklch(0.2_0.04_240)] p-6 text-white">
-            <p className="text-[11px] font-semibold tracking-widest text-white/60">
-              SEXTA-FEIRA, 15 DE MAIO DE 2026 · 07:24 · CONTÁBIL DIGITAL WORKERS
-            </p>
-            <h1 className="mt-3 text-3xl font-semibold leading-tight">
-              Bom dia, João Silva.{" "}
-              <span className="text-[oklch(0.78_0.18_150)]">{acoesPendentes} ações</span>{" "}
-              dos workers aguardam decisão.
-            </h1>
-            <p className="mt-2 text-sm text-white/60">
-              Os 2 workers conciliaram 12.480 lançamentos contábeis, classificaram 12.114 por IA e
-              prepararam balancete, DRE e provisões da competência 05/2026.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {agentes.map((a) => (
-                <span
-                  key={a.id}
-                  className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.55_0.18_260)]/60 bg-[oklch(0.3_0.1_260)]/40 px-3 py-1 text-xs text-white"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.7_0.18_260)]" />
-                  <span className="font-semibold">{a.id}</span> {a.nome}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* KPIs */}
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {kpis.map((k) => {
-              const isGauge = "gauge" in k && k.gauge;
-              const isFechamento = k.label === "Saúde do fechamento";
-              const cardClass = `rounded-xl border border-border bg-card p-4 ${isFechamento ? "cursor-pointer transition-all hover:border-primary/60 hover:shadow-lg" : ""}`;
-              const inner = (
-                <>
-                  <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                    {k.label}
-                  </p>
-                  {isGauge ? (
-                    <Gauge {...k.gauge!} />
-                  ) : "detalhes" in k && k.detalhes ? (
-                    <div className="mt-3 space-y-2">
-                      {k.detalhes.map((d) => (
-                        <div key={d.label} className="flex items-baseline justify-between">
-                          <span className="text-xs text-muted-foreground">{d.label}:</span>
-                          <span className="text-sm font-semibold text-foreground">{d.valor}</span>
-                        </div>
+          {(() => {
+            const fechamento = kpis.find((k) => k.label === "Saúde do fechamento")!;
+            const g = fechamento.gauge!;
+            const pct = Math.round((g.value / g.max) * 100);
+            return (
+              <div className="rounded-2xl bg-[oklch(0.2_0.04_240)] p-6 text-white">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-stretch">
+                  <div className="flex-1">
+                    <p className="text-[11px] font-semibold tracking-widest text-white/60">
+                      SEXTA-FEIRA, 15 DE MAIO DE 2026 · 07:24 · CONTÁBIL DIGITAL WORKERS
+                    </p>
+                    <h1 className="mt-3 text-3xl font-semibold leading-tight">
+                      Bom dia, João Silva.{" "}
+                      <span className="text-[oklch(0.78_0.18_150)]">{acoesPendentes} ações</span>{" "}
+                      dos workers aguardam decisão.
+                    </h1>
+                    <p className="mt-2 text-sm text-white/60">
+                      Os 2 workers conciliaram 12.480 lançamentos contábeis, classificaram 12.114 por IA e
+                      prepararam balancete, DRE e provisões da competência 05/2026.
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {agentes.map((a) => (
+                        <span
+                          key={a.id}
+                          className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.55_0.18_260)]/60 bg-[oklch(0.3_0.1_260)]/40 px-3 py-1 text-xs text-white"
+                        >
+                          <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.7_0.18_260)]" />
+                          <span className="font-semibold">{a.id}</span> {a.nome}
+                        </span>
                       ))}
                     </div>
-                  ) : (
-                    <>
-                      <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
-                      <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
-                        {k.delta}
+                  </div>
+
+                  <Link
+                    to="/fechamento-transicao"
+                    className="group flex w-full flex-col rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur transition-all hover:border-[oklch(0.78_0.18_150)]/60 hover:bg-white/10 lg:w-72"
+                  >
+                    <div className="flex items-start justify-between">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60">
+                        Saúde do fechamento
                       </p>
-                    </>
-                  )}
-                </>
-              );
-              if (isFechamento) {
-                return (
-                  <Link key={k.label} to="/fechamento-transicao" className={cardClass}>
-                    {inner}
+                      <span className="text-[11px] font-semibold text-[oklch(0.78_0.18_150)]">
+                        +{g.deltaPts} pts
+                      </span>
+                    </div>
+                    <div className="mt-3 flex items-baseline gap-1">
+                      <span className="text-5xl font-semibold leading-none text-white">{g.value}</span>
+                      <span className="text-sm text-white/50">/ {g.max}</span>
+                    </div>
+                    <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[oklch(0.65_0.2_150)] to-[oklch(0.78_0.18_150)]"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <p className="mt-3 text-[11px] leading-relaxed text-white/60">
+                      {g.status}. Score combina contábil, fiscal, compliance e liquidez.
+                    </p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-[oklch(0.78_0.18_150)] opacity-0 transition-opacity group-hover:opacity-100">
+                      Abrir cockpit executivo <ArrowRight className="h-3 w-3" />
+                    </span>
                   </Link>
-                );
-              }
-              return (
-                <div key={k.label} className={cardClass}>
-                  {inner}
                 </div>
-              );
-            })}
+              </div>
+            );
+          })()}
+
+          {/* KPIs */}
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {kpis.filter((k) => k.label !== "Saúde do fechamento").map((k) => (
+              <div key={k.label} className="rounded-xl border border-border bg-card p-4">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  {k.label}
+                </p>
+                {"detalhes" in k && k.detalhes ? (
+                  <div className="mt-3 space-y-2">
+                    {k.detalhes.map((d) => (
+                      <div key={d.label} className="flex items-baseline justify-between">
+                        <span className="text-xs text-muted-foreground">{d.label}:</span>
+                        <span className="text-sm font-semibold text-foreground">{d.valor}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <p className="mt-3 text-2xl font-semibold text-foreground">{k.valor}</p>
+                    <p className={`mt-2 text-xs ${k.up ? "text-primary" : "text-[oklch(0.55_0.2_25)]"}`}>
+                      {k.delta}
+                    </p>
+                  </>
+                )}
+              </div>
+            ))}
           </div>
 
           {/* Alertas */}
