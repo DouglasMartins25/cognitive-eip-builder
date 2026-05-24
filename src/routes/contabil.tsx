@@ -72,17 +72,6 @@ const kpis = [
     gauge: { value: 94, max: 100, status: "Pronto para fechar", deltaPts: 2.3, sparkline: [85, 87, 88, 89, 90, 91, 92, 93, 94, 94] },
   },
   {
-    label: "Conciliação Bancária",
-    valor: "",
-    delta: "",
-    up: true,
-    detalhes: [
-      { label: "Contas conciliadas", valor: "18 / 19" },
-      { label: "Lançamentos não conciliados", valor: "42" },
-      { label: "Valor pendente", valor: "R$ 86,7K" },
-    ],
-  },
-  {
     label: "Lançamentos Analisados",
     valor: "",
     delta: "",
