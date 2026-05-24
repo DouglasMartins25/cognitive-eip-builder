@@ -14,6 +14,7 @@ import { Route as IcmsDiagnosticoRouteImport } from './routes/icms-diagnostico'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
 import { Route as FinanceTransicaoRouteImport } from './routes/finance-transicao'
 import { Route as FechamentoTransicaoRouteImport } from './routes/fechamento-transicao'
+import { Route as FechamentoRouteImport } from './routes/fechamento'
 import { Route as DigitalWorkerRouteImport } from './routes/digital-worker'
 import { Route as ContabilTransicaoRouteImport } from './routes/contabil-transicao'
 import { Route as ContabilRouteImport } from './routes/contabil'
@@ -47,6 +48,11 @@ const FinanceTransicaoRoute = FinanceTransicaoRouteImport.update({
 const FechamentoTransicaoRoute = FechamentoTransicaoRouteImport.update({
   id: '/fechamento-transicao',
   path: '/fechamento-transicao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FechamentoRoute = FechamentoRouteImport.update({
+  id: '/fechamento',
+  path: '/fechamento',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DigitalWorkerRoute = DigitalWorkerRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/contabil': typeof ContabilRoute
   '/contabil-transicao': typeof ContabilTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
+  '/fechamento': typeof FechamentoRoute
   '/fechamento-transicao': typeof FechamentoTransicaoRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/contabil': typeof ContabilRoute
   '/contabil-transicao': typeof ContabilTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
+  '/fechamento': typeof FechamentoRoute
   '/fechamento-transicao': typeof FechamentoTransicaoRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/contabil': typeof ContabilRoute
   '/contabil-transicao': typeof ContabilTransicaoRoute
   '/digital-worker': typeof DigitalWorkerRoute
+  '/fechamento': typeof FechamentoRoute
   '/fechamento-transicao': typeof FechamentoTransicaoRoute
   '/finance-transicao': typeof FinanceTransicaoRoute
   '/financeiro': typeof FinanceiroRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/contabil'
     | '/contabil-transicao'
     | '/digital-worker'
+    | '/fechamento'
     | '/fechamento-transicao'
     | '/finance-transicao'
     | '/financeiro'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/contabil'
     | '/contabil-transicao'
     | '/digital-worker'
+    | '/fechamento'
     | '/fechamento-transicao'
     | '/finance-transicao'
     | '/financeiro'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/contabil'
     | '/contabil-transicao'
     | '/digital-worker'
+    | '/fechamento'
     | '/fechamento-transicao'
     | '/finance-transicao'
     | '/financeiro'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   ContabilRoute: typeof ContabilRoute
   ContabilTransicaoRoute: typeof ContabilTransicaoRoute
   DigitalWorkerRoute: typeof DigitalWorkerRoute
+  FechamentoRoute: typeof FechamentoRoute
   FechamentoTransicaoRoute: typeof FechamentoTransicaoRoute
   FinanceTransicaoRoute: typeof FinanceTransicaoRoute
   FinanceiroRoute: typeof FinanceiroRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/fechamento-transicao'
       fullPath: '/fechamento-transicao'
       preLoaderRoute: typeof FechamentoTransicaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fechamento': {
+      id: '/fechamento'
+      path: '/fechamento'
+      fullPath: '/fechamento'
+      preLoaderRoute: typeof FechamentoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/digital-worker': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContabilRoute: ContabilRoute,
   ContabilTransicaoRoute: ContabilTransicaoRoute,
   DigitalWorkerRoute: DigitalWorkerRoute,
+  FechamentoRoute: FechamentoRoute,
   FechamentoTransicaoRoute: FechamentoTransicaoRoute,
   FinanceTransicaoRoute: FinanceTransicaoRoute,
   FinanceiroRoute: FinanceiroRoute,
