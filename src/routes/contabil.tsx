@@ -35,15 +35,24 @@ export const Route = createFileRoute("/contabil")({
 function SideIcon({
   icon: Icon,
   to,
+  href,
   active = false,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   to?: string;
+  href?: string;
   active?: boolean;
 }) {
   const cls = `flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
     active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
   }`;
+  if (href) {
+    return (
+      <a href={href} className={cls}>
+        <Icon className="h-5 w-5" />
+      </a>
+    );
+  }
   if (to) {
     return (
       <Link to={to} className={cls}>
