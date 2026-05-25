@@ -92,7 +92,18 @@ const kpis = [
       { label: "Lançamentos Contábeis fora do Padrão", valor: "14" },
     ],
   },
-  { label: "Impacto Reforma Tributária", valor: "R$ 2,4M", delta: "Estimativa anual CBS/IBS", up: true },
+  {
+    label: "Reforma Tributária",
+    valor: "",
+    delta: "",
+    up: true,
+    detalhes: [
+      { label: "Estimativa CBS/IBS (anual)", valor: "R$ 2,4M" },
+      { label: "Itens não adequados", valor: "342" },
+      { label: "Impacto Split Payment", valor: "R$ 186k/mês" },
+      { label: "Cobertura de parametrização", valor: "97,2%" },
+    ],
+  },
   {
     label: "Apuração Simulada",
     valor: "",
