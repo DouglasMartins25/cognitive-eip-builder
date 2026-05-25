@@ -519,8 +519,10 @@ function PortalReformaPage() {
           <Sparkles className="h-3.5 w-3.5" />
           Portal Reforma · simulações baseadas em LC 214/25 e EC 132/23 · valores estimados
         </div>
-      </div>
+        </div>
+      </main>
     </div>
+
   );
 }
 
