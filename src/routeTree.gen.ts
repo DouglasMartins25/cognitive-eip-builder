@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NfsComplementaresRouteImport } from './routes/nfs-complementares'
 import { Route as IcmsTransicaoRouteImport } from './routes/icms-transicao'
 import { Route as IcmsDiagnosticoRouteImport } from './routes/icms-diagnostico'
 import { Route as FinanceiroRouteImport } from './routes/financeiro'
@@ -25,6 +26,11 @@ import { Route as ApuracaoTransicaoRouteImport } from './routes/apuracao-transic
 import { Route as ApuracaoSimulacaoRouteImport } from './routes/apuracao-simulacao'
 import { Route as IndexRouteImport } from './routes/index'
 
+const NfsComplementaresRoute = NfsComplementaresRouteImport.update({
+  id: '/nfs-complementares',
+  path: '/nfs-complementares',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IcmsTransicaoRoute = IcmsTransicaoRouteImport.update({
   id: '/icms-transicao',
   path: '/icms-transicao',
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
+  '/nfs-complementares': typeof NfsComplementaresRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
+  '/nfs-complementares': typeof NfsComplementaresRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/financeiro': typeof FinanceiroRoute
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
+  '/nfs-complementares': typeof NfsComplementaresRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/financeiro'
     | '/icms-diagnostico'
     | '/icms-transicao'
+    | '/nfs-complementares'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/financeiro'
     | '/icms-diagnostico'
     | '/icms-transicao'
+    | '/nfs-complementares'
   id:
     | '__root__'
     | '/'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/financeiro'
     | '/icms-diagnostico'
     | '/icms-transicao'
+    | '/nfs-complementares'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,10 +235,18 @@ export interface RootRouteChildren {
   FinanceiroRoute: typeof FinanceiroRoute
   IcmsDiagnosticoRoute: typeof IcmsDiagnosticoRoute
   IcmsTransicaoRoute: typeof IcmsTransicaoRoute
+  NfsComplementaresRoute: typeof NfsComplementaresRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/nfs-complementares': {
+      id: '/nfs-complementares'
+      path: '/nfs-complementares'
+      fullPath: '/nfs-complementares'
+      preLoaderRoute: typeof NfsComplementaresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/icms-transicao': {
       id: '/icms-transicao'
       path: '/icms-transicao'
@@ -351,7 +371,18 @@ const rootRouteChildren: RootRouteChildren = {
   FinanceiroRoute: FinanceiroRoute,
   IcmsDiagnosticoRoute: IcmsDiagnosticoRoute,
   IcmsTransicaoRoute: IcmsTransicaoRoute,
+  NfsComplementaresRoute: NfsComplementaresRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
