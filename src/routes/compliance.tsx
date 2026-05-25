@@ -430,15 +430,21 @@ function CompliancePage() {
               .map((k) => {
                 const isAuditoria = k.label === "Auditoria";
                 const isApuracao = k.label === "Apuração Simulada";
-                const clickable = isAuditoria || isApuracao;
+                const isReforma = k.label === "Reforma Tributária";
+                const clickable = isAuditoria || isApuracao || isReforma;
                 const cardClass = `rounded-xl border border-border bg-card p-4 ${
                   clickable ? "cursor-pointer transition-shadow hover:shadow-md hover:border-primary/40" : ""
                 }`;
                 const inner = (
                   <>
-                    <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                      {k.label}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                        {k.label}
+                      </p>
+                      {isReforma && (
+                        <span className="text-[10px] font-semibold text-primary">Portal Reforma →</span>
+                      )}
+                    </div>
                     {"detalhes" in k && k.detalhes ? (
                       <div className="mt-3 space-y-2">
                         {k.detalhes.map((d) => (
@@ -468,6 +474,13 @@ function CompliancePage() {
                 if (isApuracao) {
                   return (
                     <Link key={k.label} to="/apuracao-transicao" className={cardClass}>
+                      {inner}
+                    </Link>
+                  );
+                }
+                if (isReforma) {
+                  return (
+                    <Link key={k.label} to="/portal-reforma-transicao" className={cardClass}>
                       {inner}
                     </Link>
                   );
