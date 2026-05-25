@@ -98,8 +98,8 @@ export const Route = createFileRoute("/financeiro")({
   component: Index,
 });
 
-type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito" | "dda";
-type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito" | "dda";
+type View = "empty" | "chart" | "vencendo" | "processing" | "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito" | "dda" | "aprovacao";
+type ProcessingTarget = "comprovantes" | "credito" | "comparacao" | "vencidos" | "boletos" | "risco" | "analise" | "fluxocaixa" | "fluxocaixa-credito" | "dda" | "aprovacao";
 
 const fluxoCaixa = {
   liquidoMensal: [
