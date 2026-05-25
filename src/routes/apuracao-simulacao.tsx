@@ -135,7 +135,21 @@ const fmt = (v: number) =>
 
 // ============ Componente ============
 function ApuracaoSimulacao() {
-  const [modulo, setModulo] = useState<Modulo>("fiscal");
+  const [modulo, setModulo] = useState<Modulo>("compliance");
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<{ id: number; from: "user" | "bot"; text: string }[]>([
+    { id: 1, from: "bot", text: "Bom dia, João. Sou o copiloto de Apuração. Já carreguei a simulação de IBS, CBS e IS — posso priorizar achados de compliance, comparar cenários ou explicar lançamentos." },
+  ]);
+  const handleSend = () => {
+    const text = chatInput.trim();
+    if (!text) return;
+    setChatMessages((m) => [
+      ...m,
+      { id: m.length + 1, from: "user", text },
+      { id: m.length + 2, from: "bot", text: "Estou recalculando a apuração com base na sua solicitação e em instantes trarei o resultado." },
+    ]);
+    setChatInput("");
+  };
   const [fiscalSub, setFiscalSub] = useState<FiscalSub>("fornecimento");
   const [contabilSub, setContabilSub] = useState<ContabilSub>("balanco");
   const [notas, setNotas] = useState<NotaFiscal[]>(initialNotas);
