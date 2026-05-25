@@ -122,7 +122,7 @@ const kpis = [
       { label: "Saldo IBS/CBS a recolher", valor: "R$ 2.240" },
       { label: "Créditos não aproveitados", valor: "R$ 1.210" },
       { label: "Divergências entre módulos", valor: "3" },
-      { label: "Ações sugeridas (ND/NCP)", valor: "2" },
+      { label: "Documentos não escriturados", valor: "2" },
     ],
   },
 ];
