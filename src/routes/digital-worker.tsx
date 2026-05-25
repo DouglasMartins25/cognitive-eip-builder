@@ -31,14 +31,23 @@ function SideIcon({
   icon: Icon,
   active = false,
   to,
+  href,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   active?: boolean;
   to?: string;
+  href?: string;
 }) {
   const cls = `flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
     active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
   }`;
+  if (href) {
+    return (
+      <a href={href} className={cls}>
+        <Icon className="h-5 w-5" />
+      </a>
+    );
+  }
   if (to) {
     return (
       <Link to={to} className={cls}>
