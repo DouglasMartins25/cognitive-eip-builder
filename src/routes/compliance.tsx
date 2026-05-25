@@ -117,19 +117,19 @@ const alertas: {
 }[] = [
   {
     tipo: "critico",
-    icon: FileWarning,
-    agente: "C2",
-    titulo: "CST divergente da nova legislação IBS/CBS",
-    descricao: "342 itens com CST desatualizado · Risco de autuação estimado: R$ 412k · Sugestão de reparametrização pronta",
-    acao: "Aplicar correção",
-  },
-  {
-    tipo: "critico",
     icon: AlertCircle,
     agente: "C1",
     titulo: "DCTFWeb com pendência de transmissão",
     descricao: "Competência 04/2026 · 3 estabelecimentos · vencimento em 15/06 · risco de multa por atraso",
     acao: "Revisar",
+  },
+  {
+    tipo: "critico",
+    icon: FileWarning,
+    agente: "C2",
+    titulo: "CST divergente da nova legislação IBS/CBS",
+    descricao: "342 itens com CST desatualizado · Risco de autuação estimado: R$ 412k · Sugestão de reparametrização pronta",
+    acao: "Aplicar correção",
   },
   {
     tipo: "atencao",
