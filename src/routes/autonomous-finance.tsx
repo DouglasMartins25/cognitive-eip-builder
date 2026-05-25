@@ -67,6 +67,7 @@ function SideIcon({
 const agentes = [
   { id: "A1", nome: "Automação Bancária", status: "alert" },
   { id: "A2", nome: "Análise Financeira", status: "alert" },
+  { id: "A3", nome: "Crédito", status: "ok" },
 ] as const;
 
 const kpis = [
@@ -83,8 +84,21 @@ const kpis = [
     ],
   },
   { label: "Conciliação bancária automática", valor: "99,4%", delta: "2.847 movimentos · 6 contas", up: true },
-  { label: "Anomalias financeiras detectadas", valor: "17", delta: "12 resolvidas auto · 5 escaladas", up: true },
+  {
+    label: "Fluxo de caixa — visão CFO",
+    valor: "",
+    delta: "",
+    up: true,
+    detalhes: [
+      { label: "Saldo atual:", valor: "R$ 4,82 M" },
+      { label: "Entradas 30d:", valor: "+ R$ 3,14 M" },
+      { label: "Saídas 30d:", valor: "− R$ 2,47 M" },
+      { label: "Projetado D+30:", valor: "R$ 5,49 M" },
+      { label: "Risco liquidez D+45:", valor: "Baixo · 8%" },
+    ],
+  },
 ];
+
 
 const alertas: {
   tipo: "critico" | "atencao" | "info";
