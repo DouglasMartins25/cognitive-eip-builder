@@ -47,7 +47,7 @@ function SideIcon({
   }`;
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+      <a href={href} className={cls}>
         <Icon className="h-5 w-5" />
       </a>
     );
