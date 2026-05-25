@@ -229,7 +229,7 @@ function Home() {
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-semibold text-foreground">Financeiro</p>
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                    <CheckCircle2 className="h-2.5 w-2.5" /> 2 agentes ativos
+                    <CheckCircle2 className="h-2.5 w-2.5" /> 3 agentes ativos
                   </span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">
