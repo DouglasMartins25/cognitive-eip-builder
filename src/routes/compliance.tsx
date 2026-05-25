@@ -34,15 +34,24 @@ export const Route = createFileRoute("/compliance")({
 function SideIcon({
   icon: Icon,
   to,
+  href,
   active = false,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   to?: string;
+  href?: string;
   active?: boolean;
 }) {
   const cls = `flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
     active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
   }`;
+  if (href) {
+    return (
+      <a href={href} className={cls}>
+        <Icon className="h-5 w-5" />
+      </a>
+    );
+  }
   if (to) {
     return (
       <Link to={to} className={cls}>
@@ -296,7 +305,7 @@ function CompliancePage() {
             <SideIcon icon={Tag} />
             <SideIcon icon={RefreshCw} />
             <SideIcon icon={Briefcase} active />
-            <SideIcon icon={Contact} />
+            <SideIcon icon={Contact} href="https://id-preview--fc83a047-dc91-4a91-a387-9ee13c75e17e.lovable.app/" />
           </nav>
         </div>
         <button className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary hover:bg-muted">
