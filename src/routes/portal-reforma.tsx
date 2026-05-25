@@ -29,9 +29,9 @@ const cenarios: { id: Cenario; label: string; ano: string; desc: string }[] = [
 const parametros = [
   { grupo: "CBS", itens: [
     { label: "Alíquota CBS", valor: "8,8%", ref: "Federal" },
-    { label: "Cashback CBS", valor: "Habilitado", ref: "Famílias Bolsa Família" },
     { label: "Crédito presumido", valor: "20%", ref: "Regimes específicos" },
   ]},
+
   { grupo: "IBS", itens: [
     { label: "Alíquota estadual IBS", valor: "12,3%", ref: "UF de destino" },
     { label: "Alíquota municipal IBS", valor: "5,4%", ref: "Município de destino" },
