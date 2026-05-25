@@ -8,7 +8,6 @@ import {
   Settings2,
   CheckCircle2,
   AlertTriangle,
-  FileText,
   Sparkles,
   TrendingUp,
   Wallet,
