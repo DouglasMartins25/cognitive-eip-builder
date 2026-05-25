@@ -31,16 +31,24 @@ export const Route = createFileRoute("/icms-diagnostico")({
 function SideIcon({
   icon: Icon,
   active = false,
+  href,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   active?: boolean;
+  href?: string;
 }) {
+  const cls = `flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+    active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
+  }`;
+  if (href) {
+    return (
+      <a href={href} className={cls}>
+        <Icon className="h-5 w-5" />
+      </a>
+    );
+  }
   return (
-    <button
-      className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-        active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
-      }`}
-    >
+    <button className={cls}>
       <Icon className="h-5 w-5" />
     </button>
   );
