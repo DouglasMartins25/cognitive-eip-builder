@@ -1099,6 +1099,96 @@ function Index() {
               </button>
             </footer>
           </div>
+        ) : view === "aprovacao" ? (
+          <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
+            <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[oklch(0.95_0.04_25)] text-[oklch(0.55_0.2_25)]">
+                  <AlertCircle className="h-5 w-5" />
+                </div>
+                <div>
+                  <h2 className="text-base font-medium text-foreground">
+                    Título financeiro aguardando aprovação
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Pagamento fora do padrão sinalizado pelo agente de anomalias
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setView("empty")}
+                className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-primary transition-colors hover:bg-accent"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Voltar
+              </button>
+            </header>
+
+            <div className="flex-1 overflow-auto px-8 py-6">
+              <div className="overflow-x-auto rounded-2xl border border-border">
+                <table className="w-full min-w-[900px] text-sm">
+                  <thead className="bg-muted text-[11px] uppercase tracking-wide text-muted-foreground">
+                    <tr>
+                      <th className="px-3 py-3 text-left font-medium">Origem</th>
+                      <th className="px-3 py-3 text-left font-medium">Nº Título</th>
+                      <th className="px-3 py-3 text-left font-medium">Fornecedor</th>
+                      <th className="px-3 py-3 text-left font-medium">Documento</th>
+                      <th className="px-3 py-3 text-left font-medium">Emissão</th>
+                      <th className="px-3 py-3 text-left font-medium">Vencimento</th>
+                      <th className="px-3 py-3 text-right font-medium">Valor</th>
+                      <th className="px-3 py-3 text-left font-medium">Status</th>
+                      <th className="px-3 py-3 text-center font-medium">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-border">
+                      <td className="px-3 py-3">
+                        <span className="inline-flex items-center rounded-full border border-[oklch(0.78_0.13_45)] px-2.5 py-0.5 text-[11px] font-medium text-[oklch(0.5_0.16_45)]">
+                          Sankhya
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 font-medium text-foreground">TIT-48291</td>
+                      <td className="px-3 py-3 text-foreground">Metais Gerais</td>
+                      <td className="px-3 py-3 text-muted-foreground">NF 48.291</td>
+                      <td className="px-3 py-3 text-muted-foreground">12/05/2026</td>
+                      <td className="px-3 py-3 text-muted-foreground">19/05/2026</td>
+                      <td className="px-3 py-3 text-right font-semibold text-foreground">R$ 87.450,00</td>
+                      <td className="px-3 py-3">
+                        <span className="inline-flex items-center rounded-full bg-[oklch(0.95_0.04_25)] px-2.5 py-1 text-xs font-medium text-[oklch(0.45_0.15_25)]">
+                          Aguardando aprovação
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 text-center">
+                        <div className="inline-flex items-center gap-2">
+                          <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90">
+                            <CheckCircle2 className="h-3.5 w-3.5" />
+                            Aprovar
+                          </button>
+                          <button className="inline-flex items-center gap-1.5 rounded-full border border-[oklch(0.55_0.2_25)] bg-card px-3 py-1.5 text-xs font-medium text-[oklch(0.45_0.18_25)] hover:bg-[oklch(0.95_0.04_25)]">
+                            Rejeitar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-[oklch(0.7_0.15_25)]/40 bg-[oklch(0.95_0.04_25)] p-5">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-[oklch(0.55_0.2_25)]" />
+                  <h3 className="text-sm font-semibold text-[oklch(0.45_0.18_25)]">
+                    Motivo da sinalização
+                  </h3>
+                </div>
+                <p className="mt-2 text-xs text-foreground/80">
+                  Valor R$ 87.450 está acima da média histórica de pagamentos para este fornecedor.
+                  Não há histórico anterior de transações com <strong>Metais Gerais</strong> nos últimos 12 meses.
+                  Revise os dados do título e autorize ou rejeite o pagamento.
+                </p>
+              </div>
+            </div>
+          </div>
         ) : view === "credito" ? (
           <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border bg-card shadow-sm">
             <header className="flex items-start justify-between gap-4 border-b border-border px-8 py-5">
