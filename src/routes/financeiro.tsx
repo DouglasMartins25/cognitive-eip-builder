@@ -888,7 +888,7 @@ function Index() {
             <SideIcon icon={Tag} />
             <SideIcon icon={RefreshCw} />
             <SideIcon icon={Briefcase} active />
-            <SideIcon icon={Contact} />
+            <SideIcon icon={Contact} href="https://id-preview--fc83a047-dc91-4a91-a387-9ee13c75e17e.lovable.app/" />
           </nav>
         </div>
         <button className="flex h-10 w-10 items-center justify-center rounded-full text-primary hover:bg-muted">
