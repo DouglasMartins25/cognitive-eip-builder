@@ -35,12 +35,21 @@ export const Route = createFileRoute("/autonomous-finance")({
 function SideIcon({
   icon: Icon,
   to,
+  href,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   to?: string;
+  href?: string;
 }) {
   const cls =
     "flex h-10 w-10 items-center justify-center rounded-full text-sidebar-foreground transition-colors hover:bg-muted";
+  if (href) {
+    return (
+      <a href={href} className={cls}>
+        <Icon className="h-5 w-5" />
+      </a>
+    );
+  }
   if (to) {
     return (
       <Link to={to} className={cls}>
