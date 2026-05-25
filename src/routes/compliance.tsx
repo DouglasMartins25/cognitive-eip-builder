@@ -114,14 +114,16 @@ const alertas: {
   titulo: string;
   descricao: string;
   acao: string;
+  to?: string;
 }[] = [
   {
     tipo: "critico",
     icon: AlertCircle,
-    agente: "C1",
-    titulo: "DCTFWeb com pendência de transmissão",
-    descricao: "Competência 04/2026 · 3 estabelecimentos · vencimento em 15/06 · risco de multa por atraso",
+    agente: "C2",
+    titulo: "Divergência de ICMS nas NFs de saída",
+    descricao: "47 NFs com base de cálculo divergente · necessária emissão de NFs complementares · 6 pré-emitidas aguardando autorização",
     acao: "Revisar",
+    to: "/nfs-complementares",
   },
   {
     tipo: "critico",
