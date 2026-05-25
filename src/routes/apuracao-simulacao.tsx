@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   ArrowLeft,
+  ArrowRight,
   Receipt,
   Wallet,
   BookOpen,
@@ -13,11 +14,55 @@ import {
   CalendarClock,
   TrendingUp,
   TrendingDown,
+  Inbox,
+  Crop,
+  Bell,
+  Tag,
+  RefreshCw,
+  Briefcase,
+  Contact,
+  Sparkles,
+  Maximize2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/apuracao-simulacao")({
   component: ApuracaoSimulacao,
 });
+
+function SideIcon({
+  icon: Icon,
+  to,
+  href,
+  active = false,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  to?: string;
+  href?: string;
+  active?: boolean;
+}) {
+  const cls = `flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+    active ? "bg-muted text-foreground" : "text-sidebar-foreground hover:bg-muted"
+  }`;
+  if (href) {
+    return (
+      <a href={href} className={cls}>
+        <Icon className="h-5 w-5" />
+      </a>
+    );
+  }
+  if (to) {
+    return (
+      <Link to={to} className={cls}>
+        <Icon className="h-5 w-5" />
+      </Link>
+    );
+  }
+  return (
+    <button className={cls}>
+      <Icon className="h-5 w-5" />
+    </button>
+  );
+}
 
 type Modulo = "fiscal" | "financeiro" | "contabil" | "apuracao" | "compliance";
 type FiscalSub = "fornecimento" | "aquisicao";
