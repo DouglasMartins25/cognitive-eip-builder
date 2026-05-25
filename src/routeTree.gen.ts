@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PortalReformaTransicaoRouteImport } from './routes/portal-reforma-transicao'
+import { Route as PortalReformaRouteImport } from './routes/portal-reforma'
 import { Route as NfsComplementaresRouteImport } from './routes/nfs-complementares'
 import { Route as IcmsTransicaoRouteImport } from './routes/icms-transicao'
 import { Route as IcmsDiagnosticoRouteImport } from './routes/icms-diagnostico'
@@ -26,6 +28,16 @@ import { Route as ApuracaoTransicaoRouteImport } from './routes/apuracao-transic
 import { Route as ApuracaoSimulacaoRouteImport } from './routes/apuracao-simulacao'
 import { Route as IndexRouteImport } from './routes/index'
 
+const PortalReformaTransicaoRoute = PortalReformaTransicaoRouteImport.update({
+  id: '/portal-reforma-transicao',
+  path: '/portal-reforma-transicao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalReformaRoute = PortalReformaRouteImport.update({
+  id: '/portal-reforma',
+  path: '/portal-reforma',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NfsComplementaresRoute = NfsComplementaresRouteImport.update({
   id: '/nfs-complementares',
   path: '/nfs-complementares',
@@ -124,6 +136,8 @@ export interface FileRoutesByFullPath {
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
   '/nfs-complementares': typeof NfsComplementaresRoute
+  '/portal-reforma': typeof PortalReformaRoute
+  '/portal-reforma-transicao': typeof PortalReformaTransicaoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -142,6 +156,8 @@ export interface FileRoutesByTo {
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
   '/nfs-complementares': typeof NfsComplementaresRoute
+  '/portal-reforma': typeof PortalReformaRoute
+  '/portal-reforma-transicao': typeof PortalReformaTransicaoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -161,6 +177,8 @@ export interface FileRoutesById {
   '/icms-diagnostico': typeof IcmsDiagnosticoRoute
   '/icms-transicao': typeof IcmsTransicaoRoute
   '/nfs-complementares': typeof NfsComplementaresRoute
+  '/portal-reforma': typeof PortalReformaRoute
+  '/portal-reforma-transicao': typeof PortalReformaTransicaoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,6 +199,8 @@ export interface FileRouteTypes {
     | '/icms-diagnostico'
     | '/icms-transicao'
     | '/nfs-complementares'
+    | '/portal-reforma'
+    | '/portal-reforma-transicao'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -199,6 +219,8 @@ export interface FileRouteTypes {
     | '/icms-diagnostico'
     | '/icms-transicao'
     | '/nfs-complementares'
+    | '/portal-reforma'
+    | '/portal-reforma-transicao'
   id:
     | '__root__'
     | '/'
@@ -217,6 +239,8 @@ export interface FileRouteTypes {
     | '/icms-diagnostico'
     | '/icms-transicao'
     | '/nfs-complementares'
+    | '/portal-reforma'
+    | '/portal-reforma-transicao'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -236,10 +260,26 @@ export interface RootRouteChildren {
   IcmsDiagnosticoRoute: typeof IcmsDiagnosticoRoute
   IcmsTransicaoRoute: typeof IcmsTransicaoRoute
   NfsComplementaresRoute: typeof NfsComplementaresRoute
+  PortalReformaRoute: typeof PortalReformaRoute
+  PortalReformaTransicaoRoute: typeof PortalReformaTransicaoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/portal-reforma-transicao': {
+      id: '/portal-reforma-transicao'
+      path: '/portal-reforma-transicao'
+      fullPath: '/portal-reforma-transicao'
+      preLoaderRoute: typeof PortalReformaTransicaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal-reforma': {
+      id: '/portal-reforma'
+      path: '/portal-reforma'
+      fullPath: '/portal-reforma'
+      preLoaderRoute: typeof PortalReformaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nfs-complementares': {
       id: '/nfs-complementares'
       path: '/nfs-complementares'
@@ -372,6 +412,8 @@ const rootRouteChildren: RootRouteChildren = {
   IcmsDiagnosticoRoute: IcmsDiagnosticoRoute,
   IcmsTransicaoRoute: IcmsTransicaoRoute,
   NfsComplementaresRoute: NfsComplementaresRoute,
+  PortalReformaRoute: PortalReformaRoute,
+  PortalReformaTransicaoRoute: PortalReformaTransicaoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
